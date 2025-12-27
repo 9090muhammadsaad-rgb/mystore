@@ -1,7 +1,7 @@
 [
   {
     "name": "Subway Surfers",
-    "icon": "icons/subway.png",
+    "icon": "icon/icon.png",
     "category": "Game",
     "version": "3.21.0",
     "releaseDate": "2025-01-10",
@@ -12,7 +12,7 @@
   },
   {
     "name": "WhatsApp MOD",
-    "icon": "icons/whatsapp.png",
+    "icon": "icon/icon.png",
     "category": "MOD App",
     "version": "18.2",
     "releaseDate": "2025-02-01",
