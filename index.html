@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>APP/Game Store</title>
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg,#1e3c72,#2a5298);
+  color: #fff;
+}
+
+header {
+  padding: 15px;
+  text-align: center;
+  background: #111;
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.search-box {
+  padding: 15px;
+  text-align: center;
+}
+
+.search-box input {
+  width: 90%;
+  max-width: 400px;
+  padding: 10px;
+  border-radius: 25px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+}
+
+.store {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px,1fr));
+  gap: 15px;
+  padding: 15px;
+}
+
+.card {
+  background: #ffffff15;
+  border-radius: 15px;
+  padding: 15px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 20px #00000050;
+}
+
+.card img {
+  width: 70px;
+  height: 70px;
+  border-radius: 15px;
+}
+
+.card h3 {
+  margin: 10px 0 5px;
+}
+
+.tag {
+  display: inline-block;
+  padding: 4px 10px;
+  background: #ff9800;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.update {
+  background: #4caf50;
+}
+
+.btn {
+  display: block;
+  text-align: center;
+  margin-top: 10px;
+  padding: 10px;
+  background: #2196f3;
+  border-radius: 25px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.btn:hover {
+  background: #0d8bf2;
+}
+</style>
+</head>
+<body>
+
+<header>APP/Game Store</header>
+
+<div class="search-box">
+  <input type="text" id="search" placeholder="Search apps & games...">
+</div>
+
+<div class="store" id="store"></div>
+
+<script>
+let apps = [];
+
+fetch("info.json")
+  .then(res => res.json())
+  .then(data => {
+    apps = data;
+    render(apps);
+  });
+
+function render(list) {
+  const store = document.getElementById("store");
+  store.innerHTML = "";
+
+  list.forEach(app => {
+    store.innerHTML += `
+      <div class="card">
+        <img src="${app.icon}">
+        <h3>${app.name}</h3>
+        <span class="tag">${app.category}</span>
+        ${app.updated ? '<span class="tag update">Updated</span>' : ''}
+        <p><b>Version:</b> ${app.version}</p>
+        <p><b>Release:</b> ${app.releaseDate}</p>
+        <p>${app.description}</p>
+        <p><b>MOD:</b> ${app.modNote}</p>
+        <a class="btn" href="${app.download}">Download</a>
+      </div>
+    `;
+  });
+}
+
+document.getElementById("search").addEventListener("input", e => {
+  const value = e.target.value.toLowerCase();
+  const filtered = apps.filter(a =>
+    a.name.toLowerCase().includes(value) ||
+    a.category.toLowerCase().includes(value)
+  );
+  render(filtered);
+});
+</script>
+
+</body>
+  </html>
