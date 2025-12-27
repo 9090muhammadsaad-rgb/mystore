@@ -1,10 +1,11 @@
 {
   "storeName": "APP / Game Store",
-  "tagline": "Static Modern App & Game Store",
+  "tagline": "Modern Play Store Clone",
+  "headerImage": "N/A",
   "backgroundColor": "#0b1c2d",
   "backgroundImage": "N/A",
   "cardBorderColor": "#2563eb",
   "buttonColor": "#22c55e",
   "buttonUnavailableColor": "#ef4444",
-  "headerColor": "rgba(15,23,42,0.9)"
+  "downloadAnimationColor": "#3b82f6"
 }
