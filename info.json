@@ -1,0 +1,24 @@
+[
+  {
+    "name": "Subway Surfers",
+    "icon": "icons/subway.png",
+    "category": "Game",
+    "version": "3.21.0",
+    "releaseDate": "2025-01-10",
+    "updated": true,
+    "description": "Endless running fun game.",
+    "modNote": "Unlimited Coins",
+    "download": "https://example.com/subway.apk"
+  },
+  {
+    "name": "WhatsApp MOD",
+    "icon": "icons/whatsapp.png",
+    "category": "MOD App",
+    "version": "18.2",
+    "releaseDate": "2025-02-01",
+    "updated": false,
+    "description": "Modified WhatsApp with extra features.",
+    "modNote": "Anti-ban Enabled",
+    "download": "https://example.com/whatsappmod.apk"
+  }
+]
