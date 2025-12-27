@@ -1,3 +1,4 @@
+
 {
   "storeName": "APP / Game Store",
   "tagline": "Modern Play Store Clone",
@@ -7,5 +8,11 @@
   "cardBorderColor": "#2563eb",
   "buttonColor": "#22c55e",
   "buttonUnavailableColor": "#ef4444",
-  "downloadAnimationColor": "#3b82f6"
+  "downloadAnimationColor": "#3b82f6",
+  "categoryColors": {
+    "Battle Games": "#3b82f6",
+    "Fun Games": "#f97316",
+    "Hacking Tools": "#ef4444",
+    "Android Apps": "#10b981"
+  }
 }
