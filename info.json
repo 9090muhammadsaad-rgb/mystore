@@ -1,0 +1,12 @@
+[
+  { "id":"g1", "name":"GTA 6", "description":"Open world action game", "available":false },
+  { "id":"g2", "name":"PUBG Mobile", "description":"Battle royale shooting game" },
+  { "id":"g3", "name":"Free Fire", "description":"Fast action survival game" },
+  { "id":"g4", "name":"Minecraft", "description":"Creative sandbox game" },
+  { "id":"g5", "name":"Call of Duty", "description":"FPS war game" },
+  { "id":"g6", "name":"Asphalt 9", "description":"Racing car game" },
+  { "id":"g7", "name":"Clash of Clans", "description":"Strategy multiplayer game" },
+  { "id":"g8", "name":"Among Us", "description":"Multiplayer mystery game" },
+  { "id":"g9", "name":"FIFA Mobile", "description":"Football sports game" },
+  { "id":"g10","name":"Subway Surfers","description":"Endless runner game" }
+]
