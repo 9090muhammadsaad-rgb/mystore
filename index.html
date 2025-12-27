@@ -4,139 +4,136 @@
 <meta charset="UTF-8">
 <title>APP / Game Store</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <style>
-body{margin:0;font-family:Arial,sans-serif;background:#0b1c2d;color:white;transition:background 0.3s;}
-header{position:sticky;top:0;z-index:10;padding:15px;text-align:center;background:rgba(15,23,42,.9);}
-header img{height:50px;display:block;margin:auto;}
-header h2{margin:5px 0;font-size:24px;}
-header p{margin:0;font-size:14px;color:#cbd5e1;}
-.tabs{margin:10px 0;}
-.tabs button{margin:3px;padding:8px 14px;border:none;border-radius:20px;cursor:pointer;transition:0.3s;}
-.tabs button:hover{transform:scale(1.05);}
-input{width:90%;padding:10px;border-radius:8px;border:none;outline:none;margin-bottom:10px;}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:15px;padding:12px;}
-.card{background:rgba(255,255,255,.08);border-radius:12px;padding:12px;cursor:pointer;position:relative;overflow:hidden;transition:0.3s; border:2px solid #2563eb;}
-.card:hover{transform:translateY(-5px);box-shadow:0 8px 20px rgba(0,0,0,0.5);}
-.icon{width:60px;height:60px;border-radius:12px;background:#2563eb;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:20px;margin-bottom:5px;}
-.download{width:100%;padding:8px;margin-top:5px;border:none;border-radius:6px;cursor:pointer;color:white;transition:0.3s;}
-.download:hover{transform:scale(1.05);}
-.version{background:rgba(255,255,255,.05);padding:6px;margin:4px 0;border-radius:8px;transition:0.3s;}
-#detail{display:none;padding:12px;animation:fadein 0.3s;}
-.back{margin-bottom:10px;padding:6px 12px;border-radius:10px;border:none;cursor:pointer;}
-@keyframes fadein{from{opacity:0;}to{opacity:1;}}
+body{margin:0;font-family:Arial;background:#0b1c2d;color:white}
+header{position:sticky;top:0;z-index:10;background:rgba(15,23,42,.95);padding:12px}
+h2{margin:5px 0}
+input,select{
+  width:100%;padding:10px;border-radius:10px;border:none;margin:5px 0
+}
+.tabs button{
+  padding:8px 16px;margin:4px;border:none;border-radius:20px;
+  cursor:pointer;transition:.3s
+}
+.tabs button.active{background:#2563eb;color:white}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:15px;padding:12px
+}
+.card{
+  background:rgba(255,255,255,.08);
+  border-radius:14px;padding:12px;
+  transition:.3s;cursor:pointer
+}
+.card:hover{transform:translateY(-6px)}
+.icon{
+  width:60px;height:60px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;font-weight:bold
+}
+.game .icon{background:#2563eb}
+.app .icon{background:linear-gradient(45deg,#22c55e,#3b82f6)}
+.download{
+  width:100%;padding:8px;margin-top:6px;
+  border:none;border-radius:10px;
+  background:linear-gradient(45deg,#22c55e,#3b82f6);
+  color:white;font-weight:bold;
+  cursor:pointer;transition:.3s
+}
+.download:hover{transform:scale(1.05)}
+.badge{font-size:12px;color:#cbd5e1}
 </style>
 </head>
+
 <body>
 
 <header>
-  <img id="headerImg" src="" alt="">
-  <h2 id="storeName">APP / Game Store</h2>
-  <p id="tagline">Modern Play Store Clone</p>
+  <h2>APP / Game Store</h2>
+
   <div class="tabs">
-    <button onclick="showTab('All')">All</button>
-    <button onclick="showTab('Game')">Games</button>
-    <button onclick="showTab('App')">Apps</button>
+    <button class="active" onclick="setType('All',this)">All</button>
+    <button onclick="setType('Game',this)">Games</button>
+    <button onclick="setType('App',this)">Apps</button>
   </div>
-  <input id="search" placeholder="Search games or apps...">
+
+  <input id="search" placeholder="Search or owner:(Garena)">
+
+  <select id="category"></select>
+
+  <select id="sort">
+    <option value="new">Newest First</option>
+    <option value="old">Oldest First</option>
+    <option value="big">Largest Size</option>
+    <option value="small">Smallest Size</option>
+  </select>
 </header>
 
-<section>
-  <h3>🔥 Trending</h3>
-  <div class="grid" id="trending"></div>
-</section>
-
-<section>
-  <h3>📦 Items</h3>
-  <div class="grid" id="list"></div>
-</section>
-
-<div id="detail"></div>
+<div class="grid" id="list"></div>
 
 <script>
-let DATA, LIST, WEB;
+let DATA=[],TYPE="All";
 
-fetch("my_web_info.json")
-.then(r=>r.json())
-.then(w=>{
-  WEB=w;
-  document.body.style.background=w.backgroundImage!=="N/A"?`url(${w.backgroundImage})`:w.backgroundColor;
-  document.getElementById("storeName").innerText=w.storeName;
-  document.getElementById("tagline").innerText=w.tagline;
-  if(w.headerImage!=="N/A") document.getElementById("headerImg").src=w.headerImage;
+fetch("info.json").then(r=>r.json()).then(d=>{
+  DATA=d.games;
+  loadCategories();
+  render();
 });
 
-fetch("info.json")
-.then(r=>r.json())
-.then(d=>{
-  DATA=d;
-  LIST=d.games;
-  showTrending();
-  render(LIST);
-});
+function loadCategories(){
+  let cats=new Set();
+  DATA.forEach(g=>g.categories.forEach(c=>cats.add(c)));
+  let sel=document.getElementById("category");
+  sel.innerHTML='<option value="All">All Categories</option>';
+  cats.forEach(c=>sel.innerHTML+=`<option>${c}</option>`);
+}
 
-function iconBox(name){
-  return `<div class="icon">${name[0]}</div>`;
+function setType(t,btn){
+  TYPE=t;
+  document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  render();
+}
+
+function render(){
+  let list=[...DATA];
+
+  if(TYPE!=="All") list=list.filter(g=>g.type===TYPE);
+
+  let q=search.value.toLowerCase();
+  if(q.startsWith("owner:")){
+    let o=q.split(":")[1];
+    list=list.filter(g=>g.owner.toLowerCase().includes(o));
+  }else if(q) list=list.filter(g=>g.name.toLowerCase().includes(q));
+
+  if(category.value!=="All")
+    list=list.filter(g=>g.categories.includes(category.value));
+
+  if(sort.value==="new") list.sort((a,b)=>new Date(b.lastUpdate)-new Date(a.lastUpdate));
+  if(sort.value==="old") list.sort((a,b)=>new Date(a.releaseDate)-new Date(b.releaseDate));
+  if(sort.value==="big") list.sort((a,b)=>b.sizeMB-a.sizeMB);
+  if(sort.value==="small") list.sort((a,b)=>a.sizeMB-b.sizeMB);
+
+  listDiv.innerHTML=list.map(card).join("");
 }
 
 function card(g){
-  return `<div class="card" onclick="openDetail('${g.id}')">
-    ${iconBox(g.name)}
-    <h4>${g.name}</h4>
-    <small>${g.category} • ${g.type}</small>
-    <p>${g.description}</p>
-    <button class="download" style="background:${g.available?WEB.buttonColor:WEB.buttonUnavailableColor}">
-      ${g.available? 'Download':'Not Available'}
+  return `
+  <div class="card ${g.type.toLowerCase()}">
+    <div class="icon">${g.name[0]}</div>
+    <b>${g.name}</b>
+    <div class="badge">${g.categories.join(", ")}</div>
+    <div class="badge">${g.sizeMB} MB • ${g.country}</div>
+    <button class="download">
+      ${g.available?"Download":"Coming Soon"}
     </button>
   </div>`;
 }
 
-function render(arr){
-  document.getElementById("list").innerHTML=arr.map(card).join("");
-}
-
-function showTrending(){
-  let t=DATA.trending.map(id=>DATA.games.find(g=>g.id===id)).filter(Boolean);
-  document.getElementById("trending").innerHTML=t.map(card).join("");
-}
-
-function showTab(type){
-  if(type==="All") render(LIST);
-  else render(LIST.filter(g=>g.type===type));
-}
-
-document.getElementById("search").oninput=e=>{
-  let v=e.target.value.toLowerCase();
-  if(v.startsWith("owner:")){
-    let owner=v.split(":")[1].trim();
-    render(LIST.filter(g=>g.owner.toLowerCase().includes(owner)));
-  } else render(LIST.filter(g=>g.name.toLowerCase().includes(v)));
-}
-
-function openDetail(id){
-  let g=LIST.find(x=>x.id===id);
-  if(!g) return;
-  document.getElementById("list").style.display="none";
-  document.getElementById("trending").style.display="none";
-  let html=`<button class="back" onclick="back()">⬅ Back</button>`;
-  html+=`<h2>${g.name}</h2>`;
-  html+=`<p>${g.description}</p>`;
-  html+=`<p><b>Owner:</b> ${g.owner} • <b>Country:</b> ${g.country}</p>`;
-  html+=`<p><b>Release:</b> ${g.release} • <b>Last Update:</b> ${g.lastUpdate}</p>`;
-  html+=`<h4>Versions</h4>`;
-  g.versions.forEach(v=>{
-    html+=`<div class="version">Version ${v.version} – ${v.size} – 
-      <button class="download" style="background:${v.download==="N/A"? WEB.buttonUnavailableColor:WEB.downloadAnimationColor}">${v.download==="N/A"? "Coming Soon":"Download"}</button></div>`;
-  });
-  html+=`<h4>About This App</h4><p>${g.howToInstall||"No additional info."}</p>`;
-  document.getElementById("detail").innerHTML=html;
-  document.getElementById("detail").style.display="block";
-}
-
-function back(){
-  document.getElementById("detail").style.display="none";
-  document.getElementById("list").style.display="grid";
-  document.getElementById("trending").style.display="grid";
-}
+search.oninput=render;
+category.onchange=render;
+sort.onchange=render;
 </script>
 
 </body>
