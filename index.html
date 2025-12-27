@@ -4,21 +4,28 @@
 <meta charset="UTF-8">
 <title>APP / Game Store</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <style>
 body{
   margin:0;
-  font-family:Arial, sans-serif;
-  background:#0f172a;
+  font-family:Arial,sans-serif;
+  background:#0b1c2d;
   color:white;
 }
 header{
   position:sticky;
   top:0;
-  background:rgba(15,23,42,.9);
+  z-index:10;
   padding:15px;
   text-align:center;
-  z-index:10;
+  background:rgba(15,23,42,.9);
+}
+header h2{margin:0}
+.tabs button{
+  margin:5px;
+  padding:8px 14px;
+  border:none;
+  border-radius:20px;
+  cursor:pointer;
 }
 input{
   width:90%;
@@ -27,19 +34,18 @@ input{
   border:none;
   outline:none;
 }
-.section{
-  padding:15px;
-}
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
   gap:15px;
+  padding:12px;
 }
 .card{
   background:rgba(255,255,255,.08);
   border-radius:12px;
   padding:12px;
   cursor:pointer;
+  border:2px solid #2563eb;
 }
 .icon{
   width:60px;
@@ -51,50 +57,71 @@ input{
   justify-content:center;
   font-weight:bold;
   font-size:20px;
+  margin-bottom:5px;
 }
-.badge{
-  font-size:12px;
-  color:#94a3b8;
-}
-button{
+button.download{
   width:100%;
   padding:8px;
+  margin-top:5px;
   border:none;
   border-radius:6px;
-  margin-top:8px;
   cursor:pointer;
+  color:white;
 }
-.ok{background:#22c55e}
-.no{background:#ef4444}
+.version{
+  background:rgba(255,255,255,.05);
+  padding:6px;
+  margin:4px 0;
+  border-radius:8px;
+}
+#detail{display:none;padding:12px;}
+.back{margin-bottom:10px;padding:6px 12px;border-radius:10px;border:none;cursor:pointer;}
 </style>
 </head>
-
 <body>
 
 <header>
-  <h2>APP / Game Store</h2>
+  <h2 id="storeName">APP / Game Store</h2>
+  <p id="tagline">Static Modern App & Game Store</p>
+  <div class="tabs">
+    <button onclick="showTab('All')">All</button>
+    <button onclick="showTab('Game')">Games</button>
+    <button onclick="showTab('App')">Apps</button>
+  </div>
   <input id="search" placeholder="Search games or apps...">
 </header>
 
-<div class="section">
+<section>
   <h3>🔥 Trending</h3>
   <div class="grid" id="trending"></div>
-</div>
+</section>
 
-<div class="section">
-  <h3>📦 All Apps & Games</h3>
+<section>
+  <h3>📦 Items</h3>
   <div class="grid" id="list"></div>
-</div>
+</section>
+
+<div id="detail"></div>
 
 <script>
-let ALL=[];
+let DATA, LIST;
+
+fetch("my_web_info.json")
+.then(r=>r.json())
+.then(w=>{
+  document.body.style.background = w.backgroundImage!=="N/A"?`url(${w.backgroundImage})`:w.backgroundColor;
+  document.getElementById("storeName").innerText = w.storeName;
+  document.getElementById("tagline").innerText = w.tagline;
+  document.querySelectorAll(".card").forEach(c=>c.style.borderColor=w.cardBorderColor);
+});
 
 fetch("info.json")
 .then(r=>r.json())
-.then(data=>{
-  ALL=data.games;
-  showTrending(data.trending);
-  render(ALL);
+.then(d=>{
+  DATA=d;
+  LIST=d.games;
+  showTrending();
+  render(LIST);
 });
 
 function iconBox(name){
@@ -103,32 +130,59 @@ function iconBox(name){
 
 function card(g){
   return `
-  <div class="card">
+  <div class="card" onclick="openDetail('${g.id}')">
     ${iconBox(g.name)}
     <h4>${g.name}</h4>
-    <div class="badge">${g.category} • ${g.type}</div>
-    <p style="font-size:13px">${g.description}</p>
-    <button class="${g.available?'ok':'no'}">
-      ${g.available?'Download':'Not Available'}
+    <small>${g.category} • ${g.type}</small>
+    <p>${g.description}</p>
+    <button class="download" style="background:${g.available? '#22c55e':'#ef4444'}">
+      ${g.available? 'Download':'Not Available'}
     </button>
   </div>`;
 }
 
 function render(arr){
-  document.getElementById("list").innerHTML=
-    arr.map(card).join("");
+  document.getElementById("list").innerHTML = arr.map(card).join("");
 }
 
-function showTrending(ids){
-  const t=ALL.filter(g=>ids.includes(g.id));
-  document.getElementById("trending").innerHTML=
-    t.map(card).join("");
+function showTrending(){
+  let t=DATA.trending.map(id=>DATA.games.find(g=>g.id===id)).filter(Boolean);
+  document.getElementById("trending").innerHTML = t.map(card).join("");
+}
+
+function showTab(type){
+  if(type==="All") render(LIST);
+  else render(LIST.filter(g=>g.type===type));
 }
 
 document.getElementById("search").oninput=e=>{
-  const v=e.target.value.toLowerCase();
-  render(ALL.filter(g=>g.name.toLowerCase().includes(v)));
-};
+  let v=e.target.value.toLowerCase();
+  render(LIST.filter(g=>g.name.toLowerCase().includes(v)));
+}
+
+function openDetail(id){
+  let g=LIST.find(x=>x.id===id);
+  if(!g) return;
+  document.getElementById("list").style.display="none";
+  document.getElementById("trending").style.display="none";
+  let html=`<button class="back" onclick="back()">⬅ Back</button>`;
+  html+=`<h2>${g.name}</h2>`;
+  html+=`<p>${g.description}</p>`;
+  html+=`<p><b>Owner:</b> ${g.owner} • <b>Country:</b> ${g.country}</p>`;
+  html+=`<p><b>Release:</b> ${g.release} • <b>Last Update:</b> ${g.lastUpdate}</p>`;
+  html+=`<h4>Versions</h4>`;
+  g.versions.forEach(v=>{
+    html+=`<div class="version">Version ${v.version} – ${v.size} – <button class="download" style="background:${v.download==="N/A"? "#ef4444":"#22c55e"}">${v.download==="N/A"? "Coming Soon":"Download"}</button></div>`;
+  });
+  document.getElementById("detail").innerHTML=html;
+  document.getElementById("detail").style.display="block";
+}
+
+function back(){
+  document.getElementById("detail").style.display="none";
+  document.getElementById("list").style.display="grid";
+  document.getElementById("trending").style.display="grid";
+}
 </script>
 
 </body>
