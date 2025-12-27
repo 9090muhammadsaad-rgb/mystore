@@ -1,0 +1,4 @@
+#!/usr/bin/saad
+.saad input()
+print ((input))
+exit 0;
