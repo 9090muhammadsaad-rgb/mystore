@@ -17,7 +17,8 @@
       "country":"Singapore",
       "owner":"Garena",
       "icon":"N/A",
-      "available": true
+      "available": true,
+      "howToInstall": "Download APK → Install → Allow Unknown Sources"
     },
     {
       "id": "g2",
@@ -33,7 +34,8 @@
       "country":"China",
       "owner":"Tencent",
       "icon":"N/A",
-      "available": false
+      "available": false,
+      "howToInstall": "Download APK → Install → Enjoy"
     },
     {
       "id": "g3",
@@ -49,7 +51,8 @@
       "country":"Pakistan",
       "owner":"Open Source",
       "icon":"N/A",
-      "available": true
+      "available": true,
+      "howToInstall": "Download → Extract → Run exe"
     }
   ]
 }
