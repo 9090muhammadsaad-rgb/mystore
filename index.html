@@ -1,204 +1,134 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>APP / GAME STORE</title>
+<title>APP / Game Store</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
 body{
   margin:0;
-  font-family:system-ui;
-  background:#0b1c2d;
-  color:#fff;
+  font-family:Arial, sans-serif;
+  background:#0f172a;
+  color:white;
 }
 header{
   position:sticky;
   top:0;
+  background:rgba(15,23,42,.9);
+  padding:15px;
+  text-align:center;
   z-index:10;
-  background:#111c;
-  backdrop-filter:blur(10px);
+}
+input{
+  width:90%;
   padding:10px;
-}
-.tabs button{
-  margin:4px;
-  padding:8px 14px;
+  border-radius:8px;
   border:none;
-  border-radius:20px;
+  outline:none;
 }
-.searchBox{
-  display:flex;
-  gap:5px;
-}
-.searchBox input{
-  flex:1;
-  padding:10px;
-  border-radius:12px;
-  border:none;
+.section{
+  padding:15px;
 }
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
-  gap:12px;
-  padding:12px;
+  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:15px;
 }
 .card{
-  background:#ffffff15;
-  border-radius:15px;
-  padding:10px;
+  background:rgba(255,255,255,.08);
+  border-radius:12px;
+  padding:12px;
   cursor:pointer;
 }
 .icon{
-  height:100px;
+  width:60px;
+  height:60px;
   border-radius:12px;
+  background:#2563eb;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:36px;
-  background:linear-gradient(135deg,#2196f3,#21cbf3);
+  font-weight:bold;
+  font-size:20px;
 }
-#detail{
-  display:none;
-  padding:15px;
+.badge{
+  font-size:12px;
+  color:#94a3b8;
 }
-.version{
-  background:#ffffff10;
-  margin:6px 0;
+button{
+  width:100%;
   padding:8px;
-  border-radius:10px;
+  border:none;
+  border-radius:6px;
+  margin-top:8px;
+  cursor:pointer;
 }
-.download{
-  margin-top:10px;
-  padding:12px;
-  border-radius:25px;
-  text-align:center;
-}
+.ok{background:#22c55e}
+.no{background:#ef4444}
 </style>
 </head>
 
 <body>
 
 <header>
-  <h2>APP / GAME STORE</h2>
-
-  <div class="tabs">
-    <button onclick="filterType('All')">All</button>
-    <button onclick="filterType('Game')">Games</button>
-    <button onclick="filterType('Tool')">Apps</button>
-  </div>
-
-  <div class="searchBox">
-    <input id="search" placeholder="Search games, tools...">
-    <button onclick="voiceSearch()">🎤</button>
-  </div>
+  <h2>APP / Game Store</h2>
+  <input id="search" placeholder="Search games or apps...">
 </header>
 
-<h3 style="padding-left:12px">🔥 Trending</h3>
-<div class="grid" id="trending"></div>
+<div class="section">
+  <h3>🔥 Trending</h3>
+  <div class="grid" id="trending"></div>
+</div>
 
-<h3 style="padding-left:12px">📦 All Items</h3>
-<div class="grid" id="grid"></div>
-
-<div id="detail"></div>
+<div class="section">
+  <h3>📦 All Apps & Games</h3>
+  <div class="grid" id="list"></div>
+</div>
 
 <script>
-let DATA, LIST;
+let ALL=[];
 
 fetch("info.json")
 .then(r=>r.json())
-.then(d=>{
-  DATA=d;
-  LIST=d.games;
-  showTrending();
-  render(LIST);
+.then(data=>{
+  ALL=data.games;
+  showTrending(data.trending);
+  render(ALL);
 });
 
 function iconBox(name){
   return `<div class="icon">${name[0]}</div>`;
 }
 
-function render(list){
-  grid.innerHTML="";
-  list.forEach(g=>{
-    grid.innerHTML+=`
-      <div class="card" onclick="openGame('${g.gameId}')">
-        ${iconBox(g.name)}
-        <b>${g.name}</b><br>
-        <small>${g.category.join(", ")}</small>
-      </div>`;
-  });
+function card(g){
+  return `
+  <div class="card">
+    ${iconBox(g.name)}
+    <h4>${g.name}</h4>
+    <div class="badge">${g.category} • ${g.type}</div>
+    <p style="font-size:13px">${g.description}</p>
+    <button class="${g.available?'ok':'no'}">
+      ${g.available?'Download':'Not Available'}
+    </button>
+  </div>`;
 }
 
-function showTrending(){
-  trending.innerHTML="";
-  DATA.trending.forEach(id=>{
-    let g=DATA.games.find(x=>x.gameId===id);
-    if(g){
-      trending.innerHTML+=`
-        <div class="card" onclick="openGame('${g.gameId}')">
-          ${iconBox(g.name)}
-          <b>${g.name}</b>
-        </div>`;
-    }
-  });
+function render(arr){
+  document.getElementById("list").innerHTML=
+    arr.map(card).join("");
 }
 
-function openGame(id){
-  let g=DATA.games.find(x=>x.gameId===id);
-  grid.style.display="none";
-  trending.style.display="none";
-  detail.style.display="block";
-
-  let versions=g.versions.map(v=>`
-    <div class="version">
-      Version ${v.versionName} – ${v.size||"N/A"} MB
-      <div class="download" style="background:${v.download==="N/A"?"#999":"#4caf50"}">
-        ${v.download==="N/A"?"Coming Soon":"Download"}
-      </div>
-    </div>
-  `).join("");
-
-  detail.innerHTML=`
-    <button onclick="back()">⬅ Back</button>
-    <h2>${g.name}</h2>
-    <p>${g.description}</p>
-    <p><b>Package:</b> ${g.package}</p>
-    <p><b>Country:</b> ${g.country}</p>
-    <p><b>Team:</b> ${g.team}</p>
-    <p><b>Last Update:</b> ${g.lastUpdate}</p>
-    <h3>Versions</h3>
-    ${versions}
-  `;
+function showTrending(ids){
+  const t=ALL.filter(g=>ids.includes(g.id));
+  document.getElementById("trending").innerHTML=
+    t.map(card).join("");
 }
 
-function back(){
-  detail.style.display="none";
-  grid.style.display="grid";
-  trending.style.display="grid";
-}
-
-function filterType(type){
-  if(type==="All") render(LIST);
-  else render(LIST.filter(g=>g.category.includes(type)));
-}
-
-search.oninput=()=>{
-  let v=search.value.toLowerCase();
-  render(LIST.filter(g=>g.name.toLowerCase().includes(v)));
+document.getElementById("search").oninput=e=>{
+  const v=e.target.value.toLowerCase();
+  render(ALL.filter(g=>g.name.toLowerCase().includes(v)));
 };
-
-/* VOICE SEARCH */
-function voiceSearch(){
-  if(!('webkitSpeechRecognition'in window)) return alert("Voice not supported");
-  let r=new webkitSpeechRecognition();
-  r.lang="en-US";
-  r.start();
-  r.onresult=e=>{
-    search.value=e.results[0][0].transcript;
-    search.oninput();
-  };
-}
 </script>
 
 </body>
