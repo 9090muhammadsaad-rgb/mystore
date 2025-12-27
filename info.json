@@ -1,80 +1,61 @@
 {
-  "trending": ["g1", "g4"],
+  "trending": ["g1","g3"],
 
   "games": [
     {
       "id": "g1",
       "name": "Free Fire MAX",
       "type": "Game",
-      "categories": ["Action", "Online", "Android"],
-      "sizeMB": 1200,
-      "releaseDate": "2023-01-10",
-      "lastUpdate": "2025-01-12",
-      "country": "Singapore",
-      "owner": "Garena",
+      "category": "Battle Games",
       "description": "Battle Royale action game.",
       "versions": [
-        { "version": "2.104", "sizeMB": 1200, "download": "N/A" },
-        { "version": "2.103", "sizeMB": 1150, "download": "N/A" }
+        {"version":"2.104","size":"1.2 GB","download":"N/A"},
+        {"version":"2.103","size":"1.1 GB","download":"N/A"}
       ],
-      "icon": "N/A",
+      "release":"2023-01-10",
+      "lastUpdate":"2025-01-12",
+      "country":"Singapore",
+      "owner":"Garena",
+      "icon":"N/A",
       "available": true,
-      "howToInstall": "Download APK → Install → Allow Unknown Sources"
+      "howToInstall": "Download APK → Install → Allow Unknown Sources",
+      "recommended":["g2","g3"]
     },
-
     {
       "id": "g2",
       "name": "PUBG Mobile",
       "type": "Game",
-      "categories": ["Shooter", "Online", "Android"],
-      "sizeMB": 1800,
-      "releaseDate": "2022-08-01",
-      "lastUpdate": "2024-12-01",
-      "country": "China",
-      "owner": "Tencent",
+      "category": "Battle Games",
       "description": "Multiplayer shooting game.",
       "versions": [
-        { "version": "3.0", "sizeMB": 1800, "download": "N/A" }
+        {"version":"3.0","size":"1.8 GB","download":"N/A"}
       ],
-      "icon": "N/A",
-      "available": false
+      "release":"2022-08-01",
+      "lastUpdate":"2024-12-01",
+      "country":"China",
+      "owner":"Tencent",
+      "icon":"N/A",
+      "available": false,
+      "howToInstall": "Download APK → Install → Enjoy",
+      "recommended":["g1"]
     },
-
     {
       "id": "g3",
       "name": "C Compiler Tool",
       "type": "App",
-      "categories": ["Hacking Tool", "Linux", "Windows"],
-      "sizeMB": 45,
-      "releaseDate": "2024-03-10",
-      "lastUpdate": "2024-10-01",
-      "country": "Pakistan",
-      "owner": "Open Source",
+      "category": "Hacking Tools",
       "description": "Compile and test C programs.",
       "versions": [
-        { "version": "1.0", "sizeMB": 45, "download": "N/A" }
+        {"version":"1.0","size":"45 MB","download":"N/A"}
       ],
-      "icon": "N/A",
+      "release":"2024-03-10",
+      "lastUpdate":"2024-10-01",
+      "country":"Pakistan",
+      "owner":"Open Source",
+      "icon":"N/A",
       "available": true,
-      "howToInstall": "Download → Extract → Run"
-    },
-
-    {
-      "id": "g4",
-      "name": "Windows Optimizer",
-      "type": "App",
-      "categories": ["Windows Tool"],
-      "sizeMB": 120,
-      "releaseDate": "2023-06-01",
-      "lastUpdate": "2024-09-15",
-      "country": "USA",
-      "owner": "SystemSoft",
-      "description": "Optimize Windows performance.",
-      "versions": [
-        { "version": "2.2", "sizeMB": 120, "download": "N/A" }
-      ],
-      "icon": "N/A",
-      "available": true
+      "howToInstall": "Download → Extract → Run exe",
+      "recommended":["g1"]
     }
   ]
 }
