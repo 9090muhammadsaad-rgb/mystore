@@ -1,6 +1,10 @@
 {
   "storeName": "APP / Game Store",
   "tagline": "Static Modern App & Game Store",
+  "backgroundColor": "#0b1c2d",
   "backgroundImage": "N/A",
-  "defaultColor": "blue"
+  "cardBorderColor": "#2563eb",
+  "buttonColor": "#22c55e",
+  "buttonUnavailableColor": "#ef4444",
+  "headerColor": "rgba(15,23,42,0.9)"
 }
