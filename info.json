@@ -1,12 +1,64 @@
-[
-  { "id":"g1", "name":"GTA 6", "description":"Open world action game", "available":false },
-  { "id":"g2", "name":"PUBG Mobile", "description":"Battle royale shooting game" },
-  { "id":"g3", "name":"Free Fire", "description":"Fast action survival game" },
-  { "id":"g4", "name":"Minecraft", "description":"Creative sandbox game" },
-  { "id":"g5", "name":"Call of Duty", "description":"FPS war game" },
-  { "id":"g6", "name":"Asphalt 9", "description":"Racing car game" },
-  { "id":"g7", "name":"Clash of Clans", "description":"Strategy multiplayer game" },
-  { "id":"g8", "name":"Among Us", "description":"Multiplayer mystery game" },
-  { "id":"g9", "name":"FIFA Mobile", "description":"Football sports game" },
-  { "id":"g10","name":"Subway Surfers","description":"Endless runner game" }
-]
+{
+  "trending": ["g1", "g3", "g5"],
+
+  "games": [
+    {
+      "gameId": "g1",
+      "name": "Free Fire MAX",
+      "package": "com.garena.ffmax",
+      "category": ["Game", "Action"],
+      "country": "Singapore",
+      "owner": "Garena",
+      "team": "Garena Dev Team",
+      "createdDate": "2023-01-10",
+      "lastUpdate": "2025-01-12",
+      "isNew": true,
+      "available": true,
+
+      "icon": "N/A",
+      "screenshots": [],
+      "video": "N/A",
+
+      "description": "Battle Royale action game.",
+
+      "versions": [
+        {
+          "versionId": "g1v1",
+          "versionName": "2.104",
+          "size": 1200,
+          "download": "N/A"
+        },
+        {
+          "versionId": "g1v2",
+          "versionName": "2.103",
+          "size": 1100,
+          "download": "N/A"
+        }
+      ]
+    },
+
+    {
+      "gameId": "g2",
+      "name": "C Language Tool",
+      "package": "tool.c.compiler",
+      "category": ["Tool", "Hacking Tools", "Linux"],
+      "country": "Pakistan",
+      "owner": "Open Source",
+      "team": "Community",
+      "createdDate": "2024-05-01",
+      "lastUpdate": "2024-11-20",
+      "isNew": false,
+      "available": true,
+      "icon": "N/A",
+      "description": "C language compile & analysis tool.",
+      "versions": [
+        {
+          "versionId": "g2v1",
+          "versionName": "1.0",
+          "size": 50,
+          "download": "N/A"
+        }
+      ]
+    }
+  ]
+}
