@@ -1,51 +1,42 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>APP / Game Store</title>
-<style>
-:root{
-  --glass:rgba(255,255,255,.12);
-  --blur:blur(14px);
-}
+<title>APP / GAME STORE</title>
 
+<style>
 body{
   margin:0;
   font-family:system-ui;
-  background:#0d47a1;
+  background:#0b1c2d;
   color:#fff;
 }
-
-/* HEADER */
-.header{
+header{
   position:sticky;
   top:0;
   z-index:10;
-  padding:15px;
-  text-align:center;
-  backdrop-filter:var(--blur);
-  background:rgba(0,0,0,.5);
-}
-
-/* SEARCH */
-.search{
-  position:sticky;
-  top:90px;
-  z-index:9;
+  background:#111c;
+  backdrop-filter:blur(10px);
   padding:10px;
-  background:rgba(0,0,0,.5);
-  backdrop-filter:var(--blur);
 }
-.search input{
-  width:100%;
-  padding:12px;
+.tabs button{
+  margin:4px;
+  padding:8px 14px;
   border:none;
-  border-radius:12px;
+  border-radius:20px;
 }
-
-/* GRID */
+.searchBox{
+  display:flex;
+  gap:5px;
+}
+.searchBox input{
+  flex:1;
+  padding:10px;
+  border-radius:12px;
+  border:none;
+}
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
@@ -53,9 +44,8 @@ body{
   padding:12px;
 }
 .card{
-  background:var(--glass);
-  backdrop-filter:var(--blur);
-  border-radius:16px;
+  background:#ffffff15;
+  border-radius:15px;
   padding:10px;
   cursor:pointer;
 }
@@ -66,126 +56,149 @@ body{
   align-items:center;
   justify-content:center;
   font-size:36px;
-  font-weight:bold;
+  background:linear-gradient(135deg,#2196f3,#21cbf3);
 }
-.card h4{margin:8px 0}
-
-/* DETAIL */
 #detail{
   display:none;
   padding:15px;
 }
-.back{
-  border:none;
-  padding:8px 14px;
-  border-radius:20px;
-  margin-bottom:10px;
+.version{
+  background:#ffffff10;
+  margin:6px 0;
+  padding:8px;
+  border-radius:10px;
 }
 .download{
+  margin-top:10px;
   padding:12px;
   border-radius:25px;
   text-align:center;
-  margin-top:15px;
-}
-
-/* DESKTOP */
-@media(min-width:768px){
-  .grid{grid-template-columns:repeat(4,1fr)}
 }
 </style>
 </head>
 
 <body>
 
-<div class="header" id="header"></div>
-<div class="search">
-  <input id="search" placeholder="Search games...">
-</div>
+<header>
+  <h2>APP / GAME STORE</h2>
 
+  <div class="tabs">
+    <button onclick="filterType('All')">All</button>
+    <button onclick="filterType('Game')">Games</button>
+    <button onclick="filterType('Tool')">Apps</button>
+  </div>
+
+  <div class="searchBox">
+    <input id="search" placeholder="Search games, tools...">
+    <button onclick="voiceSearch()">🎤</button>
+  </div>
+</header>
+
+<h3 style="padding-left:12px">🔥 Trending</h3>
+<div class="grid" id="trending"></div>
+
+<h3 style="padding-left:12px">📦 All Items</h3>
 <div class="grid" id="grid"></div>
+
 <div id="detail"></div>
 
 <script>
-let apps=[];
-const colors=[
-  "#2196f3","#e91e63","#9c27b0","#009688",
-  "#ff9800","#4caf50","#3f51b5",
-  "#795548","#607d8b","#673ab7",
-  "#00bcd4","#f44336"
-];
+let DATA, LIST;
 
-/* WEBSITE INFO */
-fetch("my_web_info.json")
-.then(r=>r.json())
-.then(w=>{
-  let bg = w.backgroundImage && w.backgroundImage!=="N/A"
-    ? `url(${w.backgroundImage})`
-    : colors[0];
-  document.body.style.background = bg;
-  header.innerHTML = `
-    <h2>${w.storeName}</h2>
-    <small>${w.tagline}</small>
-  `;
-});
-
-/* APPS */
 fetch("info.json")
 .then(r=>r.json())
 .then(d=>{
-  apps=d;
-  render(d);
-})
-.catch(e=>{
-  grid.innerHTML="<h3>⚠ info.json not loaded</h3>";
-  console.error(e);
+  DATA=d;
+  LIST=d.games;
+  showTrending();
+  render(LIST);
 });
 
-/* RENDER GRID */
+function iconBox(name){
+  return `<div class="icon">${name[0]}</div>`;
+}
+
 function render(list){
   grid.innerHTML="";
-  list.forEach(a=>{
-    let c=colors[Math.floor(Math.random()*colors.length)];
+  list.forEach(g=>{
     grid.innerHTML+=`
-      <div class="card" onclick="openApp('${a.id}')">
-        <div class="icon" style="background:${c}">
-          ${a.name[0]}
-        </div>
-        <h4>${a.name}</h4>
-        <small>${a.available===false?"Not Available":"Available"}</small>
-      </div>
-    `;
+      <div class="card" onclick="openGame('${g.gameId}')">
+        ${iconBox(g.name)}
+        <b>${g.name}</b><br>
+        <small>${g.category.join(", ")}</small>
+      </div>`;
   });
 }
 
-/* DETAIL PAGE */
-function openApp(id){
-  const a=apps.find(x=>x.id===id);
+function showTrending(){
+  trending.innerHTML="";
+  DATA.trending.forEach(id=>{
+    let g=DATA.games.find(x=>x.gameId===id);
+    if(g){
+      trending.innerHTML+=`
+        <div class="card" onclick="openGame('${g.gameId}')">
+          ${iconBox(g.name)}
+          <b>${g.name}</b>
+        </div>`;
+    }
+  });
+}
+
+function openGame(id){
+  let g=DATA.games.find(x=>x.gameId===id);
   grid.style.display="none";
+  trending.style.display="none";
   detail.style.display="block";
 
-  let status = a.available===false
-    ? `<div class="download" style="background:#999">Game Not Available</div>`
-    : `<div class="download" style="background:#ffc107">Coming Soon</div>`;
+  let versions=g.versions.map(v=>`
+    <div class="version">
+      Version ${v.versionName} – ${v.size||"N/A"} MB
+      <div class="download" style="background:${v.download==="N/A"?"#999":"#4caf50"}">
+        ${v.download==="N/A"?"Coming Soon":"Download"}
+      </div>
+    </div>
+  `).join("");
 
   detail.innerHTML=`
-    <button class="back" onclick="back()">⬅ Back</button>
-    <h2>${a.name}</h2>
-    <p>${a.description || "N/A"}</p>
-    ${status}
+    <button onclick="back()">⬅ Back</button>
+    <h2>${g.name}</h2>
+    <p>${g.description}</p>
+    <p><b>Package:</b> ${g.package}</p>
+    <p><b>Country:</b> ${g.country}</p>
+    <p><b>Team:</b> ${g.team}</p>
+    <p><b>Last Update:</b> ${g.lastUpdate}</p>
+    <h3>Versions</h3>
+    ${versions}
   `;
 }
 
-/* BACK */
 function back(){
   detail.style.display="none";
   grid.style.display="grid";
+  trending.style.display="grid";
 }
 
-/* SEARCH */
+function filterType(type){
+  if(type==="All") render(LIST);
+  else render(LIST.filter(g=>g.category.includes(type)));
+}
+
 search.oninput=()=>{
   let v=search.value.toLowerCase();
-  render(apps.filter(a=>a.name.toLowerCase().includes(v)));
+  render(LIST.filter(g=>g.name.toLowerCase().includes(v)));
 };
+
+/* VOICE SEARCH */
+function voiceSearch(){
+  if(!('webkitSpeechRecognition'in window)) return alert("Voice not supported");
+  let r=new webkitSpeechRecognition();
+  r.lang="en-US";
+  r.start();
+  r.onresult=e=>{
+    search.value=e.results[0][0].transcript;
+    search.oninput();
+  };
+}
 </script>
 
 </body>
