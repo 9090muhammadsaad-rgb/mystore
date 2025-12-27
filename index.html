@@ -1,10 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>App / Game Store</title>
-
+<title>APP / Game Store</title>
 <style>
 :root{
   --glass:rgba(255,255,255,.12);
@@ -14,8 +14,8 @@
 body{
   margin:0;
   font-family:system-ui;
-  color:white;
   background:#0d47a1;
+  color:#fff;
 }
 
 /* HEADER */
@@ -121,7 +121,6 @@ fetch("my_web_info.json")
   let bg = w.backgroundImage && w.backgroundImage!=="N/A"
     ? `url(${w.backgroundImage})`
     : colors[0];
-
   document.body.style.background = bg;
   header.innerHTML = `
     <h2>${w.storeName}</h2>
@@ -135,9 +134,13 @@ fetch("info.json")
 .then(d=>{
   apps=d;
   render(d);
+})
+.catch(e=>{
+  grid.innerHTML="<h3>⚠ info.json not loaded</h3>";
+  console.error(e);
 });
 
-/* RENDER */
+/* RENDER GRID */
 function render(list){
   grid.innerHTML="";
   list.forEach(a=>{
@@ -186,4 +189,4 @@ search.oninput=()=>{
 </script>
 
 </body>
-  </html>
+</html>
