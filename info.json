@@ -1,64 +1,56 @@
 {
-  "trending": ["g1", "g3", "g5"],
+  "trending": ["g1", "g3"],
 
   "games": [
     {
-      "gameId": "g1",
+      "id": "g1",
       "name": "Free Fire MAX",
-      "package": "com.garena.ffmax",
-      "category": ["Game", "Action"],
+      "type": "Game",
+      "category": "Action",
+      "description": "Battle Royale action game.",
+      "version": "2.104",
+      "size": "1.2 GB",
+      "release": "2023-01-10",
+      "lastUpdate": "2025-01-12",
       "country": "Singapore",
       "owner": "Garena",
-      "team": "Garena Dev Team",
-      "createdDate": "2023-01-10",
-      "lastUpdate": "2025-01-12",
-      "isNew": true,
-      "available": true,
-
       "icon": "N/A",
-      "screenshots": [],
-      "video": "N/A",
-
-      "description": "Battle Royale action game.",
-
-      "versions": [
-        {
-          "versionId": "g1v1",
-          "versionName": "2.104",
-          "size": 1200,
-          "download": "N/A"
-        },
-        {
-          "versionId": "g1v2",
-          "versionName": "2.103",
-          "size": 1100,
-          "download": "N/A"
-        }
-      ]
+      "download": "N/A",
+      "available": true
     },
 
     {
-      "gameId": "g2",
-      "name": "C Language Tool",
-      "package": "tool.c.compiler",
-      "category": ["Tool", "Hacking Tools", "Linux"],
+      "id": "g2",
+      "name": "PUBG Mobile",
+      "type": "Game",
+      "category": "Shooter",
+      "description": "Multiplayer shooting game.",
+      "version": "3.0",
+      "size": "1.8 GB",
+      "release": "2022-08-01",
+      "lastUpdate": "2024-12-01",
+      "country": "China",
+      "owner": "Tencent",
+      "icon": "N/A",
+      "download": "N/A",
+      "available": false
+    },
+
+    {
+      "id": "g3",
+      "name": "C Compiler Tool",
+      "type": "App",
+      "category": "Hacking Tools",
+      "description": "Compile and test C programs.",
+      "version": "1.0",
+      "size": "45 MB",
+      "release": "2024-03-10",
+      "lastUpdate": "2024-10-01",
       "country": "Pakistan",
       "owner": "Open Source",
-      "team": "Community",
-      "createdDate": "2024-05-01",
-      "lastUpdate": "2024-11-20",
-      "isNew": false,
-      "available": true,
       "icon": "N/A",
-      "description": "C language compile & analysis tool.",
-      "versions": [
-        {
-          "versionId": "g2v1",
-          "versionName": "1.0",
-          "size": 50,
-          "download": "N/A"
-        }
-      ]
+      "download": "N/A",
+      "available": true
     }
   ]
 }
