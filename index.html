@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Store - Loading...</title>
+    <title>Store</title>
     <style>
         :root {
             --primary-bg: #0f172a;
@@ -20,19 +20,20 @@
             font-family: 'Segoe UI', sans-serif;
             margin: 0;
             transition: 0.5s;
+            padding-bottom: 50px;
         }
 
-        /* Glassmorphism Header */
         header {
-            padding: 60px 20px;
+            padding: 40px 20px;
             text-align: center;
-            background: linear-gradient(to bottom, rgba(59, 130, 246, 0.2), transparent);
+            background: linear-gradient(to bottom, rgba(59, 130, 246, 0.15), transparent);
         }
 
-        .search-wrapper {
+        /* Fixed Search Bar Logic */
+        .search-container {
             position: sticky;
             top: 15px;
-            z-index: 100;
+            z-index: 1000;
             width: 90%;
             max-width: 500px;
             margin: 0 auto;
@@ -41,41 +42,63 @@
         .search-bar {
             width: 100%;
             padding: 15px 25px;
-            border-radius: 50px;
+            border-radius: 30px;
             border: 1px solid var(--glass-border);
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
             color: white;
             outline: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        /* Tabs & Glow */
-        .tabs {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 30px 0;
-        }
-
-        .tab {
-            padding: 10px 25px;
-            cursor: pointer;
-            border-radius: 30px;
-            background: var(--card-bg);
-            border: 1px solid var(--glass-border);
+            font-size: 1rem;
             transition: 0.3s;
         }
 
-        .tab.active {
-            background: var(--accent);
-            box-shadow: 0 0 20px var(--accent);
+        .search-bar:focus {
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.2);
         }
 
-        /* Grid */
+        /* Suggestions Box */
+        #suggestions {
+            position: absolute;
+            top: 110%;
+            left: 0;
+            width: 100%;
+            background: #1e293b;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            display: none;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+        }
+
+        .suggestion-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .suggestion-item:before {
+            content: '🔍';
+            margin-right: 10px;
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+
+        .suggestion-item:hover {
+            background: var(--accent);
+        }
+
+        /* Grid & Tabs */
+        .tabs { display: flex; justify-content: center; gap: 10px; margin: 25px 0; }
+        .tab { padding: 8px 20px; cursor: pointer; border-radius: 20px; background: var(--card-bg); transition: 0.3s; font-size: 0.9rem; }
+        .tab.active { background: var(--accent); box-shadow: 0 0 15px var(--accent); }
+
         .app-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 20px;
             padding: 20px;
             max-width: 1200px;
@@ -86,51 +109,40 @@
             background: var(--card-bg);
             border: 1px solid var(--glass-border);
             border-radius: 20px;
-            padding: 20px;
+            padding: 15px;
             text-align: center;
-            cursor: pointer;
-            transition: transform 0.3s;
+            transition: 0.3s;
         }
 
-        .app-card:hover {
-            transform: translateY(-10px) scale(1.05);
-            background: rgba(255, 255, 255, 0.15);
-        }
+        .app-card:hover { transform: translateY(-5px); background: rgba(255,255,255,0.12); }
+        .app-card img { width: 80px; height: 80px; border-radius: 18px; margin-bottom: 10px; object-fit: cover; }
 
-        .app-card img {
-            width: 90px;
-            height: 90px;
-            border-radius: 20px;
-            margin-bottom: 12px;
-            background: #1e293b; /* Placeholder color */
-        }
-
-        /* Detail Modal */
+        /* Modal */
         #modal {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.85);
             backdrop-filter: blur(10px);
             display: none;
-            z-index: 1000;
+            z-index: 2000;
             overflow-y: auto;
         }
 
         .modal-content {
-            max-width: 700px;
-            margin: 50px auto;
+            max-width: 600px;
+            margin: 40px auto;
             background: #1e293b;
-            padding: 30px;
-            border-radius: 30px;
+            padding: 25px;
+            border-radius: 25px;
             position: relative;
         }
 
         .btn-dl {
-            display: inline-block;
+            display: block;
             width: 100%;
             padding: 15px;
             margin-top: 10px;
-            border-radius: 15px;
+            border-radius: 12px;
             text-align: center;
             text-decoration: none;
             font-weight: bold;
@@ -140,30 +152,25 @@
         .available { background: #22c55e; }
         .coming-soon { background: var(--danger); }
 
-        footer {
-            background: #000;
-            padding: 50px 20px;
-            text-align: center;
-            margin-top: 50px;
-            border-top: 1px solid #222;
-        }
+        footer { background: #000; padding: 40px 20px; text-align: center; margin-top: 50px; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1 id="web-name">Store</h1>
-        <p id="web-desc">Loading amazing content...</p>
+        <h1 id="web-name">N/A</h1>
+        <p id="web-desc">N/A</p>
     </header>
 
-    <div class="search-wrapper">
-        <input type="text" id="search" class="search-bar" placeholder="Search apps or games...">
+    <div class="search-container">
+        <input type="text" id="search-input" class="search-bar" placeholder="Search games & apps..." autocomplete="off">
+        <div id="suggestions"></div>
     </div>
 
     <div class="tabs">
-        <div class="tab active" onclick="filter('all')">All</div>
-        <div class="tab" onclick="filter('game')">Games</div>
-        <div class="tab" onclick="filter('app')">Apps</div>
+        <div class="tab active" onclick="filterType('all')">All</div>
+        <div class="tab" onclick="filterType('game')">Games</div>
+        <div class="tab" onclick="filterType('app')">Apps</div>
     </div>
 
     <div class="app-grid" id="main-grid"></div>
@@ -174,103 +181,118 @@
         </div>
     </div>
 
-    <footer id="footer">
-        <p id="watermark">© 2026</p>
+    <footer>
         <p id="footer-text"></p>
-        <a id="help-btn" href="#" style="color:var(--accent)">Help Center</a>
+        <p id="watermark" style="opacity: 0.5; font-size: 0.8rem;"></p>
     </footer>
 
     <script>
         let apps = [];
         let siteInfo = {};
+        let searchKeywords = [];
 
-        // 1. Fetch Data with Fallback Logic
-        async function loadStore() {
+        async function init() {
             try {
-                // Fetching JSON with Cache Buster to avoid GitHub caching issues
-                const resInfo = await fetch('my_web_info.json?v=' + Date.now());
-                const resApps = await fetch('info.json?v=' + Date.now());
-                
-                if(!resInfo.ok || !resApps.ok) throw new Error("File not found");
+                const [resInfo, resApps, resSearch] = await Promise.all([
+                    fetch('my_web_info.json?v=' + Date.now()),
+                    fetch('info.json?v=' + Date.now()),
+                    fetch('search.txt?v=' + Date.now()).then(r => r.text())
+                ]);
 
                 siteInfo = (await resInfo.json())[0];
                 apps = await resApps.json();
-            } catch (err) {
-                console.warn("JSON load failed, using N/A defaults:", err);
-                // DEFAULT N/A DATA
-                siteInfo = { "WebName": "N/A", "Description": "N/A", "Watermark": "N/A", "Background_color": "#0f172a" };
-                apps = [{
-                    id: 0, name: "N/A", type: "game", category: "N/A", icon: "N/A", 
-                    available: false, versions: [{version: "0.0", size: "0MB", download: "#"}],
-                    owner: "N/A", description: "Information not available."
-                }];
+                searchKeywords = resSearch.split('\n').filter(line => line.trim() !== "");
+            } catch (e) {
+                console.warn("Loading Defaults...");
+                siteInfo = { WebName: "App Store", Description: "Static Store", Background_color: "#0f172a" };
+                apps = [{id:1, name:"Sample", type:"game", category:"N/A", available:true, icon:"N/A", versions:[], description:"N/A"}];
             }
-            renderUI();
+            renderHeader();
+            renderApps(apps);
         }
 
-        function renderUI() {
+        function renderHeader() {
             document.getElementById('web-name').innerText = siteInfo.WebName;
             document.getElementById('web-desc').innerText = siteInfo.Description;
             document.getElementById('watermark').innerText = siteInfo.Watermark;
             document.body.style.backgroundColor = siteInfo.Background_color;
-            
-            displayApps(apps);
         }
 
-        function displayApps(data) {
+        function renderApps(data) {
             const grid = document.getElementById('main-grid');
             grid.innerHTML = data.map(app => `
                 <div class="app-card" onclick="openApp(${app.id})">
-                    <img src="${app.icon === 'N/A' ? 'https://via.placeholder.com/90?text=App' : app.icon}">
-                    <div style="font-size: 0.8rem; color: var(--accent)">${app.category}</div>
-                    <div style="font-weight: bold; margin-top: 5px;">${app.name}</div>
+                    <img src="${app.icon === 'N/A' ? 'https://via.placeholder.com/80?text=App' : app.icon}">
+                    <div style="font-weight: bold; font-size:0.9rem;">${app.name}</div>
+                    <div style="font-size: 0.7rem; color: #94a3b8;">${app.category}</div>
                 </div>
             `).join('');
         }
 
+        // Search & Suggestions Logic
+        const searchInput = document.getElementById('search-input');
+        const suggestionsBox = document.getElementById('suggestions');
+
+        searchInput.addEventListener('input', (e) => {
+            const val = e.target.value.toLowerCase();
+            
+            // Filter Apps
+            const filteredApps = apps.filter(a => a.name.toLowerCase().includes(val));
+            renderApps(filteredApps);
+
+            // Show Suggestions
+            if(val.length > 0) {
+                const matches = searchKeywords.filter(k => k.toLowerCase().includes(val)).slice(0, 5);
+                if(matches.length > 0) {
+                    suggestionsBox.innerHTML = matches.map(m => `<div class="suggestion-item" onclick="applySearch('${m}')">${m}</div>`).join('');
+                    suggestionsBox.style.display = 'block';
+                } else {
+                    suggestionsBox.style.display = 'none';
+                }
+            } else {
+                suggestionsBox.style.display = 'none';
+            }
+        });
+
+        function applySearch(text) {
+            searchInput.value = text;
+            suggestionsBox.style.display = 'none';
+            const filtered = apps.filter(a => a.name.toLowerCase().includes(text.toLowerCase()));
+            renderApps(filtered);
+        }
+
+        // Close suggestions when clicking outside
+        document.addEventListener('click', (e) => {
+            if(!e.target.closest('.search-container')) suggestionsBox.style.display = 'none';
+        });
+
+        function filterType(type) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            const filtered = type === 'all' ? apps : apps.filter(a => a.type === type);
+            renderApps(filtered);
+        }
+
         function openApp(id) {
             const app = apps.find(a => a.id === id);
-            const modal = document.getElementById('modal');
-            const content = document.getElementById('modal-data');
-            
-            content.innerHTML = `
-                <div style="display:flex; gap:20px; align-items:center;">
-                    <img src="${app.icon === 'N/A' ? 'https://via.placeholder.com/90' : app.icon}" style="width:100px; border-radius:20px;">
-                    <div>
-                        <h2>${app.name}</h2>
-                        <p style="color:#94a3b8">Developer: ${app.owner}</p>
-                    </div>
+            document.getElementById('modal-data').innerHTML = `
+                <div style="display:flex; gap:15px;">
+                    <img src="${app.icon === 'N/A' ? 'https://via.placeholder.com/80' : app.icon}" style="width:80px; border-radius:15px;">
+                    <div><h2>${app.name}</h2><p>${app.owner}</p></div>
                 </div>
-                <div style="margin:20px 0; line-height:1.6;">${app.description}</div>
-                <h3>Download Versions</h3>
+                <p style="margin:20px 0;">${app.description}</p>
                 ${app.versions.map(v => `
                     <a href="${app.available ? v.download : '#'}" class="btn-dl ${app.available ? 'available' : 'coming-soon'}">
-                        ${app.available ? 'Download v' + v.version + ' (' + v.size + ')' : 'Coming Soon'}
+                        ${app.available ? 'Download v'+v.version : 'Coming Soon'}
                     </a>
                 `).join('')}
             `;
-            modal.style.display = 'block';
+            document.getElementById('modal').style.display = 'block';
         }
 
         function closeApp() { document.getElementById('modal').style.display = 'none'; }
 
-        // Search Filter
-        document.getElementById('search').addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase();
-            const filtered = apps.filter(a => a.name.toLowerCase().includes(query));
-            displayApps(filtered);
-        });
-
-        function filter(type) {
-            const filtered = type === 'all' ? apps : apps.filter(a => a.type === type);
-            displayApps(filtered);
-            // Tab active switch
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
-        }
-
-        loadStore();
+        init();
     </script>
 </body>
 </html>
-
