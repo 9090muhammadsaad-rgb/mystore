@@ -3,193 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Universal Pro Store</title>
+    <title>Elite Pro Store</title>
     <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        :root { --ps-green: #01875f; --ps-dark: #202124; --ps-grey: #5f6368; --ps-bg: #ffffff; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Google Sans', sans-serif; }
-        body { background: #fff; overflow-x: hidden; padding-bottom: 70px; }
+        :root { --ps-green: #01875f; --ps-bg: #ffffff; --ps-txt: #202124; --ps-card: #ffffff; --ps-border: #e8eaed; }
+        [data-theme="dark"] { --ps-bg: #121212; --ps-txt: #e8eaed; --ps-card: #1e1e1e; --ps-border: #333; }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Google Sans', sans-serif; transition: background 0.3s; }
+        body { background: var(--ps-bg); color: var(--ps-txt); overflow-x: hidden; padding-bottom: 80px; }
 
         /* Splash Screen */
-        #splash { position: fixed; inset: 0; background: #fff; z-index: 9999; display: flex; align-items: center; justify-content: center; transition: 0.5s; }
-        #splash img { width: 100px; animation: scaleUp 1s infinite alternate; }
-        @keyframes scaleUp { from { transform: scale(1); } to { transform: scale(1.1); } }
+        #splash { position: fixed; inset: 0; background: #fff; z-index: 9999; display: flex; align-items: center; justify-content: center; }
+        #splash img { width: 150px; border-radius: 20px; }
 
         /* Header */
-        header { position: sticky; top: 0; background: #fff; z-index: 1000; padding: 15px; border-bottom: 1px solid #eee; }
+        header { position: sticky; top: 0; background: var(--ps-bg); z-index: 1000; padding: 15px; border-bottom: 1px solid var(--ps-border); }
         .search-row { display: flex; align-items: center; gap: 10px; max-width: 800px; margin: 0 auto; }
-        .search-box { flex: 1; padding: 10px 15px; background: #f1f3f4; border-radius: 8px; border: none; outline: none; }
-        .sort-btn { cursor: pointer; font-size: 22px; filter: grayscale(1); transition: 0.3s; }
-        .sort-btn:hover { filter: grayscale(0); transform: rotate(90deg); }
+        .search-box { flex: 1; padding: 12px 20px; background: rgba(128,128,128,0.1); border-radius: 25px; border: none; outline: none; color: var(--ps-txt); }
+        .sort-btn { cursor: pointer; font-size: 24px; }
 
-        /* Bottom Nav (Auto Hide) */
-        .bottom-nav { 
-            position: fixed; bottom: 0; width: 100%; background: #fff; border-top: 1px solid #eee;
-            display: flex; justify-content: space-around; padding: 12px; z-index: 1001; transition: 0.3s ease-in-out;
-        }
-        .nav-hide { transform: translateY(100%); }
-        .nav-btn { border: none; background: none; color: var(--ps-grey); font-size: 14px; font-weight: 500; cursor: pointer; }
-        .nav-btn.active { color: var(--ps-green); border-bottom: 2px solid var(--ps-green); }
+        /* Sorting Drawer */
+        #drawer { position: fixed; bottom: -100%; left: 0; width: 100%; background: var(--ps-card); z-index: 2000; padding: 25px; 
+                  border-radius: 25px 25px 0 0; box-shadow: 0 -5px 20px rgba(0,0,0,0.2); transition: 0.4s; max-height: 80vh; overflow-y: auto; }
+        #drawer.open { bottom: 0; }
+        .filter-section { margin-bottom: 20px; }
+        .filter-title { font-weight: bold; margin-bottom: 10px; display: block; border-bottom: 1px solid var(--ps-border); padding-bottom: 5px; }
+        .chip-container { display: flex; flex-wrap: wrap; gap: 8px; }
+        .chip { padding: 8px 15px; background: rgba(128,128,128,0.1); border-radius: 20px; font-size: 13px; cursor: pointer; }
+        .chip.active { background: var(--ps-green); color: white; }
 
-        /* Sections */
+        /* Main Content */
         .container { max-width: 1000px; margin: 20px auto; padding: 0 15px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px; }
-        .app-card { cursor: pointer; animation: fadeIn 0.5s ease forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .app-card img { width: 100%; aspect-ratio: 1/1; border-radius: 20%; border: 1px solid #f0f0f0; object-fit: cover; }
-        .app-title { font-size: 13px; font-weight: 500; margin-top: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 20px; }
+        .app-card { cursor: pointer; opacity: 0; transform: translateY(20px); transition: 0.5s; }
+        .app-card.show { opacity: 1; transform: translateY(0); }
+        .app-card img { width: 100%; aspect-ratio: 1/1; border-radius: 22%; object-fit: cover; border: 1px solid var(--ps-border); }
+        .app-title { font-size: 14px; font-weight: 500; margin-top: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-        /* Detail View */
-        #modal { position: fixed; inset: 0; background: #fff; z-index: 5000; display: none; overflow-y: auto; }
-        .m-content { max-width: 800px; margin: 0 auto; padding: 20px; }
-        .plat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
-        .dl-btn { 
-            padding: 12px; border-radius: 8px; border: 1px solid #ddd; background: #f8f9fa; 
-            text-align: center; cursor: pointer; text-decoration: none; color: #333; font-size: 12px;
-        }
-        .dl-btn.active { background: var(--ps-green); color: #fff; border: none; font-weight: bold; }
-        
-        .media-scroller { display: flex; gap: 10px; overflow-x: auto; padding: 10px 0; }
-        .media-item { height: 160px; border-radius: 10px; background: #000; }
+        /* Bottom Nav */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--ps-card); display: flex; justify-content: space-around; 
+                      padding: 15px; border-top: 1px solid var(--ps-border); z-index: 1500; transition: 0.3s; }
+        .nav-hide { transform: translateY(100%); }
+        .nav-btn { border: none; background: none; color: var(--ps-grey); cursor: pointer; font-weight: 500; }
+        .nav-btn.active { color: var(--ps-green); }
+
+        /* Help Button */
+        .help-btn { display: block; width: 100%; padding: 12px; background: #3498db; color: white; border-radius: 10px; text-align: center; text-decoration: none; margin-top: 20px; }
     </style>
 </head>
-<body>
+<body data-theme="light">
 
-    <div id="splash"><img src="icon.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/512/512142.png'"></div>
+    <div id="splash"><img src="1761933069017.jpg"></div>
 
     <header>
         <div class="search-row">
-            <input type="text" id="search" class="search-box" placeholder="Search apps, games, tools...">
-            <span class="sort-btn" id="sort-icon" onclick="sortData()">🔘</span>
+            <input type="text" id="search" class="search-box" placeholder="Search with keywords...">
+            <span class="sort-btn" onclick="toggleDrawer()">🔘</span>
         </div>
     </header>
 
     <div class="container">
-        <h3 id="section-label">Trending Now</h3>
+        <h3 id="section-title" style="margin-bottom: 15px;">Trending Updates</h3>
         <div class="grid" id="main-grid"></div>
+        <div id="loading-more" style="text-align: center; padding: 20px; display: none;">Loading more...</div>
     </div>
 
     <nav class="bottom-nav" id="navbar">
-        <button class="nav-btn active" onclick="filterData('all', this)">All</button>
-        <button class="nav-btn" onclick="filterData('game', this)">Games</button>
-        <button class="nav-btn" onclick="filterData('app', this)">Apps</button>
-        <button class="nav-btn" onclick="filterData('tool', this)">Tools</button>
+        <button class="nav-btn active" onclick="tab('all', this)">All</button>
+        <button class="nav-btn" onclick="tab('game', this)">Games</button>
+        <button class="nav-btn" onclick="tab('app', this)">Apps</button>
     </nav>
 
-    <div id="modal">
-        <div class="m-content">
-            <button onclick="closeApp()" style="border:none; background:none; font-size:25px; cursor:pointer;">✕ Close</button>
-            <div id="app-hero" style="margin-top:20px;"></div>
-            
-            <h4>Screenshots / Video</h4>
-            <div class="media-scroller" id="media-box"></div>
-
-            <h4>Download for Platform</h4>
-            <div class="plat-grid" id="dl-box"></div>
-
-            <h4>Information</h4>
-            <div id="app-info" style="font-size:14px; color:var(--ps-grey); line-height:1.6; background:#f9f9f9; padding:15px; border-radius:10px;"></div>
-            
-            <h4 style="margin-top:20px;">Recommended</h4>
-            <div class="grid" id="rec-grid"></div>
+    <div id="drawer">
+        <h2 style="margin-bottom: 20px;">Settings & Filters</h2>
+        
+        <div class="filter-section">
+            <span class="filter-title">Theme</span>
+            <div class="chip-container">
+                <div class="chip" onclick="setTheme('light')">White Mode</div>
+                <div class="chip" onclick="setTheme('dark')">Dark Mode</div>
+            </div>
         </div>
+
+        <div class="filter-section">
+            <span class="filter-title">Sort By</span>
+            <div class="chip-container">
+                <div class="chip" onclick="sortData('size-low')">Lowest Size</div>
+                <div class="chip" onclick="sortData('size-high')">Highest Size</div>
+                <div class="chip" onclick="sortData('newest')">Newest</div>
+                <div class="chip" onclick="sortData('oldest')">Oldest</div>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <span class="filter-title">OS Support</span>
+            <div class="chip-container" id="os-filters">
+                <div class="chip" onclick="filterOS('android')">Android</div>
+                <div class="chip" onclick="filterOS('windows')">Windows</div>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <span class="filter-title">Categories</span>
+            <div class="chip-container" id="cat-filters"></div>
+        </div>
+
+        <a href="https://example.com" target="_blank" class="help-btn">Help & Documentation</a>
+        <button onclick="toggleDrawer()" style="width: 100%; margin-top: 10px; padding: 10px; border: none; background: #eee; border-radius: 10px;">Close</button>
     </div>
 
     <script>
-        let rawData = [];
-        let currentFilter = 'all';
+        let apps = [];
+        let itemsToShow = 10;
+        let currentData = [];
 
         async function init() {
             try {
                 const res = await fetch('info.json?v=' + Date.now());
-                rawData = await res.json();
-                setTimeout(() => { document.getElementById('splash').style.opacity = '0'; 
-                setTimeout(() => document.getElementById('splash').style.display='none', 500); 
-                render(rawData.filter(a => a.trending)); }, 2000);
-            } catch (e) { console.error("Data Load Error"); }
+                const data = await res.json();
+                apps = data.apps;
+                currentData = apps;
+                
+                // Load Dynamic Filters
+                const cats = [...new Set(apps.map(a => a.category))];
+                document.getElementById('cat-filters').innerHTML = cats.map(c => `<div class="chip" onclick="filterCat('${c}')">${c}</div>`).join('');
+
+                setTimeout(() => {
+                    document.getElementById('splash').style.display = 'none';
+                    render();
+                }, 2000);
+            } catch (e) { console.error("JSON missing or corrupt."); }
         }
 
-        function render(data) {
-            document.getElementById('main-grid').innerHTML = data.map(a => `
-                <div class="app-card" onclick="openApp(${a.id})">
-                    <img src="${a.icon}">
+        function render() {
+            const grid = document.getElementById('main-grid');
+            grid.innerHTML = currentData.slice(0, itemsToShow).map(a => `
+                <div class="app-card show" onclick="window.location.href='#${a.id}'">
+                    <img src="${a.icon || 'default.png'}">
                     <div class="app-title">${a.name}</div>
-                    <div style="font-size:10px; color:var(--ps-grey)">${a.category}</div>
+                    <div style="font-size:11px; opacity:0.7">${a.category} • ${a.size}</div>
                 </div>
             `).join('');
         }
 
-        function openApp(id) {
-            const a = rawData.find(x => x.id === id);
-            document.getElementById('app-hero').innerHTML = `
-                <div style="display:flex; gap:15px; align-items:center;">
-                    <img src="${a.icon}" style="width:100px; border-radius:20%;">
-                    <div><h2 style="font-size:20px;">${a.name}</h2><p style="color:var(--ps-green)">${a.owner}</p></div>
-                </div>
-            `;
-
-            // Media
-            document.getElementById('media-box').innerHTML = a.media.map(m => 
-                m.match(/\.(mp4|webm)/) ? `<video src="${m}" class="media-item" controls></video>` : `<img src="${m}" class="media-item">`
-            ).join('');
-
-            // Platforms (Windows, ZIP/Source etc)
-            const dls = document.getElementById('dl-box');
-            dls.innerHTML = '';
-            for (const [plat, url] of Object.entries(a.platforms)) {
-                dls.innerHTML += `<a href="${url || '#'}" class="dl-btn ${url ? 'active' : ''}" target="_blank">
-                    ${plat.toUpperCase()}<br>${url ? 'Download' : 'N/A'}
-                </a>`;
+        // Infinite Scroll
+        window.onscroll = function() {
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
+                if(itemsToShow < currentData.length) {
+                    itemsToShow += 10;
+                    render();
+                }
             }
-
-            document.getElementById('app-info').innerHTML = `
-                <b>Category:</b> ${a.category}<br>
-                <b>Size:</b> ${a.size}<br>
-                <b>OS Required:</b> ${a.requirements}<br><br>
-                ${a.description}
-            `;
-
-            // Recommended
-            const recs = rawData.filter(r => a.recommended.includes(r.id));
-            document.getElementById('rec-grid').innerHTML = recs.map(r => `
-                <div class="app-card" onclick="openApp(${r.id})">
-                    <img src="${r.icon}" style="width:80px; height:80px;">
-                    <div class="app-title" style="font-size:11px;">${r.name}</div>
-                </div>
-            `).join('');
-
-            document.getElementById('modal').style.display = 'block';
-        }
-
-        function closeApp() { document.getElementById('modal').style.display = 'none'; }
-
-        // Filter & Sort
-        function filterData(type, btn) {
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            currentFilter = type;
-            const filtered = type === 'all' ? rawData : rawData.filter(a => a.type === type);
-            document.getElementById('section-label').innerText = type.toUpperCase() + " List";
-            render(filtered);
-        }
-
-        function sortData() {
-            rawData.reverse();
-            filterData(currentFilter, document.querySelector('.nav-btn.active'));
-        }
-
-        // Hide Nav on Scroll
-        let lastScroll = 0;
-        window.addEventListener('scroll', () => {
-            const current = window.pageYOffset;
+            // Hide Nav on Scroll
             const nav = document.getElementById('navbar');
-            if (current > lastScroll && current > 100) nav.classList.add('nav-hide');
+            if (this.oldScroll < this.scrollY) nav.classList.add('nav-hide');
             else nav.classList.remove('nav-hide');
-            lastScroll = current;
-        });
+            this.oldScroll = this.scrollY;
+        };
+
+        function toggleDrawer() { document.getElementById('drawer').classList.toggle('open'); }
+        function setTheme(t) { document.body.setAttribute('data-theme', t); toggleDrawer(); }
+
+        function sortData(type) {
+            if(type === 'size-low') currentData.sort((a,b) => parseFloat(a.size) - parseFloat(b.size));
+            if(type === 'size-high') currentData.sort((a,b) => parseFloat(b.size) - parseFloat(a.size));
+            if(type === 'newest') currentData.sort((a,b) => new Date(b.releaseDate) - new Date(a.releaseDate));
+            if(type === 'oldest') currentData.sort((a,b) => new Date(a.releaseDate) - new Date(b.releaseDate));
+            render();
+            toggleDrawer();
+        }
+
+        function filterOS(os) {
+            currentData = apps.filter(a => a.platforms && a.platforms[os]);
+            render();
+            toggleDrawer();
+        }
+
+        function filterCat(c) {
+            currentData = apps.filter(a => a.category === c);
+            render();
+            toggleDrawer();
+        }
 
         init();
     </script>
 </body>
-</html>
-
+    </html>
+    
