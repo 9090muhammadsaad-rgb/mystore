@@ -6,163 +6,166 @@
     <title>Faizan Store Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        :root { --ps-green: #01875f; --ps-bg: #ffffff; --ps-txt: #202124; --ps-card: #ffffff; --ps-border: #e8eaed; }
+        :root { --ps-green: #01875f; --ps-bg: #ffffff; --ps-txt: #202124; --ps-card: #ffffff; --ps-border: #e8eaed; --ps-grey: #5f6368; }
         [data-theme="dark"] { --ps-bg: #121212; --ps-txt: #e8eaed; --ps-card: #1e1e1e; --ps-border: #333; }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Google Sans', sans-serif; transition: 0.3s; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Google Sans', sans-serif; }
         body { background: var(--ps-bg); color: var(--ps-txt); overflow-x: hidden; padding-bottom: 80px; }
 
-        /* Splash Screen */
-        #splash { position: fixed; inset: 0; background: #fff; z-index: 9999; display: flex; align-items: center; justify-content: center; }
-        #splash img { width: 150px; border-radius: 20px; }
+        /* Smooth Entry Animation */
+        .container { animation: fadeIn 0.8s ease-out; max-width: 1000px; margin: 20px auto; padding: 0 15px; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* Header */
         header { position: sticky; top: 0; background: var(--ps-bg); z-index: 1000; padding: 15px; border-bottom: 1px solid var(--ps-border); display: flex; align-items: center; gap: 10px; }
         .search-box { flex: 1; padding: 12px 20px; background: rgba(128,128,128,0.1); border-radius: 25px; border: none; outline: none; color: var(--ps-txt); }
         .sort-btn { cursor: pointer; font-size: 24px; }
 
-        /* Grid */
-        .container { max-width: 1000px; margin: 20px auto; padding: 0 15px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px; }
-        .app-card { cursor: pointer; text-align: center; }
+        /* Main Grid */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 15px; margin-top: 10px; }
+        .app-card { cursor: pointer; text-align: left; }
         .app-card img { width: 100%; aspect-ratio: 1/1; border-radius: 22%; object-fit: cover; border: 1px solid var(--ps-border); }
-        .app-title { font-size: 13px; font-weight: 500; margin-top: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .app-title { font-size: 13px; font-weight: 500; margin-top: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-        /* Description Modal (Details Page) */
-        #modal { position: fixed; inset: 0; background: var(--ps-bg); z-index: 5000; display: none; overflow-y: auto; padding: 20px; }
-        .m-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
-        .m-header img { width: 80px; border-radius: 18px; }
-        .media-box { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; margin: 15px 0; }
-        .media-box img, .media-box video { height: 180px; border-radius: 10px; background: #000; }
-        .dl-section { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
-        .dl-btn { padding: 12px; background: var(--ps-green); color: #fff; text-align: center; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 13px; }
+        /* Full Details Page (Modal) */
+        #details-page { position: fixed; inset: 0; background: var(--ps-bg); z-index: 5000; display: none; overflow-y: auto; padding-top: 0; }
+        .top-bar { position: sticky; top: 0; background: var(--ps-bg); padding: 15px; display: flex; align-items: center; z-index: 10; }
+        .back-btn { font-size: 28px; border: none; background: none; color: var(--ps-txt); cursor: pointer; margin-right: 15px; }
 
-        /* Drawer */
-        #drawer { position: fixed; bottom: -100%; left: 0; width: 100%; background: var(--ps-card); z-index: 2000; padding: 20px; border-radius: 20px 20px 0 0; transition: 0.4s; box-shadow: 0 -5px 15px rgba(0,0,0,0.2); }
-        #drawer.open { bottom: 0; }
-        .chip-container { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-        .chip { padding: 8px 15px; background: rgba(128,128,128,0.1); border-radius: 20px; font-size: 12px; cursor: pointer; }
+        .hero-section { display: flex; gap: 20px; padding: 20px; align-items: center; }
+        .hero-section img { width: 90px; height: 90px; border-radius: 20%; object-fit: cover; }
+        .hero-info h2 { font-size: 22px; }
+        .hero-info p { color: var(--ps-green); font-weight: 500; font-size: 14px; }
+
+        .gallery { display: flex; gap: 10px; overflow-x: auto; padding: 10px 20px; scrollbar-width: none; }
+        .gallery img, .gallery video { height: 180px; border-radius: 12px; min-width: 300px; object-fit: cover; background: #000; }
+
+        .info-box { padding: 20px; font-size: 14px; line-height: 1.6; color: var(--ps-grey); }
+        .dl-container { padding: 0 20px 30px; display: flex; flex-direction: column; gap: 10px; }
+        .dl-btn { display: block; width: 100%; padding: 15px; border-radius: 8px; text-align: center; text-decoration: none; font-weight: bold; font-size: 14px; }
+        .btn-android { background: var(--ps-green); color: white; }
+        .btn-win { background: #3c4043; color: white; }
 
         /* Bottom Nav */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--ps-card); display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid var(--ps-border); z-index: 1500; }
-        .nav-btn { border: none; background: none; color: #5f6368; font-weight: bold; cursor: pointer; padding-bottom: 5px; }
-        .nav-btn.active { color: var(--ps-green); border-bottom: 2px solid var(--ps-green); }
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--ps-card); display: flex; justify-content: space-around; padding: 12px; border-top: 1px solid var(--ps-border); z-index: 1000; }
+        .nav-btn { border: none; background: none; color: var(--ps-grey); font-weight: 500; cursor: pointer; }
+        .nav-btn.active { color: var(--ps-green); }
+
+        /* Drawer */
+        #drawer { position: fixed; bottom: -100%; left: 0; width: 100%; background: var(--ps-card); z-index: 2000; padding: 20px; border-radius: 20px 20px 0 0; transition: 0.3s; box-shadow: 0 -5px 15px rgba(0,0,0,0.1); }
+        #drawer.open { bottom: 0; }
+        .chip { display: inline-block; padding: 8px 15px; background: rgba(128,128,128,0.1); border-radius: 20px; margin: 5px; font-size: 12px; cursor: pointer; }
     </style>
 </head>
 <body data-theme="light">
 
-    <div id="splash"><img src="1761933069017.jpg"></div>
-
     <header>
-        <input type="text" id="search" class="search-box" placeholder="Search mods & tools...">
+        <input type="text" id="search" class="search-box" placeholder="Search Faizan Store...">
         <span class="sort-btn" onclick="toggleDrawer()">🔘</span>
     </header>
 
     <div class="container">
-        <h3 id="label" style="margin-bottom:15px;">Trending</h3>
+        <h3 id="section-label">All Games & Apps</h3>
         <div class="grid" id="main-grid"></div>
     </div>
 
-    <div id="modal">
-        <button onclick="closeModal()" style="border:none; background:none; font-size:20px; margin-bottom:10px; cursor:pointer;">✕ Close</button>
-        <div id="modal-content"></div>
+    <div id="details-page">
+        <div class="top-bar">
+            <button class="back-btn" onclick="closeDetails()">←</button>
+            <span style="font-weight: 500;">Details</span>
+        </div>
+        <div id="details-content"></div>
     </div>
 
     <nav class="bottom-nav">
-        <button class="nav-btn active" onclick="filterType('all', this)">All</button>
-        <button class="nav-btn" onclick="filterType('game', this)">Games</button>
-        <button class="nav-btn" onclick="filterType('app', this)">Apps</button>
-        <button class="nav-btn" onclick="filterType('tool', this)">Tools</button>
+        <button class="nav-btn active" onclick="filterData('all', this)">All</button>
+        <button class="nav-btn" onclick="filterData('game', this)">Games</button>
+        <button class="nav-btn" onclick="filterData('app', this)">Apps</button>
+        <button class="nav-btn" onclick="filterData('tool', this)">Tools</button>
     </nav>
 
     <div id="drawer">
-        <h3>Store Settings</h3>
-        <div class="chip-container">
-            <div class="chip" onclick="setTheme('light')">White Mode</div>
-            <div class="chip" onclick="setTheme('dark')">Dark Mode</div>
-            <div class="chip" onclick="sortData('size-high')">Highest Size</div>
-            <div class="chip" onclick="sortData('newest')">Newest</div>
-        </div>
-        <a href="https://example.com" style="display:block; margin-top:15px; color:var(--ps-green);">Help Center</a>
-        <button onclick="toggleDrawer()" style="width:100%; margin-top:15px; padding:10px; border:none; background:#eee; border-radius:10px;">Close</button>
+        <h3>Sorting & Themes</h3>
+        <div class="chip" onclick="setTheme('light')">White Mode</div>
+        <div class="chip" onclick="setTheme('dark')">Dark Mode</div>
+        <div class="chip" onclick="sort('size')">Sort by Size</div>
+        <button onclick="toggleDrawer()" style="width:100%; margin-top:15px; padding:10px; border:none; background:#eee; border-radius:8px;">Close</button>
     </div>
 
     <script>
-        let allApps = [];
-        let currentList = [];
+        let allData = [];
+        let viewList = [];
 
-        async function start() {
-            try {
-                const res = await fetch('info.json?v=' + Date.now());
-                const data = await res.json();
-                allApps = data.apps;
-                currentList = allApps.filter(a => data.trending_ids.includes(a.id));
-
-                setTimeout(() => {
-                    document.getElementById('splash').style.display = 'none';
-                    render();
-                }, 3000);
-            } catch (e) { alert("JSON missing!"); }
+        async function init() {
+            const res = await fetch('info.json');
+            const data = await res.json();
+            allData = data.apps;
+            viewList = allData;
+            render();
         }
 
         function render() {
             const grid = document.getElementById('main-grid');
-            grid.innerHTML = currentList.map(a => `
-                <div class="app-card" onclick="openModal('${a.id}')">
+            grid.innerHTML = viewList.map(a => `
+                <div class="app-card" onclick="openDetails('${a.id}')">
                     <img src="${a.icon}">
                     <div class="app-title">${a.name}</div>
-                    <div style="font-size:10px; opacity:0.6;">${a.size}</div>
+                    <div style="font-size:10px; color:var(--ps-grey)">${a.size} • ${a.category}</div>
                 </div>
             `).join('');
         }
 
-        function openModal(id) {
-            const a = allApps.find(x => x.id === id);
-            const content = document.getElementById('modal-content');
+        function openDetails(id) {
+            const a = allData.find(x => x.id === id);
+            const container = document.getElementById('details-content');
             
-            content.innerHTML = `
-                <div class="m-header">
+            container.innerHTML = `
+                <div class="hero-section">
                     <img src="${a.icon}">
-                    <div><h2>${a.name}</h2><p style="color:var(--ps-green)">${a.owner || 'Faizan Store'}</p></div>
+                    <div class="hero-info">
+                        <h2>${a.name}</h2>
+                        <p>${a.owner || 'Faizan Store'}</p>
+                    </div>
                 </div>
-                <div class="media-box">
-                    ${a.media.map(m => m.url.endsWith('.mp4') ? `<video src="${m.url}" controls></video>` : `<img src="${m.url}">`).join('')}
+
+                <div class="gallery">
+                    ${a.media.map(m => m.endsWith('.mp4') ? `<video src="${m}" controls></video>` : `<img src="${m}">`).join('')}
                 </div>
-                <p style="font-size:14px; line-height:1.5;">${a.description || 'No description available.'}</p>
-                <div class="dl-section">
-                    ${a.platforms.android ? a.platforms.android.map(link => `<a href="${link.url}" class="dl-btn">Download APK<br>(${link.name})</a>`).join('') : ''}
-                    ${a.platforms.windows ? `<a href="${a.platforms.windows}" class="dl-btn" style="background:#444">Windows version</a>` : ''}
+
+                <div class="info-box">
+                    <p>${a.description || 'No description available for this version.'}</p>
+                    <div style="margin-top:10px; font-size:12px;">
+                        <b>Size:</b> ${a.size} | <b>Updated:</b> ${a.releaseDate}
+                    </div>
+                </div>
+
+                <div class="dl-container">
+                    ${a.platforms.android ? a.platforms.android.map(l => `<a href="${l.url}" class="dl-btn btn-android">Install APK (${l.name})</a>`).join('') : ''}
+                    ${a.platforms.windows ? `<a href="${a.platforms.windows}" class="dl-btn btn-win">Download for Windows</a>` : ''}
                 </div>
             `;
-            document.getElementById('modal').style.display = 'block';
+            document.getElementById('details-page').style.display = 'block';
         }
 
-        function closeModal() { document.getElementById('modal').style.display = 'none'; }
-
-        function filterType(t, btn) {
+        function closeDetails() { document.getElementById('details-page').style.display = 'none'; }
+        
+        function filterData(type, btn) {
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            currentList = t === 'all' ? allApps : allApps.filter(a => a.type === t);
-            document.getElementById('label').innerText = t.toUpperCase();
+            viewList = type === 'all' ? allData : allData.filter(a => a.type === type);
             render();
         }
 
         function toggleDrawer() { document.getElementById('drawer').classList.toggle('open'); }
         function setTheme(t) { document.body.setAttribute('data-theme', t); toggleDrawer(); }
-        function sortData(m) {
-            if(m === 'size-high') currentList.sort((a,b) => parseFloat(b.size) - parseFloat(a.size));
-            if(m === 'newest') currentList.reverse();
-            render(); toggleDrawer();
-        }
 
-        // Search
         document.getElementById('search').addEventListener('input', (e) => {
-            const v = e.target.value.toLowerCase();
-            currentList = allApps.filter(a => a.name.toLowerCase().includes(v));
+            const term = e.target.value.toLowerCase();
+            viewList = allData.filter(a => a.name.toLowerCase().includes(term));
             render();
         });
 
-        start();
+        init();
     </script>
 </body>
 </html>
