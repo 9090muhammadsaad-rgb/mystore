@@ -3,305 +3,239 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elite App Store</title>
+    <title>Play Store Clone</title>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #0f172a;
-            --accent: #3b82f6;
-            --accent-glow: rgba(59, 130, 246, 0.5);
-            --glass: rgba(255, 255, 255, 0.08);
-            --text: #f8fafc;
+            --ps-green: #01875f;
+            --ps-dark: #202124;
+            --ps-light-grey: #5f6368;
+            --ps-bg: #ffffff;
+            --ps-card-hover: #f1f3f4;
         }
 
-        body {
-            background: var(--primary);
-            color: var(--text);
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Google Sans', sans-serif; }
+        
+        body { background-color: var(--ps-bg); color: var(--ps-dark); }
 
-        /* Animated Background */
-        body::before {
-            content: "";
-            position: fixed;
-            top: -10%; left: -10%;
-            width: 400px; height: 400px;
-            background: var(--accent);
-            filter: blur(150px);
-            opacity: 0.15;
-            z-index: -1;
-            animation: move 10s infinite alternate;
-        }
-
-        @keyframes move { from { transform: translate(0,0); } to { transform: translate(100vw, 50vh); } }
-
+        /* --- Header & Search --- */
         header {
-            padding: 80px 20px 40px;
-            text-align: center;
+            position: sticky; top: 0; z-index: 1000;
+            background: #fff; padding: 10px 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
-        .store-title {
-            font-size: 2.5rem;
-            font-weight: 800;
-            background: linear-gradient(to right, #fff, var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
-        }
-
-        /* Modern Search Box */
         .search-container {
-            position: sticky;
-            top: 20px;
-            z-index: 1000;
-            width: 90%;
-            max-width: 550px;
-            margin: 0 auto;
+            max-width: 700px; margin: 0 auto; position: relative;
         }
 
-        .search-box-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 50px;
-            padding: 5px 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        .search-box {
+            width: 100%; padding: 12px 20px 12px 50px;
+            background: #f1f3f4; border: none; border-radius: 8px;
+            font-size: 16px; outline: none; transition: 0.2s;
         }
 
-        .search-box-wrapper:focus-within {
-            border-color: var(--accent);
-            box-shadow: 0 0 20px var(--accent-glow);
-            transform: scale(1.02);
-        }
+        .search-box:focus { background: #fff; box-shadow: 0 1px 6px rgba(32,33,36,0.28); }
 
-        .search-bar {
-            width: 100%;
-            padding: 12px;
-            background: transparent;
-            border: none;
-            color: white;
-            outline: none;
-            font-size: 1rem;
-        }
+        .search-icon { position: absolute; left: 15px; top: 12px; color: var(--ps-light-grey); }
 
-        .mic-icon {
-            cursor: pointer;
-            font-size: 1.2rem;
-            opacity: 0.7;
-            transition: 0.3s;
-        }
-
-        .mic-icon:hover { opacity: 1; color: var(--accent); }
-
-        /* Suggestions */
+        /* Suggestions Dropdown */
         #suggestions {
-            position: absolute;
-            top: 110%; left: 0; width: 100%;
-            background: #1e293b;
-            border-radius: 20px;
-            display: none;
-            border: 1px solid var(--glass);
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            position: absolute; top: 100%; left: 0; width: 100%;
+            background: #fff; border-radius: 0 0 8px 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: none; border: 1px solid #e8eaed; border-top: none;
         }
 
-        .suggestion-item {
-            padding: 15px 20px;
-            cursor: pointer;
-            transition: 0.2s;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+        .sugg-item {
+            padding: 12px 20px; cursor: pointer; display: flex; align-items: center;
         }
+        .sugg-item:hover { background: #f8f9fa; }
+        .sugg-item:before { content: "🔍"; margin-right: 15px; opacity: 0.5; }
 
-        .suggestion-item:hover { background: var(--accent); padding-left: 30px; }
-
-        /* Loader */
-        #search-loader {
-            display: none;
-            text-align: center;
-            margin: 10px 0;
-            font-size: 0.8rem;
-            color: var(--accent);
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
-
-        /* Grid */
-        .app-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-            gap: 25px;
-            padding: 40px 5%;
+        /* --- App Grid --- */
+        .container { max-width: 1000px; margin: 20px auto; padding: 0 15px; }
+        .grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 25px; margin-top: 20px;
         }
 
         .app-card {
-            background: var(--glass);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 24px;
-            padding: 20px;
-            text-align: center;
-            transition: 0.4s;
-            position: relative;
-            overflow: hidden;
+            cursor: pointer; transition: 0.2s; border-radius: 8px; padding: 10px;
         }
-
-        .app-card:hover {
-            background: rgba(255,255,255,0.12);
-            transform: translateY(-10px);
-            border-color: var(--accent);
-        }
-
+        .app-card:hover { background: var(--ps-card-hover); }
         .app-card img {
-            width: 100px;
-            height: 100px;
-            border-radius: 22px;
-            margin-bottom: 15px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            width: 100%; aspect-ratio: 1/1; border-radius: 20%;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1); margin-bottom: 10px;
+        }
+        .app-name { font-size: 14px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .app-owner { color: var(--ps-light-grey); font-size: 12px; }
+
+        /* --- Modal / Detail View --- */
+        #modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #fff; z-index: 2000; display: none; overflow-y: auto;
         }
 
-        /* Download Button Animation */
-        .btn-dl {
-            display: block;
-            width: 100%;
-            padding: 14px;
-            margin-top: 15px;
-            border-radius: 14px;
-            text-decoration: none;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: 0.3s;
+        .modal-header {
+            max-width: 800px; margin: 20px auto; padding: 20px; display: flex; gap: 24px;
         }
 
-        .available { background: linear-gradient(45deg, #22c55e, #16a34a); color: white; }
-        .available:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(34, 197, 94, 0.4); }
-        .coming-soon { background: #334155; color: #94a3b8; cursor: not-allowed; }
+        .modal-header img { width: 120px; height: 120px; border-radius: 22px; }
 
-        footer {
-            background: #020617;
-            padding: 60px 20px;
-            text-align: center;
-            border-top: 1px solid var(--glass);
+        .install-btn {
+            background: var(--ps-green); color: #fff; border: none;
+            padding: 10px 40px; border-radius: 8px; font-weight: 500;
+            cursor: pointer; font-size: 14px; margin-top: 15px;
+        }
+
+        .section-title { font-size: 18px; font-weight: 500; margin: 20px 0 10px; }
+        .badge-list { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+        .badge { background: #f1f3f4; padding: 5px 12px; border-radius: 15px; font-size: 12px; }
+
+        .close-btn { 
+            position: absolute; top: 20px; right: 20px; font-size: 24px; cursor: pointer; background: none; border: none;
+        }
+
+        /* Responsive Mobile */
+        @media (max-width: 600px) {
+            .grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+            .app-name { font-size: 12px; }
+            .modal-header { flex-direction: column; align-items: center; text-align: center; }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1 class="store-title" id="web-name">Loading...</h1>
-        <p id="web-desc" style="opacity: 0.6;">Getting things ready for you</p>
+        <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search-input" class="search-box" placeholder="Search for apps & games..." autocomplete="off">
+            <div id="suggestions"></div>
+        </div>
     </header>
 
-    <div class="search-container">
-        <div class="search-box-wrapper">
-            <span style="opacity: 0.5;">🔍</span>
-            <input type="text" id="search-input" class="search-bar" placeholder="Search for games..." autocomplete="off">
-            <span class="mic-icon" onclick="startVoiceSearch()">🎤</span>
-        </div>
-        <div id="search-loader">Searching for amazing content...</div>
-        <div id="suggestions"></div>
+    <div class="container">
+        <h2 class="section-title">Recommended for you</h2>
+        <div class="grid" id="main-grid"></div>
     </div>
 
-    <div class="app-grid" id="main-grid"></div>
+    <div id="modal">
+        <button class="close-btn" onclick="closeApp()">✕</button>
+        <div class="modal-header">
+            <img id="m-icon" src="" alt="">
+            <div>
+                <h1 id="m-name"></h1>
+                <p id="m-owner" style="color:var(--ps-green); font-weight:500;"></p>
+                <div id="m-badges" class="badge-list"></div>
+                <button class="install-btn" id="m-install">Install</button>
+            </div>
+        </div>
 
-    <footer>
-        <div id="footer-text"></div>
-        <p id="watermark"></p>
-    </footer>
+        <div style="max-width: 800px; margin: 0 auto; padding: 20px;">
+            <div class="section-title">About this app</div>
+            <p id="m-desc" style="color:var(--ps-light-grey); line-height: 1.6;"></p>
+            
+            <div class="section-title">Platform Support</div>
+            <div id="m-platforms" class="badge-list"></div>
+
+            <div class="section-title">Data safety</div>
+            <div style="border: 1px solid #e8eaed; padding: 15px; border-radius: 8px;">
+                <p style="font-size: 13px; color: #5f6368;">Safety starts with understanding how developers collect and share your data. <span style="color:var(--ps-green)">See details</span></p>
+            </div>
+
+            <div class="section-title">Similar Games</div>
+            <div class="grid" id="recommended-grid"></div>
+        </div>
+    </div>
 
     <script>
         let apps = [];
-        let searchKeywords = [];
+        let keywords = [];
 
         async function init() {
             try {
-                const [resInfo, resApps, resSearch] = await Promise.all([
-                    fetch('my_web_info.json?v=' + Date.now()).then(r => r.json()),
+                const [resApps, resSearch] = await Promise.all([
                     fetch('info.json?v=' + Date.now()).then(r => r.json()),
                     fetch('search.txt?v=' + Date.now()).then(r => r.text())
                 ]);
-
-                siteInfo = resInfo[0];
                 apps = resApps;
-                searchKeywords = resSearch.split('\n').filter(l => l.trim() !== "");
-                
-                document.getElementById('web-name').innerText = siteInfo.WebName;
-                document.getElementById('web-desc').innerText = siteInfo.Description;
-                document.getElementById('watermark').innerText = siteInfo.Watermark;
+                keywords = resSearch.split('\n').filter(l => l.trim());
                 renderApps(apps);
-            } catch (e) {
-                console.log("Error loading. Check JSON files.");
-            }
+            } catch (e) { console.error("Data Load Error"); }
         }
 
         function renderApps(data) {
             const grid = document.getElementById('main-grid');
             grid.innerHTML = data.map(app => `
                 <div class="app-card" onclick="openApp(${app.id})">
-                    <img src="${app.icon === 'N/A' ? 'https://via.placeholder.com/100/1e293b/fff?text=App' : app.icon}">
-                    <div style="font-weight: 700; margin-bottom: 5px;">${app.name}</div>
-                    <div style="font-size: 0.75rem; color: var(--accent); text-transform: uppercase;">${app.category}</div>
+                    <img src="${app.icon === 'N/A' ? 'https://via.placeholder.com/150' : app.icon}">
+                    <div class="app-name">${app.name}</div>
+                    <div class="app-owner">${app.category}</div>
                 </div>
             `).join('');
         }
 
-        // Professional Search Logic
-        const searchInput = document.getElementById('search-input');
-        const loader = document.getElementById('search-loader');
-        const suggs = document.getElementById('suggestions');
+        // Search Suggestion Engine
+        const input = document.getElementById('search-input');
+        const suggBox = document.getElementById('suggestions');
 
-        searchInput.addEventListener('input', (e) => {
+        input.addEventListener('input', (e) => {
             const val = e.target.value.toLowerCase();
-            
-            if(val.length > 0) {
-                loader.style.display = 'block';
-                const matches = searchKeywords.filter(k => k.toLowerCase().includes(val)).slice(0, 5);
-                
-                setTimeout(() => {
-                    loader.style.display = 'none';
-                    if(matches.length > 0) {
-                        suggs.innerHTML = matches.map(m => `<div class="suggestion-item" onclick="handleSelect('${m}')">${m}</div>`).join('');
-                        suggs.style.display = 'block';
-                    } else {
-                        suggs.style.display = 'none';
-                    }
-                }, 300); // 0.3s artificial delay for professional feel
-            } else {
-                suggs.style.display = 'none';
-                renderApps(apps);
-            }
+            if (val.length > 0) {
+                const filtered = keywords.filter(k => k.toLowerCase().includes(val)).slice(0, 5);
+                if (filtered.length > 0) {
+                    suggBox.innerHTML = filtered.map(k => `<div class="sugg-item" onclick="selectSearch('${k}')">${k}</div>`).join('');
+                    suggBox.style.display = 'block';
+                } else { suggBox.style.display = 'none'; }
+            } else { suggBox.style.display = 'none'; renderApps(apps); }
         });
 
-        function handleSelect(text) {
-            searchInput.value = text;
-            suggs.style.display = 'none';
-            const filtered = apps.filter(a => a.name.toLowerCase().includes(text.toLowerCase()));
+        function selectSearch(k) {
+            input.value = k;
+            suggBox.style.display = 'none';
+            const filtered = apps.filter(a => a.name.toLowerCase().includes(k.toLowerCase()) || a.category.toLowerCase().includes(k.toLowerCase()));
             renderApps(filtered);
         }
 
-        // Voice Search Feature
-        function startVoiceSearch() {
-            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-            recognition.lang = 'en-US';
-            recognition.start();
+        function openApp(id) {
+            const app = apps.find(a => a.id === id);
+            document.getElementById('m-icon').src = app.icon;
+            document.getElementById('m-name').innerText = app.name;
+            document.getElementById('m-owner').innerText = app.owner;
+            document.getElementById('m-desc').innerText = app.description;
             
-            searchInput.placeholder = "Listening...";
-            
-            recognition.onresult = (event) => {
-                const speechToText = event.results[0][0].transcript;
-                searchInput.value = speechToText;
-                handleSelect(speechToText);
-                searchInput.placeholder = "Search for games...";
-            };
+            // Platform Badges (Windows, Mac, Linux etc)
+            const platBox = document.getElementById('m-platforms');
+            platBox.innerHTML = `
+                <span class="badge">Windows</span>
+                <span class="badge">Linux</span>
+                <span class="badge">macOS</span>
+            `;
+
+            const installBtn = document.getElementById('m-install');
+            if(app.available) {
+                installBtn.innerText = "Install";
+                installBtn.style.background = "var(--ps-green)";
+                installBtn.onclick = () => window.open(app.versions[0].download);
+            } else {
+                installBtn.innerText = "Coming Soon";
+                installBtn.style.background = "#d93025";
+            }
+
+            // Recommended (Play Store Feel)
+            const recGrid = document.getElementById('recommended-grid');
+            const recApps = apps.filter(a => app.recommended.includes(a.id));
+            recGrid.innerHTML = recApps.map(r => `
+                <div class="app-card" onclick="openApp(${r.id})">
+                    <img src="${r.icon}">
+                    <div class="app-name" style="font-size:11px;">${r.name}</div>
+                </div>
+            `).join('');
+
+            document.getElementById('modal').style.display = 'block';
+            window.scrollTo(0,0);
         }
 
-        init();
-    </script>
-</body>
-</html>
+        function closeApp() { document.getElementById('modal').style.display =
+        
