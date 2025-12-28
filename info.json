@@ -1,40 +1,70 @@
+
 [
   {
     "id": 1,
-    "name": "Granny",
-    "type": "game",
-    "category": "Horror",
-    "description": "A survival horror game where you must escape a creepy house.",
-    "versions": [
-      { "version": "1.8", "size": "100MB", "download": "https://example.com/granny18" },
-      { "version": "1.7", "size": "95MB", "download": "https://example.com/granny17" }
+    "name": "Aircrack-ng Pro",
+    "type": "tool",
+    "category": "Security",
+    "trending": true,
+    "description": "A complete suite of tools to assess WiFi network security. This version includes custom scripts.",
+    "size": "25MB",
+    "requirements": "Linux (Kali) / Windows 10 / Mac",
+    "releaseDate": "2025-12-28",
+    "icon": "https://via.placeholder.com/150/202124/ffffff?text=Aircrack",
+    "media": [
+      "https://www.w3schools.com/html/mov_bbb.mp4",
+      "https://via.placeholder.com/400x200?text=Terminal+Screenshot"
     ],
-    "releaseDate": "2023-11-20",
-    "lastUpdate": "2024-01-10",
-    "country": "Sweden",
-    "owner": "DVloper",
-    "icon": "https://play-lh.googleusercontent.com/6_3Wn-0k_S3S8Gk8",
-    "available": true,
-    "howToInstall": "Download the APK, enable Unknown Sources in settings, and install.",
-    "recommended": [2]
+    "platforms": {
+      "android": null,
+      "windows": "https://gdrive.com/aircrack_win.exe",
+      "linux": "https://gdrive.com/aircrack_linux.tar.gz",
+      "source_zip": "https://github.com/aircrack-ng/zipball/master",
+      "macOS": "https://gdrive.com/aircrack_mac.dmg"
+    },
+    "recommended": [2],
+    "available": true
   },
   {
     "id": 2,
-    "name": "Granny MOD APK",
+    "name": "Granny: Chapter Two",
     "type": "game",
-    "category": "Action",
-    "description": "Modified version of Granny with God Mode and extra features.",
-    "versions": [
-      { "version": "1.0", "size": "150MB", "download": "N/A" }
-    ],
-    "releaseDate": "2024-01-15",
-    "lastUpdate": "2024-01-15",
-    "country": "Global",
-    "owner": "ModderTeam",
-    "icon": "https://via.placeholder.com/80/ff0000/ffffff?text=MOD",
-    "available": false,
-    "howToInstall": "Uninstall original Granny first, then install this APK.",
-    "recommended": [1]
+    "category": "Horror",
+    "trending": true,
+    "description": "Granny and Grandpa keep you locked in his house this time. Escape!",
+    "size": "110MB",
+    "requirements": "Android 5.0+ / Windows 7+",
+    "releaseDate": "2025-11-20",
+    "icon": "https://via.placeholder.com/150/d93025/ffffff?text=Granny2",
+    "media": ["https://via.placeholder.com/400x200?text=Granny+Gameplay"],
+    "platforms": {
+      "android": "https://mediafire.com/granny2.apk",
+      "windows": "https://gdrive.com/granny2_setup.exe",
+      "linux": null,
+      "macOS": null
+    },
+    "recommended": [1],
+    "available": true
+  },
+  {
+    "id": 3,
+    "name": "Python IDE Mobile",
+    "type": "app",
+    "category": "Coding",
+    "trending": false,
+    "description": "Write and run Python code on your mobile or desktop.",
+    "size": "40MB",
+    "requirements": "Universal",
+    "releaseDate": "2025-05-15",
+    "icon": "https://via.placeholder.com/150/3b82f6/ffffff?text=Python",
+    "media": [],
+    "platforms": {
+      "android": "https://mediafire.com/py.apk",
+      "windows": "https://gdrive.com/py_setup.exe",
+      "linux": "https://gdrive.com/py.deb",
+      "macOS": "https://gdrive.com/py.dmg"
+    },
+    "recommended": [1],
+    "available": true
   }
 ]
-
