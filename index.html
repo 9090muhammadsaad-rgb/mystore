@@ -3,190 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elite Pro Store</title>
+    <title>Faizan Store | Pro Gaming</title>
     <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root { --ps-green: #01875f; --ps-bg: #ffffff; --ps-txt: #202124; --ps-card: #ffffff; --ps-border: #e8eaed; }
         [data-theme="dark"] { --ps-bg: #121212; --ps-txt: #e8eaed; --ps-card: #1e1e1e; --ps-border: #333; }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Google Sans', sans-serif; transition: background 0.3s; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Google Sans', sans-serif; transition: 0.3s; }
         body { background: var(--ps-bg); color: var(--ps-txt); overflow-x: hidden; padding-bottom: 80px; }
 
-        /* Splash Screen */
-        #splash { position: fixed; inset: 0; background: #fff; z-index: 9999; display: flex; align-items: center; justify-content: center; }
-        #splash img { width: 150px; border-radius: 20px; }
+        /* Intro Splash Fix */
+        #splash { position: fixed; inset: 0; background: #fff; z-index: 9999; display: flex; align-items: center; justify-content: center; opacity: 1; transition: 0.8s ease; }
+        #splash img { width: 180px; border-radius: 20px; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
         /* Header */
-        /* Okay Saad */
         header { position: sticky; top: 0; background: var(--ps-bg); z-index: 1000; padding: 15px; border-bottom: 1px solid var(--ps-border); }
         .search-row { display: flex; align-items: center; gap: 10px; max-width: 800px; margin: 0 auto; }
         .search-box { flex: 1; padding: 12px 20px; background: rgba(128,128,128,0.1); border-radius: 25px; border: none; outline: none; color: var(--ps-txt); }
-        .sort-btn { cursor: pointer; font-size: 24px; }
+        .sort-btn { cursor: pointer; font-size: 24px; user-select: none; }
+
+        /* App Grid & Infinite Scroll */
+        .container { max-width: 1000px; margin: 20px auto; padding: 0 15px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 20px; }
+        .app-card { cursor: pointer; animation: fadeInUp 0.6s ease forwards; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .app-card img { width: 100%; aspect-ratio: 1/1; border-radius: 22%; object-fit: cover; border: 1px solid var(--ps-border); }
+        .app-title { font-size: 14px; font-weight: 500; margin-top: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
         /* Sorting Drawer */
         #drawer { position: fixed; bottom: -100%; left: 0; width: 100%; background: var(--ps-card); z-index: 2000; padding: 25px; 
-                  border-radius: 25px 25px 0 0; box-shadow: 0 -5px 20px rgba(0,0,0,0.2); transition: 0.4s; max-height: 80vh; overflow-y: auto; }
+                  border-radius: 25px 25px 0 0; box-shadow: 0 -5px 25px rgba(0,0,0,0.3); transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); max-height: 85vh; overflow-y: auto; }
         #drawer.open { bottom: 0; }
         .filter-section { margin-bottom: 20px; }
-        .filter-title { font-weight: bold; margin-bottom: 10px; display: block; border-bottom: 1px solid var(--ps-border); padding-bottom: 5px; }
-        .chip-container { display: flex; flex-wrap: wrap; gap: 8px; }
-        .chip { padding: 8px 15px; background: rgba(128,128,128,0.1); border-radius: 20px; font-size: 13px; cursor: pointer; }
+        .chip-container { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .chip { padding: 8px 16px; background: rgba(128,128,128,0.1); border-radius: 20px; font-size: 13px; cursor: pointer; border: 1px solid transparent; }
+        .chip:hover { border-color: var(--ps-green); }
         .chip.active { background: var(--ps-green); color: white; }
-
-        /* Main Content */
-        .container { max-width: 1000px; margin: 20px auto; padding: 0 15px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 20px; }
-        .app-card { cursor: pointer; opacity: 0; transform: translateY(20px); transition: 0.5s; }
-        .app-card.show { opacity: 1; transform: translateY(0); }
-        .app-card img { width: 100%; aspect-ratio: 1/1; border-radius: 22%; object-fit: cover; border: 1px solid var(--ps-border); }
-        .app-title { font-size: 14px; font-weight: 500; margin-top: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
         /* Bottom Nav */
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--ps-card); display: flex; justify-content: space-around; 
                       padding: 15px; border-top: 1px solid var(--ps-border); z-index: 1500; transition: 0.3s; }
         .nav-hide { transform: translateY(100%); }
-        .nav-btn { border: none; background: none; color: var(--ps-grey); cursor: pointer; font-weight: 500; }
-        .nav-btn.active { color: var(--ps-green); }
+        .nav-btn { border: none; background: none; color: var(--ps-grey); cursor: pointer; font-weight: 500; font-size: 15px; }
+        .nav-btn.active { color: var(--ps-green); border-bottom: 2px solid var(--ps-green); }
 
-        /* Help Button */
-        .help-btn { display: block; width: 100%; padding: 12px; background: #3498db; color: white; border-radius: 10px; text-align: center; text-decoration: none; margin-top: 20px; }
+        .help-btn { display: block; width: 100%; padding: 15px; background: #3498db; color: white; border-radius: 12px; text-align: center; text-decoration: none; margin-top: 10px; font-weight: bold; }
     </style>
 </head>
 <body data-theme="light">
 
-    <div id="splash"><img src="1761933069017.jpg"></div>
+    <div id="splash"><img src="1761933069017.jpg" alt="Faizan Store"></div>
 
     <header>
         <div class="search-row">
-            <input type="text" id="search" class="search-box" placeholder="Search with keywords...">
+            <input type="text" id="search-input" class="search-box" placeholder="Search apps, mods, tools...">
             <span class="sort-btn" onclick="toggleDrawer()">🔘</span>
         </div>
     </header>
 
     <div class="container">
-        <h3 id="section-title" style="margin-bottom: 15px;">Trending Updates</h3>
+        <h3 id="view-label" style="margin-bottom: 20px;">Trending Games</h3>
         <div class="grid" id="main-grid"></div>
-        <div id="loading-more" style="text-align: center; padding: 20px; display: none;">Loading more...</div>
+        <div id="scroll-anchor" style="height: 20px;"></div>
     </div>
 
     <nav class="bottom-nav" id="navbar">
-        <button class="nav-btn active" onclick="tab('all', this)">All</button>
-        <button class="nav-btn" onclick="tab('game', this)">Games</button>
-        <button class="nav-btn" onclick="tab('app', this)">Apps</button>
+        <button class="nav-btn active" onclick="switchTab('all', this)">All</button>
+        <button class="nav-btn" onclick="switchTab('game', this)">Games</button>
+        <button class="nav-btn" onclick="switchTab('app', this)">Apps</button>
     </nav>
 
     <div id="drawer">
-        <h2 style="margin-bottom: 20px;">Settings & Filters</h2>
+        <h2 style="text-align:center; margin-bottom:20px;">Store Settings</h2>
         
         <div class="filter-section">
-            <span class="filter-title">Theme</span>
+            <span style="font-weight:bold;">Visual Style</span>
             <div class="chip-container">
-                <div class="chip" onclick="setTheme('light')">White Mode</div>
-                <div class="chip" onclick="setTheme('dark')">Dark Mode</div>
+                <div class="chip" onclick="setTheme('light')">Light Theme</div>
+                <div class="chip" onclick="setTheme('dark')">Dark Theme</div>
             </div>
         </div>
 
         <div class="filter-section">
-            <span class="filter-title">Sort By</span>
+            <span style="font-weight:bold;">Sort Engine</span>
             <div class="chip-container">
-                <div class="chip" onclick="sortData('size-low')">Lowest Size</div>
-                <div class="chip" onclick="sortData('size-high')">Highest Size</div>
-                <div class="chip" onclick="sortData('newest')">Newest</div>
-                <div class="chip" onclick="sortData('oldest')">Oldest</div>
+                <div class="chip" onclick="sortApps('size-low')">Smallest Size</div>
+                <div class="chip" onclick="sortApps('size-high')">Largest Size</div>
+                <div class="chip" onclick="sortApps('newest')">Recently Added</div>
+                <div class="chip" onclick="sortApps('oldest')">Old Versions</div>
             </div>
         </div>
 
         <div class="filter-section">
-            <span class="filter-title">OS Support</span>
-            <div class="chip-container" id="os-filters">
-                <div class="chip" onclick="filterOS('android')">Android</div>
-                <div class="chip" onclick="filterOS('windows')">Windows</div>
+            <span style="font-weight:bold;">OS Support</span>
+            <div class="chip-container">
+                <div class="chip" onclick="filterByOS('android')">Android (APK)</div>
+                <div class="chip" onclick="filterByOS('windows')">Windows (EXE)</div>
             </div>
         </div>
 
         <div class="filter-section">
-            <span class="filter-title">Categories</span>
-            <div class="chip-container" id="cat-filters"></div>
+            <span style="font-weight:bold;">Top Categories</span>
+            <div class="chip-container" id="dynamic-cats"></div>
         </div>
 
-        <a href="https://example.com" target="_blank" class="help-btn">Help & Documentation</a>
-        <button onclick="toggleDrawer()" style="width: 100%; margin-top: 10px; padding: 10px; border: none; background: #eee; border-radius: 10px;">Close</button>
+        <a href="https://example.com" target="_blank" class="help-btn">Need Help?</a>
+        <button onclick="toggleDrawer()" style="width:100%; margin-top:15px; padding:12px; border-radius:12px; border:none; background:#eee; cursor:pointer;">Dismiss</button>
     </div>
 
     <script>
-        let apps = [];
-        let itemsToShow = 10;
-        let currentData = [];
+        let allApps = [];
+        let filteredApps = [];
+        let displayLimit = 12;
 
-        async function init() {
+        async function initStore() {
             try {
                 const res = await fetch('info.json?v=' + Date.now());
                 const data = await res.json();
-                apps = data.apps;
-                currentData = apps;
-                
-                // Load Dynamic Filters
-                const cats = [...new Set(apps.map(a => a.category))];
-                document.getElementById('cat-filters').innerHTML = cats.map(c => `<div class="chip" onclick="filterCat('${c}')">${c}</div>`).join('');
+                allApps = data.apps;
+                filteredApps = allApps.filter(a => data.trending_ids.includes(a.id));
 
+                // Load categories dynamically
+                const cats = [...new Set(allApps.map(a => a.category))];
+                document.getElementById('dynamic-cats').innerHTML = cats.map(c => `<div class="chip" onclick="filterByCat('${c}')">${c}</div>`).join('');
+
+                // 3 Second Loop Stopper
                 setTimeout(() => {
-                    document.getElementById('splash').style.display = 'none';
-                    render();
-                }, 2000);
-            } catch (e) { console.error("JSON missing or corrupt."); }
+                    const splash = document.getElementById('splash');
+                    splash.style.opacity = '0';
+                    setTimeout(() => splash.style.display = 'none', 800);
+                    renderGrid();
+                }, 3000);
+
+            } catch (e) { console.error("Data config failed!"); }
         }
 
-        function render() {
+        function renderGrid() {
             const grid = document.getElementById('main-grid');
-            grid.innerHTML = currentData.slice(0, itemsToShow).map(a => `
-                <div class="app-card show" onclick="window.location.href='#${a.id}'">
-                    <img src="${a.icon || 'default.png'}">
+            const toShow = filteredApps.slice(0, displayLimit);
+            grid.innerHTML = toShow.map(a => `
+                <div class="app-card" onclick="alert('Opening: ' + '${a.name}')">
+                    <img src="${a.icon}" onerror="this.src='https://via.placeholder.com/150'">
                     <div class="app-title">${a.name}</div>
-                    <div style="font-size:11px; opacity:0.7">${a.category} • ${a.size}</div>
+                    <div style="font-size:11px; opacity:0.6">${a.category} • ${a.size}</div>
                 </div>
             `).join('');
         }
 
-        // Infinite Scroll
-        window.onscroll = function() {
-            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
-                if(itemsToShow < currentData.length) {
-                    itemsToShow += 10;
-                    render();
-                }
-            }
-            // Hide Nav on Scroll
-            const nav = document.getElementById('navbar');
-            if (this.oldScroll < this.scrollY) nav.classList.add('nav-hide');
-            else nav.classList.remove('nav-hide');
-            this.oldScroll = this.scrollY;
-        };
+        // Search Engine
+        document.getElementById('search-input').addEventListener('input', (e) => {
+            const val = e.target.value.toLowerCase();
+            filteredApps = allApps.filter(a => 
+                a.name.toLowerCase().includes(val) || 
+                (a.search_keywords && a.search_keywords.some(k => k.toLowerCase().includes(val)))
+            );
+            renderGrid();
+        });
 
+        // Bottom Tabs
+        function switchTab(type, btn) {
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            filteredApps = type === 'all' ? allApps : allApps.filter(a => a.type === type);
+            document.getElementById('view-label').innerText = type.toUpperCase();
+            renderGrid();
+        }
+
+        // Drawer Controls
         function toggleDrawer() { document.getElementById('drawer').classList.toggle('open'); }
         function setTheme(t) { document.body.setAttribute('data-theme', t); toggleDrawer(); }
-
-        function sortData(type) {
-            if(type === 'size-low') currentData.sort((a,b) => parseFloat(a.size) - parseFloat(b.size));
-            if(type === 'size-high') currentData.sort((a,b) => parseFloat(b.size) - parseFloat(a.size));
-            if(type === 'newest') currentData.sort((a,b) => new Date(b.releaseDate) - new Date(a.releaseDate));
-            if(type === 'oldest') currentData.sort((a,b) => new Date(a.releaseDate) - new Date(b.releaseDate));
-            render();
-            toggleDrawer();
+        
+        function sortApps(mode) {
+            if(mode === 'size-low') filteredApps.sort((a,b) => parseFloat(a.size) - parseFloat(b.size));
+            if(mode === 'size-high') filteredApps.sort((a,b) => parseFloat(b.size) - parseFloat(a.size));
+            if(mode === 'newest') filteredApps.sort((a,b) => new Date(b.releaseDate) - new Date(a.releaseDate));
+            renderGrid(); toggleDrawer();
         }
 
-        function filterOS(os) {
-            currentData = apps.filter(a => a.platforms && a.platforms[os]);
-            render();
-            toggleDrawer();
+        function filterByCat(c) {
+            filteredApps = allApps.filter(a => a.category === c);
+            renderGrid(); toggleDrawer();
         }
 
-        function filterCat(c) {
-            currentData = apps.filter(a => a.category === c);
-            render();
-            toggleDrawer();
+        function filterByOS(os) {
+            filteredApps = allApps.filter(a => a.platforms && a.platforms[os]);
+            renderGrid(); toggleDrawer();
         }
 
-        init();
+        // Infinite Scroll Simulation
+        window.addEventListener('scroll', () => {
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50) {
+                if(displayLimit < filteredApps.length) {
+                    displayLimit += 6;
+                    renderGrid();
+                }
+            }
+            const nav = document.getElementById('navbar');
+            if (this.oldScroll < window.scrollY) nav.classList.add('nav-hide');
+            else nav.classList.remove('nav-hide');
+            this.oldScroll = window.scrollY;
+        });
+
+        initStore();
     </script>
 </body>
 </html>
