@@ -3,258 +3,250 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Faizan Store Pro | Instant Load</title>
+    <title>Faizan Store | Ultra Power</title>
     <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        :root { --p-green: #01875f; --p-bg: #ffffff; --p-txt: #202124; --p-card: #ffffff; --p-border: #e8eaed; --p-grey: #5f6368; --p-surface: #f8f9fa; }
+        :root { --p-green: #01875f; --p-bg: #ffffff; --p-txt: #202124; --p-card: #ffffff; --p-border: #e8eaed; --p-grey: #5f6368; --p-surface: #f1f3f4; }
         [data-theme="dark"] { --p-bg: #121212; --p-txt: #e8eaed; --p-card: #1e1e1e; --p-border: #333; --p-surface: #2d2d2d; }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Google Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--p-bg); color: var(--p-txt); overflow-x: hidden; transition: background 0.2s; }
+        body { background: var(--p-bg); color: var(--p-txt); overflow-x: hidden; transition: 0.2s; }
 
-        /* HEADER */
-        header { position: sticky; top: 0; background: var(--p-bg); z-index: 1000; padding: 12px 16px; border-bottom: 1px solid var(--p-border); display: flex; align-items: center; gap: 12px; }
-        .search-wrapper { flex: 1; position: relative; display: flex; align-items: center; background: var(--p-surface); border-radius: 24px; padding: 0 15px; }
-        .search-box { width: 100%; border: none; background: transparent; padding: 10px; font-size: 15px; outline: none; color: var(--p-txt); }
-        .sort-icon { cursor: pointer; font-size: 22px; user-select: none; }
+        /* HEADER & SEARCH */
+        header { position: sticky; top: 0; background: var(--p-bg); z-index: 1000; padding: 10px 15px; border-bottom: 1px solid var(--p-border); display: flex; align-items: center; gap: 10px; }
+        .search-container { flex: 1; display: flex; align-items: center; background: var(--p-surface); border-radius: 30px; padding: 0 15px; }
+        .search-box { width: 100%; border: none; background: transparent; padding: 12px; font-size: 15px; outline: none; color: var(--p-txt); }
+        .btn-settings { cursor: pointer; font-size: 24px; padding: 5px; }
 
-        /* MAIN APP GRID */
-        .main-container { max-width: 1000px; margin: 0 auto; padding: 16px; }
-        .section-title { font-size: 18px; font-weight: 700; margin: 20px 0 15px; display: flex; justify-content: space-between; align-items: center; }
+        /* CATEGORY SCROLLER */
+        .cat-scroller { display: flex; gap: 10px; overflow-x: auto; padding: 15px; scrollbar-width: none; background: var(--p-bg); }
+        .cat-scroller::-webkit-scrollbar { display: none; }
+        .cat-chip { padding: 8px 18px; background: var(--p-surface); border: 1px solid var(--p-border); border-radius: 20px; font-size: 13px; white-space: nowrap; cursor: pointer; font-weight: 500; }
+        .cat-chip.active { background: #e6f4ea; color: var(--p-green); border-color: var(--p-green); }
+
+        /* MAIN CONTENT */
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 15px 100px; }
+        .section-label { font-size: 18px; font-weight: 700; margin: 15px 0; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)); gap: 20px; }
-        .app-item { cursor: pointer; transition: 0.2s; }
-        .app-item:active { transform: scale(0.95); }
-        .app-item img { width: 100%; aspect-ratio: 1/1; border-radius: 20%; object-fit: cover; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid var(--p-border); }
-        .app-name { font-size: 12px; font-weight: 500; margin-top: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .app-sub { font-size: 10px; color: var(--p-grey); }
+        .app-item { cursor: pointer; animation: zoomIn 0.3s ease; }
+        @keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .app-item img { width: 100%; aspect-ratio: 1/1; border-radius: 22%; object-fit: cover; border: 1px solid var(--p-border); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .app-item .name { font-size: 12px; font-weight: 500; margin-top: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .app-item .meta { font-size: 10px; color: var(--p-grey); }
 
-        /* DETAILS OVERLAY (PLAY STORE FEEL) */
-        #details-overlay { position: fixed; inset: 0; background: var(--p-bg); z-index: 5000; display: none; overflow-y: auto; animation: slideIn 0.3s ease-out; }
-        @keyframes slideIn { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        
-        .d-header { position: sticky; top: 0; background: var(--p-bg); padding: 12px 16px; display: flex; align-items: center; border-bottom: 1px solid var(--p-border); z-index: 10; }
-        .back-btn { font-size: 24px; border: none; background: none; cursor: pointer; color: var(--p-txt); margin-right: 15px; }
+        /* DETAIL VIEW OVERLAY */
+        #detail-view { position: fixed; inset: 0; background: var(--p-bg); z-index: 5000; display: none; overflow-y: auto; }
+        .d-header { position: sticky; top: 0; background: var(--p-bg); padding: 12px 15px; display: flex; align-items: center; border-bottom: 1px solid var(--p-border); z-index: 10; }
+        .d-back { font-size: 26px; border: none; background: none; color: var(--p-txt); cursor: pointer; margin-right: 15px; }
 
-        .d-hero { display: flex; padding: 20px; gap: 20px; }
-        .d-hero img { width: 88px; height: 88px; border-radius: 22%; object-fit: cover; }
+        .d-hero { display: flex; padding: 20px; gap: 20px; align-items: center; }
+        .d-hero img { width: 90px; height: 90px; border-radius: 22%; object-fit: cover; }
         .d-info h2 { font-size: 22px; font-weight: 700; }
-        .d-info p { color: var(--p-green); font-weight: 500; font-size: 14px; }
+        .d-info p { color: var(--p-green); font-size: 14px; font-weight: 500; }
 
-        /* STATS ROW */
-        .stats-row { display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid var(--p-border); border-bottom: 1px solid var(--p-border); margin: 0 20px; text-align: center; }
-        .stat-item { border-right: 1px solid var(--p-border); flex: 1; }
-        .stat-item:last-child { border-right: none; }
-        .stat-val { font-weight: 700; font-size: 14px; }
-        .stat-lab { font-size: 10px; color: var(--p-grey); }
+        .d-gallery { display: flex; gap: 12px; overflow-x: auto; padding: 10px 20px; scrollbar-width: none; }
+        .d-gallery img, .d-gallery video { height: 180px; min-width: 280px; border-radius: 12px; object-fit: cover; background: #000; }
 
-        /* SCREENSHOTS */
-        .d-gallery { display: flex; gap: 12px; overflow-x: auto; padding: 20px; scrollbar-width: none; }
-        .d-gallery::-webkit-scrollbar { display: none; }
-        .d-gallery img, .d-gallery video { height: 170px; min-width: 280px; border-radius: 12px; object-fit: cover; background: #000; }
-
-        .d-desc { padding: 0 20px 20px; font-size: 14px; color: var(--p-grey); line-height: 1.5; }
-
-        /* INSTALL BUTTONS */
-        .install-box { padding: 0 20px 30px; }
-        .btn-main { display: block; width: 100%; padding: 12px; border-radius: 8px; text-align: center; text-decoration: none; font-weight: 700; margin-bottom: 10px; transition: 0.2s; }
-        .btn-green { background: var(--p-green); color: white; }
-        .btn-outline { border: 1px solid var(--p-border); color: var(--p-green); background: var(--p-card); }
+        .d-desc { padding: 20px; font-size: 14px; color: var(--p-grey); line-height: 1.6; }
+        
+        /* DOWNLOAD BUTTONS */
+        .dl-box { padding: 0 20px 20px; }
+        .dl-btn { display: block; width: 100%; padding: 14px; border-radius: 8px; text-align: center; text-decoration: none; font-weight: 700; font-size: 14px; margin-bottom: 10px; }
+        .btn-apk { background: var(--p-green); color: white; }
+        .btn-win { background: #3c4043; color: white; }
 
         /* RECOMMENDED SECTION */
-        .rec-section { padding: 20px; background: var(--p-surface); border-top: 1px solid var(--p-border); }
-        .rec-grid { display: flex; gap: 15px; overflow-x: auto; padding: 10px 0; scrollbar-width: none; }
+        .rec-box { background: var(--p-surface); padding: 20px; border-top: 1px solid var(--p-border); }
+        .rec-scroll { display: flex; gap: 15px; overflow-x: auto; padding: 10px 0; scrollbar-width: none; }
 
         /* BOTTOM NAV */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--p-card); display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid var(--p-border); z-index: 2000; }
-        .nav-link { border: none; background: none; color: var(--p-grey); font-weight: 500; font-size: 13px; cursor: pointer; flex: 1; }
-        .nav-link.active { color: var(--p-green); }
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--p-card); display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid var(--p-border); z-index: 2000; }
+        .nav-item { border: none; background: none; color: var(--p-grey); font-weight: 500; cursor: pointer; flex: 1; font-size: 13px; }
+        .nav-item.active { color: var(--p-green); }
 
         /* SETTINGS DRAWER */
-        #settings-drawer { position: fixed; bottom: -100%; left: 0; width: 100%; background: var(--p-card); z-index: 6000; padding: 25px; border-radius: 28px 28px 0 0; transition: 0.3s; box-shadow: 0 -10px 30px rgba(0,0,0,0.2); }
-        #settings-drawer.open { bottom: 0; }
-        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 5500; display: none; }
-
-        .chip-group { margin-bottom: 20px; }
+        #drawer { position: fixed; bottom: -100%; left: 0; width: 100%; background: var(--p-card); z-index: 6000; padding: 25px; border-radius: 25px 25px 0 0; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 -10px 30px rgba(0,0,0,0.2); }
+        #drawer.open { bottom: 0; }
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 5500; display: none; }
+        .drawer-item { margin-bottom: 20px; }
         .chip { display: inline-block; padding: 8px 16px; background: var(--p-surface); border-radius: 20px; margin: 4px; font-size: 12px; cursor: pointer; border: 1px solid var(--p-border); }
-        .chip.active { background: #e6f4ea; color: var(--p-green); border-color: var(--p-green); }
     </style>
 </head>
 <body data-theme="light">
 
     <header>
-        <div class="search-wrapper">
-            <input type="text" id="search-input" class="search-box" placeholder="Search for apps & games">
+        <div class="search-container">
+            <input type="text" id="main-search" class="search-box" placeholder="Search mods, apps, or tools...">
         </div>
-        <div class="sort-icon" onclick="toggleSettings(true)">🔘</div>
+        <div class="btn-settings" onclick="toggleDrawer(true)">🔘</div>
     </header>
 
-    <div class="main-container">
-        <div class="section-title">
-            <span id="list-label">Editor's Choice</span>
-            <span style="font-size: 12px; color: var(--p-green);" onclick="resetStore()">View All</span>
-        </div>
-        <div class="grid" id="main-app-grid"></div>
+    <div class="cat-scroller" id="cat-chips">
+        <div class="cat-chip active" onclick="filterByCat('All', this)">All</div>
     </div>
 
-    <div id="details-overlay">
+    <div class="container">
+        <h3 class="section-label" id="list-label">Suggested For You</h3>
+        <div class="grid" id="main-grid"></div>
+    </div>
+
+    <div id="detail-view">
         <div class="d-header">
-            <button class="back-btn" onclick="closeDetails()">←</button>
-            <span id="d-top-title" style="font-weight:700">App Details</span>
+            <button class="d-back" onclick="closeDetail()">←</button>
+            <span id="d-top-name" style="font-weight:700">App Details</span>
         </div>
-        <div id="d-content"></div>
+        <div id="d-body"></div>
         
-        <div class="rec-section">
-            <h4 style="margin-bottom:10px;">Recommended for you</h4>
-            <div class="rec-grid" id="rec-grid"></div>
+        <div class="rec-box">
+            <h4 style="margin-bottom:10px;">You might also like</h4>
+            <div class="rec-scroll" id="rec-items"></div>
         </div>
     </div>
 
-    <div class="overlay" id="drawer-overlay" onclick="toggleSettings(false)"></div>
-    <div id="settings-drawer">
-        <h3 style="margin-bottom:15px">Settings</h3>
-        <div class="chip-group">
-            <p style="font-size:12px; margin-bottom:8px">Appearance</p>
-            <div class="chip" onclick="applyTheme('light')">Light Theme</div>
-            <div class="chip" onclick="applyTheme('dark')">Dark Theme</div>
+    <div class="overlay" id="overlay" onclick="toggleDrawer(false)"></div>
+    <div id="drawer">
+        <div class="drawer-item">
+            <p style="font-size:12px; margin-bottom:8px; font-weight:bold;">Appearance</p>
+            <div class="chip" onclick="setTheme('light')">White Mode</div>
+            <div class="chip" onclick="setTheme('dark')">Dark Mode</div>
         </div>
-        <div class="chip-group">
-            <p style="font-size:12px; margin-bottom:8px">Sort By</p>
-            <div class="chip" onclick="sortItems('new')">Newest First</div>
-            <div class="chip" onclick="sortItems('size-h')">Highest Size</div>
-            <div class="chip" onclick="sortItems('size-l')">Lowest Size</div>
+        <div class="drawer-item">
+            <p style="font-size:12px; margin-bottom:8px; font-weight:bold;">Sort By</p>
+            <div class="chip" onclick="sort('new')">Newest</div>
+            <div class="chip" onclick="sort('size-h')">Highest Size</div>
+            <div class="chip" onclick="sort('size-l')">Lowest Size</div>
         </div>
-        <div class="chip-group">
-            <p style="font-size:12px; margin-bottom:8px">Platform</p>
-            <div class="chip" onclick="filterOS('android')">Android Only</div>
-            <div class="chip" onclick="filterOS('windows')">Windows Only</div>
-        </div>
-        <button onclick="toggleSettings(false)" style="width:100%; padding:15px; border:none; background:var(--p-surface); border-radius:12px; font-weight:700">Close</button>
+        <a href="https://example.com" style="display:block; text-align:center; padding:15px; color:var(--p-green); text-decoration:none; font-weight:bold;">Help Center</a>
+        <button onclick="toggleDrawer(false)" style="width:100%; padding:15px; border-radius:12px; border:none; background:var(--p-surface); font-weight:bold;">Close</button>
     </div>
 
     <nav class="bottom-nav">
-        <button class="nav-link active" onclick="tabFilter('all', this)">All</button>
-        <button class="nav-link" onclick="tabFilter('game', this)">Games</button>
-        <button class="nav-link" onclick="tabFilter('app', this)">Apps</button>
-        <button class="nav-link" onclick="tabFilter('tool', this)">Tools</button>
+        <button class="nav-item active" onclick="tab('all', this)">All</button>
+        <button class="nav-item" onclick="tab('game', this)">Games</button>
+        <button class="nav-item" onclick="tab('app', this)">Apps</button>
+        <button class="nav-item" onclick="tab('tool', this)">Tools</button>
     </nav>
 
     <script>
         let fullData = [];
-        let displayData = [];
+        let filteredData = [];
 
-        async function initStore() {
+        // 1. FETCH DATA INSTANTLY
+        async function loadStore() {
             try {
-                const res = await fetch('info.json?cache=' + Math.random());
+                const res = await fetch('info.json?v=' + Date.now());
                 const data = await res.json();
                 fullData = data.apps;
-                displayData = fullData.filter(a => data.trending_ids.includes(a.id));
-                renderMainGrid(displayData);
-            } catch (e) { console.error("Could not load Play Store data."); }
+                filteredData = fullData;
+
+                // Load categories
+                const cats = [...new Set(fullData.map(a => a.category))];
+                cats.forEach(c => {
+                    const chip = document.createElement('div');
+                    chip.className = 'cat-chip';
+                    chip.innerText = c;
+                    chip.onclick = (e) => filterByCat(c, e.target);
+                    document.getElementById('cat-chips').appendChild(chip);
+                });
+
+                renderGrid(filteredData);
+            } catch (e) { console.error("Error loading JSON"); }
         }
 
-        function renderMainGrid(list) {
-            const grid = document.getElementById('main-app-grid');
+        // 2. RENDER ENGINE
+        function renderGrid(list) {
+            const grid = document.getElementById('main-grid');
             grid.innerHTML = list.map(a => `
-                <div class="app-item" onclick="showDetails('${a.id}')">
+                <div class="app-item" onclick="openDetail('${a.id}')">
                     <img src="${a.icon}" loading="lazy">
-                    <div class="app-name">${a.name}</div>
-                    <div class="app-sub">${a.size} • ${a.category}</div>
+                    <div class="name">${a.name}</div>
+                    <div class="meta">${a.size} • ${a.category}</div>
                 </div>
             `).join('');
         }
 
-        function showDetails(id) {
+        // 3. DETAIL & RECOMMENDATION LOGIC
+        function openDetail(id) {
             const a = fullData.find(x => x.id === id);
-            document.getElementById('d-top-title').innerText = a.name;
-            const container = document.getElementById('d-content');
+            document.getElementById('d-top-name').innerText = a.name;
+            const body = document.getElementById('d-body');
             
-            container.innerHTML = `
+            body.innerHTML = `
                 <div class="d-hero">
                     <img src="${a.icon}">
                     <div class="d-info">
                         <h2>${a.name}</h2>
-                        <p>${a.owner || 'Verified Developer'}</p>
+                        <p>${a.owner || 'Verified Dev'}</p>
                     </div>
                 </div>
-
-                <div class="stats-row">
-                    <div class="stat-item"><div class="stat-val">4.8★</div><div class="stat-lab">Review</div></div>
-                    <div class="stat-item"><div class="stat-val">${a.size}</div><div class="stat-lab">Download Size</div></div>
-                    <div class="stat-item"><div class="stat-val">E</div><div class="stat-lab">Rated for 3+</div></div>
-                </div>
-
                 <div class="d-gallery">
-                    ${a.media.map(m => m.endsWith('.mp4') ? `<video src="${m}" controls muted></video>` : `<img src="${m}">`).join('')}
+                    ${a.media.map(m => m.endsWith('.mp4') ? `<video src="${m}" controls></video>` : `<img src="${m}">`).join('')}
                 </div>
-
-                <div class="install-box">
-                    ${a.platforms.android ? a.platforms.android.map(l => `<a href="${l.url}" class="btn-main btn-green">Install (${l.name})</a>`).join('') : ''}
-                    ${a.platforms.windows ? `<a href="${a.platforms.windows}" class="btn-main btn-outline">Download for Windows</a>` : ''}
-                </div>
-
                 <div class="d-desc">
-                    <h4 style="color:var(--p-txt); margin-bottom:8px">About this ${a.type}</h4>
-                    <p>${a.description || 'No detailed description provided for this specific mod version.'}</p>
+                    <p>${a.description || 'Verified and updated on Faizan Store.'}</p>
+                    <div style="margin-top:10px; font-size:12px;"><b>Size:</b> ${a.size} | <b>Updated:</b> ${a.releaseDate}</div>
+                </div>
+                <div class="dl-box">
+                    ${a.platforms.android ? a.platforms.android.map(l => `<a href="${l.url}" class="dl-btn btn-apk">Download APK (${l.name})</a>`).join('') : ''}
+                    ${a.platforms.windows ? `<a href="${a.platforms.windows}" class="dl-btn btn-win">Download for Windows</a>` : ''}
                 </div>
             `;
 
-            // RENDER RECOMMENDED ITEMS
-            const recGrid = document.getElementById('rec-grid');
-            const recommendedItems = fullData.filter(x => a.recommended && a.recommended.includes(x.id));
-            recGrid.innerHTML = recommendedItems.map(r => `
-                <div class="app-item" style="min-width:90px" onclick="showDetails('${r.id}')">
+            // Smart Recommendation Logic
+            const recs = fullData.filter(x => x.category === a.category && x.id !== a.id);
+            document.getElementById('rec-items').innerHTML = recs.map(r => `
+                <div class="app-item" style="min-width:90px" onclick="openDetail('${r.id}')">
                     <img src="${r.icon}" style="width:90px; height:90px;">
-                    <div class="app-name">${r.name}</div>
+                    <div class="name">${r.name}</div>
                 </div>
             `).join('');
 
-            document.getElementById('details-overlay').style.display = 'block';
+            document.getElementById('detail-view').style.display = 'block';
             document.body.style.overflow = 'hidden';
         }
 
-        function closeDetails() {
-            document.getElementById('details-overlay').style.display = 'none';
+        function closeDetail() {
+            document.getElementById('detail-view').style.display = 'none';
             document.body.style.overflow = 'auto';
         }
 
-        // NAVIGATION & FILTERS
-        function tabFilter(type, btn) {
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        // 4. FILTERS & SEARCH
+        function filterByCat(c, el) {
+            document.querySelectorAll('.cat-chip').forEach(ch => ch.classList.remove('active'));
+            el.classList.add('active');
+            filteredData = (c === 'All') ? fullData : fullData.filter(a => a.category === c);
+            renderGrid(filteredData);
+        }
+
+        function tab(t, btn) {
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             btn.classList.add('active');
-            displayData = type === 'all' ? fullData : fullData.filter(a => a.type === type);
-            document.getElementById('list-label').innerText = type.toUpperCase() + "S";
-            renderMainGrid(displayData);
+            filteredData = (t === 'all') ? fullData : fullData.filter(a => a.type === t);
+            renderGrid(filteredData);
         }
 
-        function toggleSettings(open) {
-            document.getElementById('settings-drawer').classList.toggle('open', open);
-            document.getElementById('drawer-overlay').style.display = open ? 'block' : 'none';
+        function toggleDrawer(show) {
+            document.getElementById('drawer').classList.toggle('open', show);
+            document.getElementById('overlay').style.display = show ? 'block' : 'none';
         }
 
-        function applyTheme(t) { document.body.setAttribute('data-theme', t); toggleSettings(false); }
+        function setTheme(t) { document.body.setAttribute('data-theme', t); toggleDrawer(false); }
 
-        function sortItems(mode) {
-            if(mode === 'size-h') displayData.sort((a,b) => parseFloat(b.size) - parseFloat(a.size));
-            if(mode === 'size-l') displayData.sort((a,b) => parseFloat(a.size) - parseFloat(b.size));
-            if(mode === 'new') displayData.reverse();
-            renderMainGrid(displayData); toggleSettings(false);
+        function sort(mode) {
+            if(mode === 'size-h') filteredData.sort((a,b) => parseFloat(b.size) - parseFloat(a.size));
+            if(mode === 'size-l') filteredData.sort((a,b) => parseFloat(a.size) - parseFloat(b.size));
+            if(mode === 'new') filteredData.reverse();
+            renderGrid(filteredData); toggleDrawer(false);
         }
 
-        function filterOS(os) {
-            displayData = fullData.filter(a => a.platforms && a.platforms[os]);
-            renderMainGrid(displayData); toggleSettings(false);
-        }
-
-        // SEARCH ENGINE
-        document.getElementById('search-input').addEventListener('input', (e) => {
-            const v = e.target.value.toLowerCase();
-            const results = fullData.filter(a => a.name.toLowerCase().includes(v) || a.category.toLowerCase().includes(v));
-            renderMainGrid(results);
+        document.getElementById('main-search').addEventListener('input', (e) => {
+            const val = e.target.value.toLowerCase();
+            const results = fullData.filter(a => a.name.toLowerCase().includes(val) || (a.keywords && a.keywords.some(k => k.toLowerCase().includes(val))));
+            renderGrid(results);
         });
 
-        function resetStore() { displayData = fullData; renderMainGrid(fullData); }
-
-        initStore();
+        loadStore();
     </script>
 </body>
-</html>
+                                                                                                                                                                           </html>
+                                                                                                                                                                           
