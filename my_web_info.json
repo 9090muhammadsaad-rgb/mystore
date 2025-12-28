@@ -1,18 +1,15 @@
-
-{
-  "storeName": "APP / Game Store",
-  "tagline": "Modern Play Store Clone",
-  "headerImage": "N/A",
-  "backgroundColor": "#0b1c2d",
-  "backgroundImage": "N/A",
-  "cardBorderColor": "#2563eb",
-  "buttonColor": "#22c55e",
-  "buttonUnavailableColor": "#ef4444",
-  "downloadAnimationColor": "#3b82f6",
-  "categoryColors": {
-    "Battle Games": "#3b82f6",
-    "Fun Games": "#f97316",
-    "Hacking Tools": "#ef4444",
-    "Android Apps": "#10b981"
+[
+  {
+    "WebName": "Faizan App Store",
+    "Watermark": "(C) Saad 2026",
+    "Released": "1-January-2026",
+    "Background_image": "N/A",
+    "Background_color": "#0f172a",
+    "Border_line_color": "Glass",
+    "Header_logo": "N/A",
+    "Header_color": "Blue",
+    "Description": "This Website Developed By **Saad (C) Credit Github Static Website Open Source and Media Fire links.",
+    "Help_link": "https://faizanstoregames/help.html"
   }
-}
+]
+
