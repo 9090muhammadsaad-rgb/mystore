@@ -3,275 +3,258 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Faizan Master Store</title>
+    <title>Faizan Store Pro | Instant Load</title>
     <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* CSS VARIABLES & THEMES */
-        :root { --ps-green: #01875f; --ps-bg: #ffffff; --ps-txt: #202124; --ps-card: #ffffff; --ps-border: #e8eaed; --ps-grey: #5f6368; --ps-nav: #ffffff; }
-        [data-theme="dark"] { --ps-bg: #121212; --ps-txt: #e8eaed; --ps-card: #1e1e1e; --ps-border: #333; --ps-nav: #1e1e1e; }
+        :root { --p-green: #01875f; --p-bg: #ffffff; --p-txt: #202124; --p-card: #ffffff; --p-border: #e8eaed; --p-grey: #5f6368; --p-surface: #f8f9fa; }
+        [data-theme="dark"] { --p-bg: #121212; --p-txt: #e8eaed; --p-card: #1e1e1e; --p-border: #333; --p-surface: #2d2d2d; }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Google Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--ps-bg); color: var(--ps-txt); overflow-x: hidden; transition: 0.3s; }
+        body { background: var(--p-bg); color: var(--p-txt); overflow-x: hidden; transition: background 0.2s; }
 
-        /* 1. SPLASH SCREEN */
-        #splash { position: fixed; inset: 0; background: #fff; z-index: 9999; display: flex; align-items: center; justify-content: center; transition: 0.8s ease; }
-        #splash img { width: 140px; border-radius: 25px; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        /* HEADER */
+        header { position: sticky; top: 0; background: var(--p-bg); z-index: 1000; padding: 12px 16px; border-bottom: 1px solid var(--p-border); display: flex; align-items: center; gap: 12px; }
+        .search-wrapper { flex: 1; position: relative; display: flex; align-items: center; background: var(--p-surface); border-radius: 24px; padding: 0 15px; }
+        .search-box { width: 100%; border: none; background: transparent; padding: 10px; font-size: 15px; outline: none; color: var(--p-txt); }
+        .sort-icon { cursor: pointer; font-size: 22px; user-select: none; }
 
-        /* 2. HEADER & SEARCH */
-        header { position: sticky; top: 0; background: var(--ps-bg); z-index: 1000; padding: 12px 15px; border-bottom: 1px solid var(--ps-border); display: flex; align-items: center; gap: 10px; }
-        .search-box { flex: 1; padding: 12px 20px; background: rgba(128,128,128,0.1); border-radius: 30px; border: none; outline: none; color: var(--ps-txt); font-size: 15px; }
-        .sort-btn-main { cursor: pointer; font-size: 24px; padding: 5px; }
+        /* MAIN APP GRID */
+        .main-container { max-width: 1000px; margin: 0 auto; padding: 16px; }
+        .section-title { font-size: 18px; font-weight: 700; margin: 20px 0 15px; display: flex; justify-content: space-between; align-items: center; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)); gap: 20px; }
+        .app-item { cursor: pointer; transition: 0.2s; }
+        .app-item:active { transform: scale(0.95); }
+        .app-item img { width: 100%; aspect-ratio: 1/1; border-radius: 20%; object-fit: cover; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid var(--p-border); }
+        .app-name { font-size: 12px; font-weight: 500; margin-top: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .app-sub { font-size: 10px; color: var(--p-grey); }
 
-        /* 3. APP GRID */
-        .container { max-width: 1000px; margin: 15px auto; padding: 0 15px; padding-bottom: 100px; }
-        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 18px; }
-        .app-card { cursor: pointer; animation: fadeInUp 0.5s ease forwards; text-align: left; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-        .app-card img { width: 100%; aspect-ratio: 1/1; border-radius: 22%; object-fit: cover; border: 1px solid var(--ps-border); }
-        .app-card .title { font-size: 13px; font-weight: 500; margin-top: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .app-card .meta { font-size: 11px; color: var(--ps-grey); }
-
-        /* 4. DETAILS PAGE (MODAL) */
-        #details-page { position: fixed; inset: 0; background: var(--ps-bg); z-index: 5000; display: none; overflow-y: auto; padding-bottom: 40px; }
-        .top-bar { position: sticky; top: 0; background: var(--ps-bg); padding: 15px; display: flex; align-items: center; border-bottom: 1px solid var(--ps-border); z-index: 10; }
-        .back-btn { font-size: 26px; border: none; background: none; color: var(--ps-txt); cursor: pointer; margin-right: 15px; }
+        /* DETAILS OVERLAY (PLAY STORE FEEL) */
+        #details-overlay { position: fixed; inset: 0; background: var(--p-bg); z-index: 5000; display: none; overflow-y: auto; animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         
-        .hero { display: flex; gap: 18px; padding: 20px; align-items: center; }
-        .hero img { width: 85px; height: 85px; border-radius: 20%; object-fit: cover; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .hero h2 { font-size: 22px; line-height: 1.2; }
-        .hero p { color: var(--ps-green); font-weight: 500; font-size: 14px; margin-top: 4px; }
+        .d-header { position: sticky; top: 0; background: var(--p-bg); padding: 12px 16px; display: flex; align-items: center; border-bottom: 1px solid var(--p-border); z-index: 10; }
+        .back-btn { font-size: 24px; border: none; background: none; cursor: pointer; color: var(--p-txt); margin-right: 15px; }
 
-        .media-scroller { display: flex; gap: 12px; overflow-x: auto; padding: 10px 20px; scrollbar-width: none; }
-        .media-scroller::-webkit-scrollbar { display: none; }
-        .media-scroller img, .media-scroller video { height: 180px; min-width: 300px; border-radius: 12px; object-fit: cover; background: #000; }
+        .d-hero { display: flex; padding: 20px; gap: 20px; }
+        .d-hero img { width: 88px; height: 88px; border-radius: 22%; object-fit: cover; }
+        .d-info h2 { font-size: 22px; font-weight: 700; }
+        .d-info p { color: var(--p-green); font-weight: 500; font-size: 14px; }
 
-        .desc-box { padding: 20px; font-size: 14px; line-height: 1.6; color: var(--ps-grey); }
-        .dl-section { padding: 0 20px; display: flex; flex-direction: column; gap: 10px; }
-        .dl-card { background: rgba(128,128,128,0.05); padding: 15px; border-radius: 12px; border: 1px solid var(--ps-border); }
-        .dl-btn { display: block; width: 100%; padding: 14px; border-radius: 8px; text-align: center; text-decoration: none; font-weight: bold; font-size: 14px; margin-top: 8px; }
-        .btn-apk { background: var(--ps-green); color: white; }
-        .btn-win { background: #3c4043; color: white; }
+        /* STATS ROW */
+        .stats-row { display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid var(--p-border); border-bottom: 1px solid var(--p-border); margin: 0 20px; text-align: center; }
+        .stat-item { border-right: 1px solid var(--p-border); flex: 1; }
+        .stat-item:last-child { border-right: none; }
+        .stat-val { font-weight: 700; font-size: 14px; }
+        .stat-lab { font-size: 10px; color: var(--p-grey); }
 
-        /* 5. 🔘 SETTINGS DRAWER */
-        #drawer { position: fixed; bottom: -100%; left: 0; width: 100%; background: var(--ps-card); z-index: 6000; padding: 25px; border-radius: 25px 25px 0 0; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 -10px 30px rgba(0,0,0,0.2); }
-        #drawer.open { bottom: 0; }
-        .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 5500; display: none; }
-        .filter-group { margin-bottom: 20px; }
-        .filter-label { font-weight: bold; font-size: 14px; display: block; margin-bottom: 10px; opacity: 0.8; }
-        .chip-box { display: flex; flex-wrap: wrap; gap: 8px; }
-        .chip { padding: 8px 16px; background: rgba(128,128,128,0.1); border-radius: 20px; font-size: 12px; cursor: pointer; border: 1px solid transparent; }
-        .chip.active { background: var(--ps-green); color: white; border-color: var(--ps-green); }
+        /* SCREENSHOTS */
+        .d-gallery { display: flex; gap: 12px; overflow-x: auto; padding: 20px; scrollbar-width: none; }
+        .d-gallery::-webkit-scrollbar { display: none; }
+        .d-gallery img, .d-gallery video { height: 170px; min-width: 280px; border-radius: 12px; object-fit: cover; background: #000; }
 
-        /* 6. BOTTOM NAV */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--ps-nav); display: flex; justify-content: space-around; padding: 12px; border-top: 1px solid var(--ps-border); z-index: 2000; transition: 0.3s; }
-        .nav-hide { transform: translateY(100%); }
-        .nav-item { border: none; background: none; color: var(--ps-grey); font-weight: 500; cursor: pointer; font-size: 14px; display: flex; flex-direction: column; align-items: center; }
-        .nav-item.active { color: var(--ps-green); }
-        .nav-item i { font-size: 20px; margin-bottom: 4px; }
+        .d-desc { padding: 0 20px 20px; font-size: 14px; color: var(--p-grey); line-height: 1.5; }
 
-        .help-link { display: block; text-align: center; padding: 15px; color: #3498db; font-weight: 500; text-decoration: none; border-top: 1px solid var(--ps-border); margin-top: 10px; }
+        /* INSTALL BUTTONS */
+        .install-box { padding: 0 20px 30px; }
+        .btn-main { display: block; width: 100%; padding: 12px; border-radius: 8px; text-align: center; text-decoration: none; font-weight: 700; margin-bottom: 10px; transition: 0.2s; }
+        .btn-green { background: var(--p-green); color: white; }
+        .btn-outline { border: 1px solid var(--p-border); color: var(--p-green); background: var(--p-card); }
+
+        /* RECOMMENDED SECTION */
+        .rec-section { padding: 20px; background: var(--p-surface); border-top: 1px solid var(--p-border); }
+        .rec-grid { display: flex; gap: 15px; overflow-x: auto; padding: 10px 0; scrollbar-width: none; }
+
+        /* BOTTOM NAV */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--p-card); display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid var(--p-border); z-index: 2000; }
+        .nav-link { border: none; background: none; color: var(--p-grey); font-weight: 500; font-size: 13px; cursor: pointer; flex: 1; }
+        .nav-link.active { color: var(--p-green); }
+
+        /* SETTINGS DRAWER */
+        #settings-drawer { position: fixed; bottom: -100%; left: 0; width: 100%; background: var(--p-card); z-index: 6000; padding: 25px; border-radius: 28px 28px 0 0; transition: 0.3s; box-shadow: 0 -10px 30px rgba(0,0,0,0.2); }
+        #settings-drawer.open { bottom: 0; }
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 5500; display: none; }
+
+        .chip-group { margin-bottom: 20px; }
+        .chip { display: inline-block; padding: 8px 16px; background: var(--p-surface); border-radius: 20px; margin: 4px; font-size: 12px; cursor: pointer; border: 1px solid var(--p-border); }
+        .chip.active { background: #e6f4ea; color: var(--p-green); border-color: var(--p-green); }
     </style>
 </head>
 <body data-theme="light">
 
-    <div id="splash"><img src="1761933069017.jpg" alt="Logo"></div>
-
-    <header id="main-header">
-        <input type="text" id="search-bar" class="search-box" placeholder="Search games, mods, tools...">
-        <div class="sort-btn-main" onclick="toggleDrawer(true)">🔘</div>
+    <header>
+        <div class="search-wrapper">
+            <input type="text" id="search-input" class="search-box" placeholder="Search for apps & games">
+        </div>
+        <div class="sort-icon" onclick="toggleSettings(true)">🔘</div>
     </header>
 
-    <div class="container">
-        <div class="section-header">
-            <h3 id="list-title">Trending Mods</h3>
-            <span style="font-size: 12px; color: var(--ps-green);" onclick="resetFilters()">Clear All</span>
+    <div class="main-container">
+        <div class="section-title">
+            <span id="list-label">Editor's Choice</span>
+            <span style="font-size: 12px; color: var(--p-green);" onclick="resetStore()">View All</span>
         </div>
-        <div class="grid" id="app-grid"></div>
+        <div class="grid" id="main-app-grid"></div>
     </div>
 
-    <div id="details-page">
-        <div class="top-bar">
+    <div id="details-overlay">
+        <div class="d-header">
             <button class="back-btn" onclick="closeDetails()">←</button>
-            <span style="font-weight: 500;" id="detail-header-name">Details</span>
+            <span id="d-top-title" style="font-weight:700">App Details</span>
         </div>
-        <div id="details-content"></div>
+        <div id="d-content"></div>
+        
+        <div class="rec-section">
+            <h4 style="margin-bottom:10px;">Recommended for you</h4>
+            <div class="rec-grid" id="rec-grid"></div>
+        </div>
     </div>
 
-    <div class="drawer-overlay" id="overlay" onclick="toggleDrawer(false)"></div>
-    <div id="drawer">
-        <div class="filter-group">
-            <span class="filter-label">Display Theme</span>
-            <div class="chip-box">
-                <div class="chip" id="t-light" onclick="setTheme('light')">Light Mode</div>
-                <div class="chip" id="t-dark" onclick="setTheme('dark')">Dark Mode</div>
-            </div>
+    <div class="overlay" id="drawer-overlay" onclick="toggleSettings(false)"></div>
+    <div id="settings-drawer">
+        <h3 style="margin-bottom:15px">Settings</h3>
+        <div class="chip-group">
+            <p style="font-size:12px; margin-bottom:8px">Appearance</p>
+            <div class="chip" onclick="applyTheme('light')">Light Theme</div>
+            <div class="chip" onclick="applyTheme('dark')">Dark Theme</div>
         </div>
-        <div class="filter-group">
-            <span class="filter-label">Sort Games By</span>
-            <div class="chip-box">
-                <div class="chip" onclick="sortData('newest')">Recently Added</div>
-                <div class="chip" onclick="sortData('size-high')">Largest Size</div>
-                <div class="chip" onclick="sortData('size-low')">Smallest Size</div>
-            </div>
+        <div class="chip-group">
+            <p style="font-size:12px; margin-bottom:8px">Sort By</p>
+            <div class="chip" onclick="sortItems('new')">Newest First</div>
+            <div class="chip" onclick="sortItems('size-h')">Highest Size</div>
+            <div class="chip" onclick="sortItems('size-l')">Lowest Size</div>
         </div>
-        <div class="filter-group">
-            <span class="filter-label">Target Platform</span>
-            <div class="chip-box">
-                <div class="chip" onclick="filterByOS('android')">Android APK</div>
-                <div class="chip" onclick="filterByOS('windows')">Windows EXE</div>
-            </div>
+        <div class="chip-group">
+            <p style="font-size:12px; margin-bottom:8px">Platform</p>
+            <div class="chip" onclick="filterOS('android')">Android Only</div>
+            <div class="chip" onclick="filterOS('windows')">Windows Only</div>
         </div>
-        <a href="https://example.com" class="help-link">Need Help? Contact Faizan Store</a>
-        <button onclick="toggleDrawer(false)" style="width:100%; padding:15px; border:none; background:rgba(128,128,128,0.1); border-radius:12px; font-weight:bold; cursor:pointer; color:var(--ps-txt);">Close Settings</button>
+        <button onclick="toggleSettings(false)" style="width:100%; padding:15px; border:none; background:var(--p-surface); border-radius:12px; font-weight:700">Close</button>
     </div>
 
-    <nav class="bottom-nav" id="bot-nav">
-        <button class="nav-item active" onclick="navFilter('all', this)">All</button>
-        <button class="nav-item" onclick="navFilter('game', this)">Games</button>
-        <button class="nav-item" onclick="navFilter('app', this)">Apps</button>
-        <button class="nav-item" onclick="navFilter('tool', this)">Tools</button>
+    <nav class="bottom-nav">
+        <button class="nav-link active" onclick="tabFilter('all', this)">All</button>
+        <button class="nav-link" onclick="tabFilter('game', this)">Games</button>
+        <button class="nav-link" onclick="tabFilter('app', this)">Apps</button>
+        <button class="nav-link" onclick="tabFilter('tool', this)">Tools</button>
     </nav>
 
     <script>
-        let rawApps = [];
-        let activeList = [];
-        let currentScroll = 0;
+        let fullData = [];
+        let displayData = [];
 
-        // Initialize Store
-        async function init() {
+        async function initStore() {
             try {
-                const res = await fetch('info.json?v=' + Date.now());
+                const res = await fetch('info.json?cache=' + Math.random());
                 const data = await res.json();
-                rawApps = data.apps;
-                activeList = rawApps.filter(a => data.trending_ids.includes(a.id));
-
-                // 3-Second Splash Timer
-                setTimeout(() => {
-                    const s = document.getElementById('splash');
-                    s.style.opacity = '0';
-                    setTimeout(() => s.style.display = 'none', 800);
-                    render(activeList);
-                }, 3000);
-            } catch (e) { console.error("Data failed to load."); }
+                fullData = data.apps;
+                displayData = fullData.filter(a => data.trending_ids.includes(a.id));
+                renderMainGrid(displayData);
+            } catch (e) { console.error("Could not load Play Store data."); }
         }
 
-        // Render Grid
-        function render(data) {
-            const grid = document.getElementById('app-grid');
-            grid.innerHTML = data.length ? data.map(a => `
-                <div class="app-card" onclick="openDetails('${a.id}')">
-                    <img src="${a.icon}" onerror="this.src='https://via.placeholder.com/150'">
-                    <div class="title">${a.name}</div>
-                    <div class="meta">${a.size} • ${a.category}</div>
+        function renderMainGrid(list) {
+            const grid = document.getElementById('main-app-grid');
+            grid.innerHTML = list.map(a => `
+                <div class="app-item" onclick="showDetails('${a.id}')">
+                    <img src="${a.icon}" loading="lazy">
+                    <div class="app-name">${a.name}</div>
+                    <div class="app-sub">${a.size} • ${a.category}</div>
                 </div>
-            `).join('') : '<p style="grid-column:1/-1; text-align:center; padding:40px;">No results found.</p>';
+            `).join('');
         }
 
-        // Search Logic
-        document.getElementById('search-bar').addEventListener('input', (e) => {
-            const v = e.target.value.toLowerCase();
-            const filtered = rawApps.filter(a => 
-                a.name.toLowerCase().includes(v) || 
-                (a.keywords && a.keywords.some(k => k.toLowerCase().includes(v)))
-            );
-            render(filtered);
-        });
-
-        // Navigation Logic
-        function navFilter(type, btn) {
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            btn.classList.add('active');
-            activeList = (type === 'all') ? rawApps : rawApps.filter(a => a.type === type);
-            document.getElementById('list-title').innerText = type.toUpperCase() + "S";
-            render(activeList);
-        }
-
-        // Details Logic
-        function openDetails(id) {
-            const a = rawApps.find(x => x.id === id);
-            document.getElementById('detail-header-name').innerText = a.name;
-            const content = document.getElementById('details-content');
+        function showDetails(id) {
+            const a = fullData.find(x => x.id === id);
+            document.getElementById('d-top-title').innerText = a.name;
+            const container = document.getElementById('d-content');
             
-            content.innerHTML = `
-                <div class="hero">
+            container.innerHTML = `
+                <div class="d-hero">
                     <img src="${a.icon}">
-                    <div class="hero-info">
+                    <div class="d-info">
                         <h2>${a.name}</h2>
-                        <p>${a.owner || 'Official Store'}</p>
+                        <p>${a.owner || 'Verified Developer'}</p>
                     </div>
                 </div>
 
-                <div class="media-scroller">
-                    ${a.media && a.media.length ? a.media.map(m => m.endsWith('.mp4') ? `<video src="${m}" controls></video>` : `<img src="${m}">`).join('') : '<p style="padding:20px;">No screenshots available.</p>'}
+                <div class="stats-row">
+                    <div class="stat-item"><div class="stat-val">4.8★</div><div class="stat-lab">Review</div></div>
+                    <div class="stat-item"><div class="stat-val">${a.size}</div><div class="stat-lab">Download Size</div></div>
+                    <div class="stat-item"><div class="stat-val">E</div><div class="stat-lab">Rated for 3+</div></div>
                 </div>
 
-                <div class="desc-box">
-                    <h4 style="margin-bottom:8px; color:var(--ps-txt);">About this version</h4>
-                    <p>${a.description || 'Verified and scanned for viruses by Faizan Store.'}</p>
-                    <div style="margin-top:15px; font-size:12px;"><b>Category:</b> ${a.category} | <b>Version:</b> ${a.ver || '1.0'}</div>
+                <div class="d-gallery">
+                    ${a.media.map(m => m.endsWith('.mp4') ? `<video src="${m}" controls muted></video>` : `<img src="${m}">`).join('')}
                 </div>
 
-                <div class="dl-section">
-                    ${a.platforms.android ? a.platforms.android.map(link => `
-                        <div class="dl-card">
-                            <span style="font-size:12px; font-weight:bold;">${link.name}</span>
-                            <a href="${link.url}" class="dl-btn btn-apk">INSTALL APK (${a.size})</a>
-                        </div>
-                    `).join('') : ''}
-                    
-                    ${a.platforms.windows ? `
-                        <div class="dl-card">
-                            <span style="font-size:12px; font-weight:bold;">PC Version</span>
-                            <a href="${a.platforms.windows}" class="dl-btn btn-win">DOWNLOAD FOR WINDOWS</a>
-                        </div>
-                    ` : ''}
+                <div class="install-box">
+                    ${a.platforms.android ? a.platforms.android.map(l => `<a href="${l.url}" class="btn-main btn-green">Install (${l.name})</a>`).join('') : ''}
+                    ${a.platforms.windows ? `<a href="${a.platforms.windows}" class="btn-main btn-outline">Download for Windows</a>` : ''}
+                </div>
+
+                <div class="d-desc">
+                    <h4 style="color:var(--p-txt); margin-bottom:8px">About this ${a.type}</h4>
+                    <p>${a.description || 'No detailed description provided for this specific mod version.'}</p>
                 </div>
             `;
-            document.getElementById('details-page').style.display = 'block';
+
+            // RENDER RECOMMENDED ITEMS
+            const recGrid = document.getElementById('rec-grid');
+            const recommendedItems = fullData.filter(x => a.recommended && a.recommended.includes(x.id));
+            recGrid.innerHTML = recommendedItems.map(r => `
+                <div class="app-item" style="min-width:90px" onclick="showDetails('${r.id}')">
+                    <img src="${r.icon}" style="width:90px; height:90px;">
+                    <div class="app-name">${r.name}</div>
+                </div>
+            `).join('');
+
+            document.getElementById('details-overlay').style.display = 'block';
             document.body.style.overflow = 'hidden';
         }
 
         function closeDetails() {
-            document.getElementById('details-page').style.display = 'none';
+            document.getElementById('details-overlay').style.display = 'none';
             document.body.style.overflow = 'auto';
         }
 
-        // Drawer & Theme Logic
-        function toggleDrawer(show) {
-            document.getElementById('drawer').classList.toggle('open', show);
-            document.getElementById('overlay').style.display = show ? 'block' : 'none';
+        // NAVIGATION & FILTERS
+        function tabFilter(type, btn) {
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            btn.classList.add('active');
+            displayData = type === 'all' ? fullData : fullData.filter(a => a.type === type);
+            document.getElementById('list-label').innerText = type.toUpperCase() + "S";
+            renderMainGrid(displayData);
         }
 
-        function setTheme(t) {
-            document.body.setAttribute('data-theme', t);
-            toggleDrawer(false);
+        function toggleSettings(open) {
+            document.getElementById('settings-drawer').classList.toggle('open', open);
+            document.getElementById('drawer-overlay').style.display = open ? 'block' : 'none';
         }
 
-        function sortData(mode) {
-            if(mode === 'size-high') activeList.sort((a,b) => parseFloat(b.size) - parseFloat(a.size));
-            if(mode === 'size-low') activeList.sort((a,b) => parseFloat(a.size) - parseFloat(b.size));
-            if(mode === 'newest') activeList.reverse();
-            render(activeList); toggleDrawer(false);
+        function applyTheme(t) { document.body.setAttribute('data-theme', t); toggleSettings(false); }
+
+        function sortItems(mode) {
+            if(mode === 'size-h') displayData.sort((a,b) => parseFloat(b.size) - parseFloat(a.size));
+            if(mode === 'size-l') displayData.sort((a,b) => parseFloat(a.size) - parseFloat(b.size));
+            if(mode === 'new') displayData.reverse();
+            renderMainGrid(displayData); toggleSettings(false);
         }
 
-        function filterByOS(os) {
-            const filtered = rawApps.filter(a => a.platforms && a.platforms[os]);
-            render(filtered); toggleDrawer(false);
+        function filterOS(os) {
+            displayData = fullData.filter(a => a.platforms && a.platforms[os]);
+            renderMainGrid(displayData); toggleSettings(false);
         }
 
-        function resetFilters() { activeList = rawApps; render(rawApps); }
+        // SEARCH ENGINE
+        document.getElementById('search-input').addEventListener('input', (e) => {
+            const v = e.target.value.toLowerCase();
+            const results = fullData.filter(a => a.name.toLowerCase().includes(v) || a.category.toLowerCase().includes(v));
+            renderMainGrid(results);
+        });
 
-        // Hide Nav on Scroll
-        window.onscroll = () => {
-            const nav = document.getElementById('bot-nav');
-            if (window.scrollY > currentScroll && window.scrollY > 100) nav.classList.add('nav-hide');
-            else nav.classList.remove('nav-hide');
-            currentScroll = window.scrollY;
-        };
+        function resetStore() { displayData = fullData; renderMainGrid(fullData); }
 
-        init();
+        initStore();
     </script>
 </body>
 </html>
