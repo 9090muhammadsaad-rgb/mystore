@@ -1,70 +1,53 @@
-
 [
   {
     "id": 1,
-    "name": "Aircrack-ng Pro",
-    "type": "tool",
-    "category": "Security",
+    "name": "Minecraft Mod Menu",
+    "type": "game",
+    "category": "Simulation",
     "trending": true,
-    "description": "A complete suite of tools to assess WiFi network security. This version includes custom scripts.",
-    "size": "25MB",
-    "requirements": "Linux (Kali) / Windows 10 / Mac",
+    "description": "Explore infinite worlds and build everything from the simplest of homes to the grandest of castles. This Mod Menu version 1.26.0.25 includes unlocked premium features and God Mode.",
+    "size": "650MB",
+    "requirements": "Android 5.0+ / Windows 10",
     "releaseDate": "2025-12-28",
-    "icon": "https://via.placeholder.com/150/202124/ffffff?text=Aircrack",
+    "owner": "Mojang & AN1",
+    "icon": "Minecraft/icon.png",
     "media": [
-      "https://www.w3schools.com/html/mov_bbb.mp4",
-      "https://via.placeholder.com/400x200?text=Terminal+Screenshot"
+      "video/minecraft.mp4",
+      "Images/minecraft_version_mod_1.png",
+      "Images/minecraft_screenshot_2.png"
     ],
     "platforms": {
-      "android": null,
-      "windows": "https://gdrive.com/aircrack_win.exe",
-      "linux": "https://gdrive.com/aircrack_linux.tar.gz",
-      "source_zip": "https://github.com/aircrack-ng/zipball/master",
-      "macOS": "https://gdrive.com/aircrack_mac.dmg"
+      "android": "https://files.an1.net/minecraft-mod-menu_1.26.0.25-an1.com.apk",
+      "windows": "https://gdrive.com/minecraft_bedrock_edition.exe",
+      "linux": null,
+      "source_zip": "https://github.com/minecraft-project/archive.zip",
+      "macOS": null
     },
-    "recommended": [2],
+    "recommended": [2, 3],
     "available": true
   },
   {
     "id": 2,
-    "name": "Granny: Chapter Two",
-    "type": "game",
-    "category": "Horror",
+    "name": "Aircrack-ng Tool",
+    "type": "tool",
+    "category": "Security",
     "trending": true,
-    "description": "Granny and Grandpa keep you locked in his house this time. Escape!",
-    "size": "110MB",
-    "requirements": "Android 5.0+ / Windows 7+",
-    "releaseDate": "2025-11-20",
-    "icon": "https://via.placeholder.com/150/d93025/ffffff?text=Granny2",
-    "media": ["https://via.placeholder.com/400x200?text=Granny+Gameplay"],
-    "platforms": {
-      "android": "https://mediafire.com/granny2.apk",
-      "windows": "https://gdrive.com/granny2_setup.exe",
-      "linux": null,
-      "macOS": null
-    },
-    "recommended": [1],
-    "available": true
-  },
-  {
-    "id": 3,
-    "name": "Python IDE Mobile",
-    "type": "app",
-    "category": "Coding",
-    "trending": false,
-    "description": "Write and run Python code on your mobile or desktop.",
-    "size": "40MB",
-    "requirements": "Universal",
-    "releaseDate": "2025-05-15",
-    "icon": "https://via.placeholder.com/150/3b82f6/ffffff?text=Python",
+    "description": "Aircrack-ng is a complete suite of tools to assess WiFi network security. Essential for penetration testers.",
+    "size": "30MB",
+    "requirements": "Linux / Windows / macOS",
+    "releaseDate": "2025-12-20",
+    "owner": "Aircrack Team",
+    "icon": "https://via.placeholder.com/150/202124/ffffff?text=Aircrack",
     "media": [],
     "platforms": {
-      "android": "https://mediafire.com/py.apk",
-      "windows": "https://gdrive.com/py_setup.exe",
-      "linux": "https://gdrive.com/py.deb",
-      "macOS": "https://gdrive.com/py.dmg"
+      "android": null,
+      "windows": "https://gdrive.com/aircrack_setup.zip",
+      "linux": "https://gdrive.com/aircrack_kali.tar.gz",
+      "source_zip": "https://github.com/aircrack-ng/source.zip",
+      "macOS": "https://gdrive.com/aircrack.dmg"
     },
     "recommended": [1],
     "available": true
   }
 ]
+
