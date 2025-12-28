@@ -1,32 +1,47 @@
 {
-  "trending_ids": ["minecraft78283", "granny4new", "poppy3real"],
+  "trending_ids": ["mc-mod-01", "granny-4-un", "aircrack-pro"],
   "apps": [
     {
-      "id": "minecraft78283",
-      "name": "Minecraft Mod (Faizan Edition)",
+      "id": "mc-mod-01",
+      "name": "Minecraft Mod Menu",
       "type": "game",
       "category": "Simulation",
-      "trending": true,
       "size": "650MB",
+      "ver": "1.26.0",
       "releaseDate": "2025-12-28",
-      "owner": "Faizan Store Mods",
+      "owner": "Mojang & AN1",
       "icon": "Minecraft/icon.png",
+      "keywords": ["craft", "god mode", "unlimited", "block"],
+      "description": "Infinite worlds and premium features unlocked. Includes God Mode, High Jump, and All Skins.",
+      "media": [
+        "video/minecraft.mp4",
+        "Images/minecraft_1.png",
+        "Images/minecraft_2.png"
+      ],
       "platforms": {
-        "android": [{"name": "Server 1", "url": "https://files.an1.net/minecraft-mod-menu_1.26.0.25-an1.com.apk"}]
+        "android": [
+          {"name": "High Speed Server", "url": "https://files.an1.net/minecraft-mod.apk"},
+          {"name": "Mirror Link", "url": "#"}
+        ],
+        "windows": "https://gdrive.com/mc_pc.exe"
       }
     },
     {
-      "id": "poppy3real",
-      "name": "Poppy Playtime Chapter 3",
-      "type": "game",
-      "category": "Horror",
-      "trending": true,
-      "size": "2.1GB",
-      "releaseDate": "2025-12-20",
-      "owner": "Mob Games",
-      "icon": "Poppy3/icon.png",
+      "id": "aircrack-pro",
+      "name": "Aircrack-ng Pro",
+      "type": "tool",
+      "category": "Security",
+      "size": "30MB",
+      "ver": "2.1",
+      "releaseDate": "2025-11-15",
+      "owner": "Faizan Tools",
+      "icon": "Tools/aircrack.png",
+      "keywords": ["wifi", "hack", "security", "monitor"],
+      "description": "A complete suite of tools to assess WiFi network security. Monitor, Attack, and Crack.",
+      "media": [],
       "platforms": {
-        "android": [{"name": "Full APK", "url": "#"}]
+        "android": null,
+        "windows": "https://gdrive.com/aircrack_win.zip"
       }
     }
   ]
