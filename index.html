@@ -3,728 +3,274 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern App Store</title>
+    <title>Store - Loading...</title>
     <style>
         :root {
             --primary-bg: #0f172a;
-            --card-bg: rgba(255, 255, 255, 0.1);
+            --card-bg: rgba(255, 255, 255, 0.08);
             --accent: #3b82f6;
             --danger: #ef4444;
             --text: #ffffff;
-            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-border: rgba(255, 255, 255, 0.1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
-        
         body {
             background-color: var(--primary-bg);
-            background-attachment: fixed;
-            background-size: cover;
             color: var(--text);
-            overflow-x: hidden;
-            transition: background 0.5s ease;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            transition: 0.5s;
         }
 
-        /* Header & Search */
+        /* Glassmorphism Header */
         header {
-            padding: 40px 20px;
+            padding: 60px 20px;
             text-align: center;
-            background: linear-gradient(180deg, rgba(0,0,0,0.5) 0%, transparent 100%);
+            background: linear-gradient(to bottom, rgba(59, 130, 246, 0.2), transparent);
         }
 
-        .search-container {
+        .search-wrapper {
             position: sticky;
-            top: 20px;
-            z-index: 1000;
+            top: 15px;
+            z-index: 100;
             width: 90%;
-            max-width: 600px;
+            max-width: 500px;
             margin: 0 auto;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .search-bar {
             width: 100%;
             padding: 15px 25px;
-            border-radius: 30px;
+            border-radius: 50px;
             border: 1px solid var(--glass-border);
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
             color: white;
             outline: none;
-            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
-        .search-container.scrolled {
-            transform: scale(0.85);
-            top: 10px;
-        }
-
-        .extra-options {
-            max-height: 0;
-            overflow: hidden;
-            background: rgba(15, 23, 42, 0.95);
-            border-radius: 15px;
-            margin-top: 10px;
-            transition: max-height 0.3s ease;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            padding: 0 15px;
-        }
-
-        .search-bar:focus + .extra-options {
-            max-height: 200px;
-            padding: 15px;
-            border: 1px solid var(--glass-border);
-        }
-
-        /* Tabs */
+        /* Tabs & Glow */
         .tabs {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            margin: 20px 0;
+            gap: 15px;
+            margin: 30px 0;
         }
 
         .tab {
             padding: 10px 25px;
             cursor: pointer;
-            border-radius: 20px;
+            border-radius: 30px;
             background: var(--card-bg);
+            border: 1px solid var(--glass-border);
             transition: 0.3s;
         }
 
         .tab.active {
             background: var(--accent);
-            box-shadow: 0 0 15px var(--accent);
+            box-shadow: 0 0 20px var(--accent);
         }
 
-        /* Grid System */
-        .container { width: 95%; max-width: 1200px; margin: 0 auto; }
-        .grid {
+        /* Grid */
+        .app-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
             gap: 20px;
-            padding: 20px 0;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        /* App Cards */
-        .card {
+        .app-card {
             background: var(--card-bg);
-            backdrop-filter: blur(5px);
             border: 1px solid var(--glass-border);
-            border-radius: 18px;
-            padding: 15px;
+            border-radius: 20px;
+            padding: 20px;
             text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s;
             cursor: pointer;
-            position: relative;
+            transition: transform 0.3s;
         }
 
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        .app-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            background: rgba(255, 255, 255, 0.15);
         }
 
-        .card img {
-            width: 80px;
-            height: 80px;
-            border-radius: 18px;
-            margin-bottom: 10px;
-            object-fit: cover;
-        }
-
-        .category-badge {
-            font-size: 0.7rem;
-            padding: 2px 8px;
-            border-radius: 10px;
-            background: var(--accent);
-            display: inline-block;
-            margin-bottom: 5px;
+        .app-card img {
+            width: 90px;
+            height: 90px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            background: #1e293b; /* Placeholder color */
         }
 
         /* Detail Modal */
-        #detail-view {
+        #modal {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.9);
-            z-index: 2000;
+            backdrop-filter: blur(10px);
             display: none;
-            overflow-y: auto;
-            padding: 40px 20px;
-        }
-
-        .detail-content {
-            max-width: 800px;
-            margin: 0 auto;
-            background: #1e293b;
-            padding: 30px;
-            border-radius: 20px;
-        }
-
-        .download-btn {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            text-align: center;
-            border-radius: 12px;
-            text-decoration: none;
-            color: white;
-            font-weight: bold;
-            margin: 10px 0;
-            transition: 0.3s;
-        }
-
-        .btn-available { background: #22c55e; }
-        .btn-available:hover { transform: scale(1.02); background: #16a34a; }
-        .btn-unavailable { background: var(--danger); cursor: not-allowed; }
-
-        /* Footer */
-        footer {
-            background: #000;
-            padding: 40px;
-            margin-top: 50px;
-            text-align: center;
-            font-size: 0.9rem;
-        }
-
-        @media (max-width: 600px) {
-            .grid { grid-template-columns: repeat(2, 1fr); }
-        }
-    </style>
-</head>
-<body>
-
-    <header id="main-header">
-        <img id="header-logo" src="" alt="" style="display:none; height: 50px;">
-        <h1 id="store-name">Loading Store...</h1>
-        <p id="tagline"></p>
-    </header>
-
-    <div class="search-container" id="search-box">
-        <input type="text" class="search-bar" placeholder="Search games, owners, categories..." id="search-input">
-        <div class="extra-options">
-            <select id="sort-select">
-                <option value="newest">Newest First</option>
-                <option value="oldest">Oldest First</option>
-                <option value="size-asc">Size: Smallest</option>
-                <option value="size-desc">Size: Largest</option>
-            </select>
-            <select id="category-filter">
-                <option value="all">All Categories</option>
-            </select>
-        </div>
-    </div>
-
-    <div class="tabs">
-        <div class="tab active" onclick="filterType('all', this)">All</div>
-        <div class="tab" onclick="filterType('game', this)">Games</div>
-        <div class="tab" onclick="filterType('app', this)">Apps</div>
-    </div>
-
-    <div class="container">
-        <h2 id="section-title">Trending Now</h2>
-        <div class="grid" id="app-grid">
-            </div>
-    </div>
-
-    <div id="detail-view">
-        <div class="detail-content">
-            <button onclick="closeDetail()" style="float:right; background:none; border:none; color:white; font-size:1.5rem; cursor:pointer;">&times;</button>
-            <div id="detail-body"></div>
-            <hr style="margin:20px 0; border:0; border-top:1px solid #444;">
-            <h3>Recommended</h3>
-            <div class="grid" id="recommended-grid"></div>
-        </div>
-    </div>
-
-    <footer id="footer">
-        <p id="footer-desc"></p>
-        <p id="watermark"></p>
-        <a id="help-link" href="#" style="color: var(--accent);">Help Center</a>
-    </footer>
-
-    <script>
-        let appData = [];
-        let config = {};
-
-        // Fetching both JSONs
-        async function init() {
-            try {
-                const configRes = await fetch('my_web_info.json');
-                const storeRes = await fetch('info.json');
-                
-                config = (await configRes.json())[0];
-                appData = await storeRes.json();
-            } catch (e) {
-                console.error("Using Fallback Data. Host on a server to use JSON files.");
-                // Fallback objects for testing without a server
-                config = {"WebName":"Faizan Store","Watermark":"(C) Saad 2026","Background_color":"#0f172a","Border_line_color":"Glass","Description":"Developed by Saad. Open Source Store."};
-                appData = [
-                    {id:1, name:"Granny", type:"game", category:"Horror", available:true, releaseDate:"2024-01-01", versions:[{version:"1.8", size:"100MB", download:"#"}], icon:"https://via.placeholder.com/80", recommended:[2]},
-                    {id:2, name:"Granny MOD", type:"game", category:"Horror", available:false, releaseDate:"2024-02-01", versions:[{version:"1.0", size:"150MB", download:"#"}], icon:"https://via.placeholder.com/80", recommended:[1]}
-                ];
-            }
-            applyConfig();
-            renderApps(appData);
-            populateCategories();
-        }
-
-        function applyConfig() {
-            document.title = config.WebName;
-            document.getElementById('store-name').innerText = config.WebName;
-            document.getElementById('watermark').innerText = config.Watermark;
-            document.getElementById('footer-desc').innerText = config.Description;
-            if(config.Background_image !== "N/A") {
-                document.body.style.backgroundImage = `url(${config.Background_image})`;
-            } else {
-                document.body.style.backgroundColor = config.Background_color;
-            }
-        }
-
-        function renderApps(data) {
-            const grid = document.getElementById('app-grid');
-            grid.innerHTML = data.map(app => `
-                <div class="card" onclick="openDetail(${app.id})">
-                    <img src="${app.icon === 'N/A' ? 'https://via.placeholder.com/80' : app.icon}" alt="${app.name}">
-                    <div class="category-badge">${app.category}</div>
-                    <h4>${app.name}</h4>
-                </div>
-            `).join('');
-        }
-
-        function openDetail(id) {
-            const app = appData.find(a => a.id === id);
-            const body = document.getElementById('detail-body');
-            body.innerHTML = `
-                <div style="display:flex; gap:20px; align-items:center; margin-bottom:20px;">
-                    <img src="${app.icon}" style="width:120px; border-radius:20px;">
-                    <div>
-                        <h2>${app.name}</h2>
-                        <p>${app.owner} | ${app.country}</p>
-                    </div>
-                </div>
-                <p>${app.description}</p>
-                <div style="margin:20px 0;">
-                    <h3>Versions</h3>
-                    ${app.versions.map(v => `
-                        <div style="display:flex; justify-content:space-between; align-items:center; background:#334155; padding:10px; border-radius:10px; margin:5px 0;">
-                            <span>v${v.version} (${v.size})</span>
-                            <a href="${app.available ? v.download : '#'}" class="download-btn ${app.available ? 'btn-available' : 'btn-unavailable'}" style="width:auto; margin:0; padding:5px 15px;">
-                                ${app.available ? 'Download' : 'Coming Soon'}
-                            </a>
-                        </div>
-                    `).join('')}
-                </div>
-                <h4>How to Install</h4>
-                <p style="font-size:0.9rem; color:#cbd5e1;">${app.howToInstall}</p>
-            `;
-            
-            // Handle Recommended
-            const recGrid = document.getElementById('recommended-grid');
-            const recs = appData.filter(a => app.recommended.includes(a.id));
-            recGrid.innerHTML = recs.map(r => `
-                <div class="card" onclick="openDetail(${r.id})">
-                    <img src="${r.icon}" style="width:50px; height:50px;">
-                    <div style="font-size:0.8rem">${r.name}</div>
-                </div>
-            `).join('');
-
-            document.getElementById('detail-view').style.display = 'block';
-        }
-
-        function closeDetail() { document.getElementById('detail-view').style.display = 'none'; }
-
-        // Search and Filter Logic
-        document.getElementById('search-input').addEventListener('input', (e) => {
-            const val = e.target.value.toLowerCase();
-            const filtered = appData.filter(a => 
-                a.name.toLowerCase().includes(val) || 
-                a.owner.toLowerCase().includes(val) || 
-                a.category.toLowerCase().includes(val)
-            );
-            renderApps(filtered);
-        });
-
-        function filterType(type, el) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            el.classList.add('active');
-            const filtered = type === 'all' ? appData : appData.filter(a => a.type === type);
-            renderApps(filtered);
-        }
-
-        window.addEventListener('scroll', () => {
-            const search = document.getElementById('search-box');
-            if(window.scrollY > 50) search.classList.add('scrolled');
-            else search.classList.remove('scrolled');
-        });
-
-        init();
-    </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern App Store</title>
-    <style>
-        :root {
-            --primary-bg: #0f172a;
-            --card-bg: rgba(255, 255, 255, 0.1);
-            --accent: #3b82f6;
-            --danger: #ef4444;
-            --text: #ffffff;
-            --glass-border: rgba(255, 255, 255, 0.2);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
-        
-        body {
-            background-color: var(--primary-bg);
-            background-attachment: fixed;
-            background-size: cover;
-            color: var(--text);
-            overflow-x: hidden;
-            transition: background 0.5s ease;
-        }
-
-        /* Header & Search */
-        header {
-            padding: 40px 20px;
-            text-align: center;
-            background: linear-gradient(180deg, rgba(0,0,0,0.5) 0%, transparent 100%);
-        }
-
-        .search-container {
-            position: sticky;
-            top: 20px;
             z-index: 1000;
-            width: 90%;
-            max-width: 600px;
-            margin: 0 auto;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow-y: auto;
         }
 
-        .search-bar {
-            width: 100%;
-            padding: 15px 25px;
+        .modal-content {
+            max-width: 700px;
+            margin: 50px auto;
+            background: #1e293b;
+            padding: 30px;
             border-radius: 30px;
-            border: 1px solid var(--glass-border);
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            color: white;
-            outline: none;
-            font-size: 1rem;
-        }
-
-        .search-container.scrolled {
-            transform: scale(0.85);
-            top: 10px;
-        }
-
-        .extra-options {
-            max-height: 0;
-            overflow: hidden;
-            background: rgba(15, 23, 42, 0.95);
-            border-radius: 15px;
-            margin-top: 10px;
-            transition: max-height 0.3s ease;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            padding: 0 15px;
-        }
-
-        .search-bar:focus + .extra-options {
-            max-height: 200px;
-            padding: 15px;
-            border: 1px solid var(--glass-border);
-        }
-
-        /* Tabs */
-        .tabs {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        .tab {
-            padding: 10px 25px;
-            cursor: pointer;
-            border-radius: 20px;
-            background: var(--card-bg);
-            transition: 0.3s;
-        }
-
-        .tab.active {
-            background: var(--accent);
-            box-shadow: 0 0 15px var(--accent);
-        }
-
-        /* Grid System */
-        .container { width: 95%; max-width: 1200px; margin: 0 auto; }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 20px;
-            padding: 20px 0;
-        }
-
-        /* App Cards */
-        .card {
-            background: var(--card-bg);
-            backdrop-filter: blur(5px);
-            border: 1px solid var(--glass-border);
-            border-radius: 18px;
-            padding: 15px;
-            text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s;
-            cursor: pointer;
             position: relative;
         }
 
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-        }
-
-        .card img {
-            width: 80px;
-            height: 80px;
-            border-radius: 18px;
-            margin-bottom: 10px;
-            object-fit: cover;
-        }
-
-        .category-badge {
-            font-size: 0.7rem;
-            padding: 2px 8px;
-            border-radius: 10px;
-            background: var(--accent);
+        .btn-dl {
             display: inline-block;
-            margin-bottom: 5px;
-        }
-
-        /* Detail Modal */
-        #detail-view {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
-            z-index: 2000;
-            display: none;
-            overflow-y: auto;
-            padding: 40px 20px;
-        }
-
-        .detail-content {
-            max-width: 800px;
-            margin: 0 auto;
-            background: #1e293b;
-            padding: 30px;
-            border-radius: 20px;
-        }
-
-        .download-btn {
-            display: block;
             width: 100%;
             padding: 15px;
+            margin-top: 10px;
+            border-radius: 15px;
             text-align: center;
-            border-radius: 12px;
             text-decoration: none;
-            color: white;
             font-weight: bold;
-            margin: 10px 0;
-            transition: 0.3s;
+            color: white;
         }
 
-        .btn-available { background: #22c55e; }
-        .btn-available:hover { transform: scale(1.02); background: #16a34a; }
-        .btn-unavailable { background: var(--danger); cursor: not-allowed; }
+        .available { background: #22c55e; }
+        .coming-soon { background: var(--danger); }
 
-        /* Footer */
         footer {
             background: #000;
-            padding: 40px;
-            margin-top: 50px;
+            padding: 50px 20px;
             text-align: center;
-            font-size: 0.9rem;
-        }
-
-        @media (max-width: 600px) {
-            .grid { grid-template-columns: repeat(2, 1fr); }
+            margin-top: 50px;
+            border-top: 1px solid #222;
         }
     </style>
 </head>
 <body>
 
-    <header id="main-header">
-        <img id="header-logo" src="" alt="" style="display:none; height: 50px;">
-        <h1 id="store-name">Loading Store...</h1>
-        <p id="tagline"></p>
+    <header>
+        <h1 id="web-name">Store</h1>
+        <p id="web-desc">Loading amazing content...</p>
     </header>
 
-    <div class="search-container" id="search-box">
-        <input type="text" class="search-bar" placeholder="Search games, owners, categories..." id="search-input">
-        <div class="extra-options">
-            <select id="sort-select">
-                <option value="newest">Newest First</option>
-                <option value="oldest">Oldest First</option>
-                <option value="size-asc">Size: Smallest</option>
-                <option value="size-desc">Size: Largest</option>
-            </select>
-            <select id="category-filter">
-                <option value="all">All Categories</option>
-            </select>
-        </div>
+    <div class="search-wrapper">
+        <input type="text" id="search" class="search-bar" placeholder="Search apps or games...">
     </div>
 
     <div class="tabs">
-        <div class="tab active" onclick="filterType('all', this)">All</div>
-        <div class="tab" onclick="filterType('game', this)">Games</div>
-        <div class="tab" onclick="filterType('app', this)">Apps</div>
+        <div class="tab active" onclick="filter('all')">All</div>
+        <div class="tab" onclick="filter('game')">Games</div>
+        <div class="tab" onclick="filter('app')">Apps</div>
     </div>
 
-    <div class="container">
-        <h2 id="section-title">Trending Now</h2>
-        <div class="grid" id="app-grid">
-            </div>
-    </div>
+    <div class="app-grid" id="main-grid"></div>
 
-    <div id="detail-view">
-        <div class="detail-content">
-            <button onclick="closeDetail()" style="float:right; background:none; border:none; color:white; font-size:1.5rem; cursor:pointer;">&times;</button>
-            <div id="detail-body"></div>
-            <hr style="margin:20px 0; border:0; border-top:1px solid #444;">
-            <h3>Recommended</h3>
-            <div class="grid" id="recommended-grid"></div>
+    <div id="modal" onclick="if(event.target == this) closeApp()">
+        <div class="modal-content">
+            <div id="modal-data"></div>
         </div>
     </div>
 
     <footer id="footer">
-        <p id="footer-desc"></p>
-        <p id="watermark"></p>
-        <a id="help-link" href="#" style="color: var(--accent);">Help Center</a>
+        <p id="watermark">© 2026</p>
+        <p id="footer-text"></p>
+        <a id="help-btn" href="#" style="color:var(--accent)">Help Center</a>
     </footer>
 
     <script>
-        let appData = [];
-        let config = {};
+        let apps = [];
+        let siteInfo = {};
 
-        // Fetching both JSONs
-        async function init() {
+        // 1. Fetch Data with Fallback Logic
+        async function loadStore() {
             try {
-                const configRes = await fetch('my_web_info.json');
-                const storeRes = await fetch('info.json');
+                // Fetching JSON with Cache Buster to avoid GitHub caching issues
+                const resInfo = await fetch('my_web_info.json?v=' + Date.now());
+                const resApps = await fetch('info.json?v=' + Date.now());
                 
-                config = (await configRes.json())[0];
-                appData = await storeRes.json();
-            } catch (e) {
-                console.error("Using Fallback Data. Host on a server to use JSON files.");
-                // Fallback objects for testing without a server
-                config = {"WebName":"Faizan Store","Watermark":"(C) Saad 2026","Background_color":"#0f172a","Border_line_color":"Glass","Description":"Developed by Saad. Open Source Store."};
-                appData = [
-                    {id:1, name:"Granny", type:"game", category:"Horror", available:true, releaseDate:"2024-01-01", versions:[{version:"1.8", size:"100MB", download:"#"}], icon:"https://via.placeholder.com/80", recommended:[2]},
-                    {id:2, name:"Granny MOD", type:"game", category:"Horror", available:false, releaseDate:"2024-02-01", versions:[{version:"1.0", size:"150MB", download:"#"}], icon:"https://via.placeholder.com/80", recommended:[1]}
-                ];
+                if(!resInfo.ok || !resApps.ok) throw new Error("File not found");
+
+                siteInfo = (await resInfo.json())[0];
+                apps = await resApps.json();
+            } catch (err) {
+                console.warn("JSON load failed, using N/A defaults:", err);
+                // DEFAULT N/A DATA
+                siteInfo = { "WebName": "N/A", "Description": "N/A", "Watermark": "N/A", "Background_color": "#0f172a" };
+                apps = [{
+                    id: 0, name: "N/A", type: "game", category: "N/A", icon: "N/A", 
+                    available: false, versions: [{version: "0.0", size: "0MB", download: "#"}],
+                    owner: "N/A", description: "Information not available."
+                }];
             }
-            applyConfig();
-            renderApps(appData);
-            populateCategories();
+            renderUI();
         }
 
-        function applyConfig() {
-            document.title = config.WebName;
-            document.getElementById('store-name').innerText = config.WebName;
-            document.getElementById('watermark').innerText = config.Watermark;
-            document.getElementById('footer-desc').innerText = config.Description;
-            if(config.Background_image !== "N/A") {
-                document.body.style.backgroundImage = `url(${config.Background_image})`;
-            } else {
-                document.body.style.backgroundColor = config.Background_color;
-            }
+        function renderUI() {
+            document.getElementById('web-name').innerText = siteInfo.WebName;
+            document.getElementById('web-desc').innerText = siteInfo.Description;
+            document.getElementById('watermark').innerText = siteInfo.Watermark;
+            document.body.style.backgroundColor = siteInfo.Background_color;
+            
+            displayApps(apps);
         }
 
-        function renderApps(data) {
-            const grid = document.getElementById('app-grid');
+        function displayApps(data) {
+            const grid = document.getElementById('main-grid');
             grid.innerHTML = data.map(app => `
-                <div class="card" onclick="openDetail(${app.id})">
-                    <img src="${app.icon === 'N/A' ? 'https://via.placeholder.com/80' : app.icon}" alt="${app.name}">
-                    <div class="category-badge">${app.category}</div>
-                    <h4>${app.name}</h4>
+                <div class="app-card" onclick="openApp(${app.id})">
+                    <img src="${app.icon === 'N/A' ? 'https://via.placeholder.com/90?text=App' : app.icon}">
+                    <div style="font-size: 0.8rem; color: var(--accent)">${app.category}</div>
+                    <div style="font-weight: bold; margin-top: 5px;">${app.name}</div>
                 </div>
             `).join('');
         }
 
-        function openDetail(id) {
-            const app = appData.find(a => a.id === id);
-            const body = document.getElementById('detail-body');
-            body.innerHTML = `
-                <div style="display:flex; gap:20px; align-items:center; margin-bottom:20px;">
-                    <img src="${app.icon}" style="width:120px; border-radius:20px;">
+        function openApp(id) {
+            const app = apps.find(a => a.id === id);
+            const modal = document.getElementById('modal');
+            const content = document.getElementById('modal-data');
+            
+            content.innerHTML = `
+                <div style="display:flex; gap:20px; align-items:center;">
+                    <img src="${app.icon === 'N/A' ? 'https://via.placeholder.com/90' : app.icon}" style="width:100px; border-radius:20px;">
                     <div>
                         <h2>${app.name}</h2>
-                        <p>${app.owner} | ${app.country}</p>
+                        <p style="color:#94a3b8">Developer: ${app.owner}</p>
                     </div>
                 </div>
-                <p>${app.description}</p>
-                <div style="margin:20px 0;">
-                    <h3>Versions</h3>
-                    ${app.versions.map(v => `
-                        <div style="display:flex; justify-content:space-between; align-items:center; background:#334155; padding:10px; border-radius:10px; margin:5px 0;">
-                            <span>v${v.version} (${v.size})</span>
-                            <a href="${app.available ? v.download : '#'}" class="download-btn ${app.available ? 'btn-available' : 'btn-unavailable'}" style="width:auto; margin:0; padding:5px 15px;">
-                                ${app.available ? 'Download' : 'Coming Soon'}
-                            </a>
-                        </div>
-                    `).join('')}
-                </div>
-                <h4>How to Install</h4>
-                <p style="font-size:0.9rem; color:#cbd5e1;">${app.howToInstall}</p>
+                <div style="margin:20px 0; line-height:1.6;">${app.description}</div>
+                <h3>Download Versions</h3>
+                ${app.versions.map(v => `
+                    <a href="${app.available ? v.download : '#'}" class="btn-dl ${app.available ? 'available' : 'coming-soon'}">
+                        ${app.available ? 'Download v' + v.version + ' (' + v.size + ')' : 'Coming Soon'}
+                    </a>
+                `).join('')}
             `;
-            
-            // Handle Recommended
-            const recGrid = document.getElementById('recommended-grid');
-            const recs = appData.filter(a => app.recommended.includes(a.id));
-            recGrid.innerHTML = recs.map(r => `
-                <div class="card" onclick="openDetail(${r.id})">
-                    <img src="${r.icon}" style="width:50px; height:50px;">
-                    <div style="font-size:0.8rem">${r.name}</div>
-                </div>
-            `).join('');
-
-            document.getElementById('detail-view').style.display = 'block';
+            modal.style.display = 'block';
         }
 
-        function closeDetail() { document.getElementById('detail-view').style.display = 'none'; }
+        function closeApp() { document.getElementById('modal').style.display = 'none'; }
 
-        // Search and Filter Logic
-        document.getElementById('search-input').addEventListener('input', (e) => {
-            const val = e.target.value.toLowerCase();
-            const filtered = appData.filter(a => 
-                a.name.toLowerCase().includes(val) || 
-                a.owner.toLowerCase().includes(val) || 
-                a.category.toLowerCase().includes(val)
-            );
-            renderApps(filtered);
+        // Search Filter
+        document.getElementById('search').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const filtered = apps.filter(a => a.name.toLowerCase().includes(query));
+            displayApps(filtered);
         });
 
-        function filterType(type, el) {
+        function filter(type) {
+            const filtered = type === 'all' ? apps : apps.filter(a => a.type === type);
+            displayApps(filtered);
+            // Tab active switch
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            el.classList.add('active');
-            const filtered = type === 'all' ? appData : appData.filter(a => a.type === type);
-            renderApps(filtered);
+            event.target.classList.add('active');
         }
 
-        window.addEventListener('scroll', () => {
-            const search = document.getElementById('search-box');
-            if(window.scrollY > 50) search.classList.add('scrolled');
-            else search.classList.remove('scrolled');
-        });
-
-        init();
+        loadStore();
     </script>
 </body>
 </html>
+
