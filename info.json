@@ -1,48 +1,67 @@
 {
-  "trending_ids": ["mc-mod-01", "granny-4-un", "aircrack-pro"],
+  "trending_ids": ["g1", "g4", "a12", "t2", "t5"],
   "apps": [
     {
-      "id": "mc-mod-01",
-      "name": "Minecraft Mod Menu",
-      "type": "game",
-      "category": "Simulation",
-      "size": "650MB",
-      "ver": "1.26.0",
-      "releaseDate": "2025-12-28",
-      "owner": "Mojang & AN1",
-      "icon": "Minecraft/icon.png",
-      "keywords": ["craft", "god mode", "unlimited", "block"],
-      "description": "Infinite worlds and premium features unlocked. Includes God Mode, High Jump, and All Skins.",
-      "media": [
-        "video/minecraft.mp4",
-        "Images/minecraft_1.png",
-        "Images/minecraft_2.png"
-      ],
-      "platforms": {
-        "android": [
-          {"name": "High Speed Server", "url": "https://files.an1.net/minecraft-mod.apk"},
-          {"name": "Mirror Link", "url": "#"}
-        ],
-        "windows": "https://gdrive.com/mc_pc.exe"
-      }
+      "id": "g1", "name": "Minecraft", "type": "game", "category": "Simulation", "size": "650MB", "releaseDate": "2025-12-28", "owner": "Mojang", "icon": "icon/icon.png", "keywords": ["craft", "build"], "description": "Explore infinite worlds and build everything from the simplest of homes to the grandest of castles.", "media": ["icon/icon.png"], "platforms": { "android": [{"name": "MOD APK", "url": "#"}], "windows": "#" }
     },
     {
-      "id": "aircrack-pro",
-      "name": "Aircrack-ng Pro",
-      "type": "tool",
-      "category": "Security",
-      "size": "30MB",
-      "ver": "2.1",
-      "releaseDate": "2025-11-15",
-      "owner": "Faizan Tools",
-      "icon": "Tools/aircrack.png",
-      "keywords": ["wifi", "hack", "security", "monitor"],
-      "description": "A complete suite of tools to assess WiFi network security. Monitor, Attack, and Crack.",
-      "media": [],
-      "platforms": {
-        "android": null,
-        "windows": "https://gdrive.com/aircrack_win.zip"
-      }
+      "id": "g2", "name": "PUBG Mobile", "type": "game", "category": "Action", "size": "1.8GB", "releaseDate": "2025-12-20", "owner": "Krafton", "icon": "icon/icon.png", "keywords": ["battle", "royale"], "description": "The original battle royale, now on mobile with high-quality graphics and intense combat.", "media": ["icon/icon.png"], "platforms": { "android": [{"name": "Global v3.0", "url": "#"}] }
+    },
+    {
+      "id": "g3", "name": "Free Fire", "type": "game", "category": "Action", "size": "700MB", "releaseDate": "2025-11-15", "owner": "Garena", "icon": "icon/icon.png", "keywords": ["survival", "fire"], "description": "Fast-paced survival shooter game where 50 players compete for the ultimate victory.", "media": ["icon/icon.png"], "platforms": { "android": [{"name": "Direct Download", "url": "#"}] }
+    },
+    {
+      "id": "g4", "name": "Call of Duty Mobile", "type": "game", "category": "Action", "size": "2.1GB", "releaseDate": "2025-12-05", "owner": "Activision", "icon": "icon/icon.png", "keywords": ["fps", "shooter"], "description": "Classic Call of Duty experience with multiplayer maps and battle royale modes.", "media": ["icon/icon.png"], "platforms": { "android": [{"name": "APK + OBB", "url": "#"}] }
+    },
+    {
+      "id": "g5", "name": "Valorant", "type": "game", "category": "Shooter", "size": "12GB", "releaseDate": "2025-10-10", "owner": "Riot Games", "icon": "icon/icon.png", "keywords": ["agents", "tactical"], "description": "5v5 character-based tactical shooter where precise gunplay meets unique agent abilities.", "media": ["icon/icon.png"], "platforms": { "windows": "#" }
+    },
+    {
+      "id": "g6", "name": "God of War Ragnarök", "type": "game", "category": "Adventure", "size": "80GB", "releaseDate": "2025-05-12", "owner": "Sony", "icon": "icon/icon.png", "keywords": ["kratos", "action"], "description": "Join Kratos and Atreus on a mythic journey for answers before Ragnarök arrives.", "media": ["icon/icon.png"], "platforms": { "windows": "#" }
+    },
+    {
+      "id": "g7", "name": "Elden Ring", "type": "game", "category": "RPG", "size": "60GB", "releaseDate": "2025-01-01", "owner": "FromSoftware", "icon": "icon/icon.png", "keywords": ["souls", "fantasy"], "description": "Rise, Tarnished, and be guided by grace to brandish the power of the Elden Ring.", "media": ["icon/icon.png"], "platforms": { "windows": "#" }
+    },
+    {
+      "id": "g8", "name": "FIFA 23", "type": "game", "category": "Sports", "size": "45GB", "releaseDate": "2024-09-20", "owner": "EA Sports", "icon": "icon/icon.png", "keywords": ["football", "soccer"], "description": "Experience the biggest tournament in football with FIFA 23.", "media": ["icon/icon.png"], "platforms": { "windows": "#", "android": [{"name": "Early Access", "url": "#"}] }
+    },
+    {
+        "id": "g9", "name": "Need for Speed Most Wanted", "type": "game", "category": "Racing", "size": "2GB", "releaseDate": "2025-06-15", "owner": "EA", "icon": "icon/icon.png", "keywords": ["car", "race"], "description": "Evade a relentless police force while you clash with street racers.", "media": ["icon/icon.png"], "platforms": { "android": [{"name": "Direct APK", "url": "#"}], "windows": "#" }
+    },
+    {
+        "id": "g10", "name": "Cyberpunk 2077", "type": "game", "category": "RPG", "size": "70GB", "releaseDate": "2025-03-22", "owner": "CD Projekt", "icon": "icon/icon.png", "keywords": ["sci-fi", "openworld"], "description": "Become a mercenary in the megalopolis of Night City.", "media": ["icon/icon.png"], "platforms": { "windows": "#" }
+    },
+
+    {
+      "id": "a1", "name": "Google Chrome", "type": "app", "category": "Browser", "size": "95MB", "releaseDate": "2025-12-28", "owner": "Google", "icon": "icon/icon.png", "keywords": ["web", "fast"], "description": "The fast, free, and secure browser built for the modern web.", "media": ["icon/icon.png"], "platforms": { "android": [{"name": "Play Store", "url": "#"}], "windows": "#" }
+    },
+    {
+      "id": "a2", "name": "Brave Browser", "type": "app", "category": "Browser", "size": "80MB", "releaseDate": "2025-11-12", "owner": "Brave Software", "icon": "icon/icon.png", "keywords": ["privacy", "adblock"], "description": "Fast, private and secure web browser with adblocker.", "media": ["icon/icon.png"], "platforms": { "android": [{"name": "APK", "url": "#"}] }
+    },
+    {
+      "id": "a11", "name": "Telegram", "type": "app", "category": "Communication", "size": "45MB", "releaseDate": "2025-12-25", "owner": "Telegram FZ", "icon": "icon/icon.png", "keywords": ["chat", "secure"], "description": "Pure instant messaging — simple, fast, secure, and synced across all your devices.", "media": ["icon/icon.png"], "platforms": { "android": [{"name": "Direct Link", "url": "#"}], "windows": "#" }
+    },
+    {
+      "id": "a12", "name": "WhatsApp", "type": "app", "category": "Communication", "size": "35MB", "releaseDate": "2025-12-28", "owner": "Meta", "icon": "icon/icon.png", "keywords": ["messenger", "call"], "description": "Simple, reliable, and private messaging and calling.", "media": ["icon/icon.png"], "platforms": { "android": [{"name": "Latest Beta", "url": "#"}] }
+    },
+    {
+      "id": "a30", "name": "YouTube Vanced", "type": "app", "category": "Video", "size": "65MB", "releaseDate": "2025-08-05", "owner": "Vanced Team", "icon": "icon/icon.png", "keywords": ["adfree", "youtube"], "description": "The best modded version of YouTube with background play and no ads.", "media": ["icon/icon.png"], "platforms": { "android": [{"name": "Vanced Manager", "url": "#"}] }
+    },
+
+    {
+      "id": "t1", "name": "Wifite", "type": "tool", "category": "Security", "size": "15MB", "releaseDate": "2025-11-22", "owner": "Faizan Tools", "icon": "icon/icon.png", "keywords": ["wifi", "hacking"], "description": "Automated wireless auditor for cracking WPS/WEP/WPA networks.", "media": ["icon/icon.png"], "platforms": { "windows": "#" }
+    },
+    {
+      "id": "t2", "name": "Aircrack-ng", "type": "tool", "category": "Security", "size": "22MB", "releaseDate": "2025-10-18", "owner": "Aircrack", "icon": "icon/icon.png", "keywords": ["crack", "wifi"], "description": "A complete suite of tools to assess WiFi network security.", "media": ["icon/icon.png"], "platforms": { "windows": "#", "android": [{"name": "Termux Script", "url": "#"}] }
+    },
+    {
+      "id": "t3", "name": "Metasploit Framework", "type": "tool", "category": "Exploitation", "size": "350MB", "releaseDate": "2025-12-01", "owner": "Rapid7", "icon": "icon/icon.png", "keywords": ["exploit", "pentest"], "description": "World's most used penetration testing framework.", "media": ["icon/icon.png"], "platforms": { "windows": "#" }
+    },
+    {
+      "id": "t4", "name": "Nmap", "type": "tool", "category": "Network", "size": "30MB", "releaseDate": "2025-09-05", "owner": "Gordon Lyon", "icon": "icon/icon.png", "keywords": ["scanner", "port"], "description": "Free and open source utility for network discovery and security auditing.", "media": ["icon/icon.png"], "platforms": { "windows": "#", "android": [{"name": "Nmap Android", "url": "#"}] }
+    },
+    {
+      "id": "t5", "name": "SQLmap", "type": "tool", "category": "Exploitation", "size": "10MB", "releaseDate": "2025-12-10", "owner": "sqlmapproject", "icon": "icon/icon.png", "keywords": ["sql", "injection"], "description": "Automatic SQL injection and database takeover tool.", "media": ["icon/icon.png"], "platforms": { "android": [{"name": "Python Script", "url": "#"}] }
     }
   ]
-}
+    }
