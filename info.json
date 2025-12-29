@@ -1,30 +1,38 @@
 {
-  "trending_ids": ["minecraft-v1"],
+  "trending_ids": ["mc-v1"],
   "apps": [
     {
-      "id": "minecraft-v1",
-      "name": "Minecraft Mod Menu",
+      "id": "mc-v1",
+      "name": "Minecraft",
       "type": "game",
       "category": "Simulation",
       "size": "650MB",
-      "ver": "1.26.0.25",
-      "releaseDate": "Dec 2025",
-      "owner": "Mojang & AN1",
+      "isNew": true,
+      "package": "com.mojang.minecraftpe",
+      "compatibility": "Android 5.0+",
       "icon": "icon/icon.png",
-      "keywords": ["minecraft", "mod menu", "god mode", "build"],
-      "description": "Minecraft is an open-world game where you can build anything. This Special Mod Menu version includes: God Mode, High Damage, Unlocked Premium Skins, and No Fall Damage. Perfect for survival and creative modes.",
-      "media": [
-        "icon/icon.png"
+      "description": "Infinite worlds and god mode unlocked.",
+      "versions": [
+        { "ver": "1.26.0.25", "url": "https://files.an1.co/minecraft-v1.26.apk" },
+        { "ver": "1.25.0.01", "url": "https://files.an1.co/minecraft-v1.25.apk" }
       ],
-      "platforms": {
-        "android": [
-          {
-            "name": "Direct Download (v1.26.0.25)",
-            "url": "https://files.an1.co/minecraft-mod-menu_1.26.0.25-an1.com.apk"
-          }
-        ],
-        "windows": null
-      }
+      "media": ["icon/icon.png"]
+    },
+    {
+      "id": "chrome-01",
+      "name": "Google Chrome",
+      "type": "app",
+      "category": "Browser",
+      "size": "95MB",
+      "isNew": false,
+      "package": "com.android.chrome",
+      "compatibility": "Android 7.0+",
+      "icon": "icon/icon.png",
+      "description": "Fast and secure browser.",
+      "versions": [
+        { "ver": "120.0.1", "url": "#" }
+      ],
+      "media": []
     }
   ]
 }
