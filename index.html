@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Faizan Store | Elite Sorting</title>
+    <title>Faizan Store | Pro Sorting</title>
     <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        :root { --p-green: #01875f; --p-bg: #ffffff; --p-txt: #202124; --p-border: #e8eaed; --p-surface: #f1f3f4; --p-active: #e6f4ea; --p-card: #ffffff; }
-        [data-theme="dark"] { --p-bg: #121212; --p-txt: #e8eaed; --p-border: #333; --p-surface: #2d2d2d; --p-active: #1a332a; --p-card: #1e1e1e; }
+        :root { --p-green: #01875f; --p-bg: #ffffff; --p-txt: #202124; --p-border: #e8eaed; --p-surface: #f1f3f4; --p-active: #e6f4ea; --p-drawer: #ffffff; }
+        [data-theme="dark"] { --p-bg: #121212; --p-txt: #e8eaed; --p-border: #333; --p-surface: #2d2d2d; --p-active: #1a332a; --p-drawer: #1e1e1e; }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Google Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--p-bg); color: var(--p-txt); transition: 0.3s; overflow-x: hidden; }
@@ -18,42 +18,40 @@
         .search-pill { flex: 1; display: flex; align-items: center; background: var(--p-surface); border-radius: 8px; padding: 0 12px; }
         .search-input { width: 100%; border: none; background: transparent; padding: 12px; font-size: 15px; outline: none; color: var(--p-txt); }
 
-        /* SETTINGS DRAWER (REFINED) */
+        /* SETTINGS DRAWER (Premium Look) */
         #drawer { 
-            position: fixed; top: 0; right: -100%; width: 280px; height: 100%; 
-            background: var(--p-card); z-index: 6000; padding: 20px; 
-            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: -10px 0 30px rgba(0,0,0,0.3);
-            display: flex; flex-direction: column;
+            position: fixed; top: 0; right: -100%; width: 300px; height: 100%; 
+            background: var(--p-drawer); color: var(--p-txt); z-index: 6000; padding: 25px; 
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: -10px 0 30px rgba(0,0,0,0.2); 
+            overflow-y: auto;
         }
         #drawer.open { right: 0; }
         .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 5500; display: none; backdrop-filter: blur(2px); }
         .overlay.active { display: block; }
 
-        .drawer-header { font-size: 20px; font-weight: 700; margin-bottom: 20px; color: var(--p-green); border-bottom: 2px solid var(--p-green); padding-bottom: 10px; }
-        
-        .sort-btn { 
+        .drawer-title { font-size: 20px; font-weight: 700; color: var(--p-green); margin-bottom: 20px; border-bottom: 2px solid var(--p-green); padding-bottom: 10px; }
+        .drawer-btn { 
             width: 100%; padding: 14px 10px; text-align: left; border: none; background: transparent; 
-            border-bottom: 1px solid var(--p-border); color: var(--p-txt); font-size: 14px; 
-            display: flex; align-items: center; gap: 12px; cursor: pointer; transition: 0.2s;
+            border-bottom: 1px solid var(--p-border); color: var(--p-txt); font-size: 15px; 
+            cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 10px;
         }
-        .sort-btn:active { background: var(--p-active); }
-        .sort-btn span { font-size: 18px; }
+        .drawer-btn:active { background: var(--p-active); }
 
         /* APP GRID */
-        .container { padding: 85px 16px 100px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)); gap: 20px; }
-        .app-card { cursor: pointer; text-align: center; }
-        .app-card img { width: 100%; aspect-ratio: 1/1; border-radius: 22%; object-fit: cover; border: 1px solid var(--p-border); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .app-name { font-size: 12px; font-weight: 500; margin-top: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .app-info { font-size: 10px; color: gray; }
+        .container { padding: 80px 16px 120px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 18px; }
+        .app-card { cursor: pointer; text-align: left; }
+        .app-card img { width: 100%; aspect-ratio: 1/1; border-radius: 22%; object-fit: cover; border: 1px solid var(--p-border); }
+        .app-name { font-size: 12px; font-weight: 500; margin-top: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .app-meta { font-size: 10px; color: gray; margin-top: 2px; }
 
-        /* DETAILS */
+        /* DETAIL VIEW */
         #details { position: fixed; inset: 0; background: var(--p-bg); z-index: 5000; display: none; overflow-y: auto; }
         .d-header { position: sticky; top: 0; background: var(--p-bg); padding: 15px; border-bottom: 1px solid var(--p-border); display: flex; align-items: center; }
-        
-        /* BOTTOM NAV */
-        nav { position: fixed; bottom: 0; width: 100%; background: var(--p-bg); border-top: 1px solid var(--p-border); display: flex; justify-content: space-around; padding: 12px 0; z-index: 4000; }
-        .nav-link { border: none; background: none; color: #5f6368; font-size: 12px; font-weight: 500; flex: 1; }
+
+        /* NAV BAR */
+        nav { position: fixed; bottom: 0; width: 100%; background: var(--p-bg); border-top: 1px solid var(--p-border); display: flex; justify-content: space-around; padding: 10px 0; z-index: 4000; }
+        .nav-link { border: none; background: none; color: gray; font-size: 12px; font-weight: 500; flex: 1; }
         .nav-link.active { color: var(--p-green); font-weight: 700; }
     </style>
 </head>
@@ -61,26 +59,34 @@
 
     <header id="main-header">
         <div class="search-pill">
-            <input type="text" id="search" class="search-input" placeholder="Search...">
+            <input type="text" id="search" class="search-input" placeholder="Search apps & games...">
         </div>
-        <div onclick="toggleDrawer(true)" style="cursor:pointer; font-size: 22px;">🔘</div>
+        <div onclick="toggleDrawer(true)" style="cursor:pointer; font-size: 24px;">🔘</div>
     </header>
 
     <div class="overlay" id="overlay" onclick="toggleDrawer(false)"></div>
 
     <div id="drawer">
-        <div class="drawer-header">Menu & Sorting</div>
+        <div class="drawer-title">Settings & Sorting</div>
         
-        <button class="sort-btn" onclick="window.location.href='https://example.com/help'"><span>❓</span> Help & Support</button>
-        <button class="sort-btn" onclick="setTheme('light')"><span>☀️</span> White Mode (Default)</button>
-        <button class="sort-btn" onclick="setTheme('dark')"><span>🌙</span> Dark Mode</button>
-        <button class="sort-btn" onclick="applySort('default')"><span>🔄</span> Default (All Sorting)</button>
-        <button class="sort-btn" onclick="applySort('size-h')"><span>📈</span> Highest To Lowest (Size)</button>
-        <button class="sort-btn" onclick="applySort('size-l')"><span>📉</span> Lowest To Highest (Size)</button>
-        <button class="sort-btn" onclick="applySort('date-n')"><span>🆕</span> Newest To Oldest (Date)</button>
-        <button class="sort-btn" onclick="applySort('date-o')"><span>⏳</span> Oldest To Newest (Date)</button>
+        <button class="drawer-btn" onclick="window.location.href='https://example.com/help'">❓ Help & Support</button>
+        
+        <div style="margin: 15px 0 10px; font-size: 12px; color: var(--p-green); font-weight: 700;">SORT BY SIZE</div>
+        <button class="drawer-btn" onclick="sortData('size-h')">📈 Highest To Lowest (Size)</button>
+        <button class="drawer-btn" onclick="sortData('size-l')">📉 Lowest To Highest (Size)</button>
 
-        <button onclick="toggleDrawer(false)" style="margin-top:auto; padding:15px; background:var(--p-green); color:white; border:none; border-radius:8px; font-weight:bold;">CLOSE</button>
+        <div style="margin: 15px 0 10px; font-size: 12px; color: var(--p-green); font-weight: 700;">SORT BY DATE</div>
+        <button class="drawer-btn" onclick="sortData('date-n')">🆕 Newest To Oldest (Date)</button>
+        <button class="drawer-btn" onclick="sortData('date-o')">📅 Oldest To Newest (Date)</button>
+
+        <div style="margin: 15px 0 10px; font-size: 12px; color: var(--p-green); font-weight: 700;">THEME</div>
+        <button class="drawer-btn" onclick="setTheme('dark')">🌙 Dark Mode</button>
+        <button class="drawer-btn" onclick="setTheme('light')">☀️ White Mode (Default)</button>
+
+        <div style="margin: 15px 0 10px; font-size: 12px; color: var(--p-green); font-weight: 700;">RESET</div>
+        <button class="drawer-btn" onclick="sortData('default')" style="color: var(--p-green); font-weight: bold;">🔄 Default (All Sorting)</button>
+        
+        <button onclick="toggleDrawer(false)" style="width:100%; padding:15px; background:var(--p-active); color:var(--p-green); border:none; border-radius:10px; margin-top:30px; font-weight:bold; cursor:pointer;">CLOSE</button>
     </div>
 
     <div class="container">
@@ -89,105 +95,106 @@
 
     <div id="details">
         <div class="d-header">
-            <button onclick="closeDetails()" style="background:none; border:none; font-size:26px;">←</button>
-            <span id="d-title" style="margin-left:15px; font-weight:700">Details</span>
+            <button onclick="closeDetails()" style="background:none; border:none; font-size:24px; color:var(--p-txt);">←</button>
+            <span id="d-nav-title" style="margin-left:20px; font-weight:700"></span>
         </div>
-        <div id="d-content" style="padding:20px;"></div>
+        <div id="detail-content"></div>
     </div>
 
     <nav>
-        <button class="nav-link active" onclick="changeTab('all', this)">Home</button>
-        <button class="nav-link" onclick="changeTab('game', this)">Games</button>
-        <button class="nav-link" onclick="changeTab('app', this)">Apps</button>
+        <button class="nav-link active" onclick="tab('all', this)">Home</button>
+        <button class="nav-link" onclick="tab('game', this)">Games</button>
+        <button class="nav-link" onclick="tab('app', this)">Apps</button>
     </nav>
 
     <script>
-        let db = [];
-        let currentTab = 'all';
-        let touchStartX = 0;
+        let rawData = [];
+        let currentList = [];
+        let lastScroll = 0;
 
         async function init() {
             const res = await fetch('info.json');
             const data = await res.json();
-            db = data.apps;
-            renderGrid(db);
+            rawData = data.apps;
+            currentList = [...rawData];
+            renderGrid(currentList);
         }
 
-        function renderGrid(data) {
+        function renderGrid(list) {
             const grid = document.getElementById('main-grid');
-            grid.innerHTML = data.map(a => `
-                <div class="app-card" onclick="openApp('${a.id}')">
+            grid.innerHTML = list.map(a => `
+                <div class="app-card" onclick="openDetails('${a.id}')">
                     <img src="${a.icon}" loading="lazy">
                     <div class="app-name">${a.name}</div>
-                    <div class="app-info">${a.size} | ${a.releaseDate}</div>
+                    <div class="app-meta">${a.size} • ${a.releaseDate}</div>
                 </div>
             `).join('');
         }
 
-        // --- SORTING LOGIC ---
-        function applySort(type) {
-            let sorted = [...db].filter(x => currentTab === 'all' || x.type === currentTab);
+        function sortData(type) {
+            let sorted = [...currentList];
+            if (type === 'size-h') sorted.sort((a, b) => parseSize(b.size) - parseSize(a.size));
+            if (type === 'size-l') sorted.sort((a, b) => parseSize(a.size) - parseSize(b.size));
+            if (type === 'date-n') sorted.sort((a, b) => new Date(b.releaseDate) - new Date(a.releaseDate));
+            if (type === 'date-o') sorted.sort((a, b) => new Date(a.releaseDate) - new Date(b.releaseDate));
+            if (type === 'default') sorted = [...rawData];
             
-            if (type === 'size-h') sorted.sort((a,b) => parseFloat(b.size) - parseFloat(a.size));
-            if (type === 'size-l') sorted.sort((a,b) => parseFloat(a.size) - parseFloat(b.size));
-            if (type === 'date-n') sorted.sort((a,b) => new Date(b.releaseDate) - new Date(a.releaseDate));
-            if (type === 'date-o') sorted.sort((a,b) => new Date(a.releaseDate) - new Date(b.releaseDate));
-            if (type === 'default') sorted = db.filter(x => currentTab === 'all' || x.type === currentTab);
-
             renderGrid(sorted);
             toggleDrawer(false);
         }
 
-        function changeTab(t, el) {
-            currentTab = t;
-            document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
-            el.classList.add('active');
-            renderGrid(t === 'all' ? db : db.filter(x => x.type === t));
+        function parseSize(s) {
+            let n = parseFloat(s);
+            if (s.includes('GB')) n *= 1024;
+            return n;
         }
 
-        function openApp(id) {
-            const a = db.find(x => x.id === id);
-            document.getElementById('d-title').innerText = a.name;
-            document.getElementById('d-content').innerHTML = `
-                <img src="${a.icon}" style="width:100px; border-radius:20px;">
-                <h2 style="margin:15px 0;">${a.name}</h2>
-                <p><b>Size:</b> ${a.size}</p>
-                <p><b>Released:</b> ${a.releaseDate}</p>
-                <p style="margin-top:10px; color:gray;">${a.description}</p>
-                <div style="margin-top:20px; background:var(--p-surface); border-radius:10px; padding:15px;">
-                    <h4>Versions</h4>
-                    ${(a.versions || []).map(v => `
-                        <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #ddd;">
-                            <span>Ver: ${v.ver}</span>
-                            <a href="${v.url}" style="color:var(--p-green); font-weight:bold; text-decoration:none;">Download</a>
-                        </div>
-                    `).join('')}
+        function openDetails(id) {
+            const a = rawData.find(x => x.id === id);
+            document.getElementById('d-nav-title').innerText = a.name;
+            document.getElementById('detail-content').innerHTML = `
+                <div style="padding:20px; display:flex; gap:15px; align-items:center;">
+                    <img src="${a.icon}" style="width:90px; height:90px; border-radius:22%;">
+                    <div><h2>${a.name}</h2><p style="color:var(--p-green)">${a.category}</p></div>
                 </div>
+                <div style="padding:20px; background:var(--p-surface); margin:15px; border-radius:12px;">
+                    <b>Versions:</b><br>
+                    ${(a.versions || []).map(v => `<div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--p-border);">
+                        <span>Ver: ${v.ver} (${v.size})</span>
+                        <a href="${v.url}" style="color:var(--p-green); font-weight:bold; text-decoration:none;">Download</a>
+                    </div>`).join('')}
+                </div>
+                <div style="padding:20px;"><b>Description:</b><p style="color:gray; font-size:14px; margin-top:5px;">${a.description}</p></div>
             `;
             document.getElementById('details').style.display = 'block';
         }
-
-        // GESTURES & HEADER
-        window.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX);
-        window.addEventListener('touchend', e => {
-            if (touchStartX - e.changedTouches[0].screenX > 100) toggleDrawer(true);
-            if (e.changedTouches[0].screenX - touchStartX > 100) toggleDrawer(false);
-        });
-
-        let lastScroll = 0;
-        window.addEventListener('scroll', () => {
-            const h = document.getElementById('main-header');
-            if (window.pageYOffset > lastScroll) h.classList.add('hide');
-            else h.classList.remove('hide');
-            lastScroll = window.pageYOffset;
-        });
 
         function toggleDrawer(s) {
             document.getElementById('drawer').classList.toggle('open', s);
             document.getElementById('overlay').classList.toggle('active', s);
         }
+
+        function setTheme(t) { 
+            document.body.setAttribute('data-theme', t); 
+            toggleDrawer(false); 
+        }
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            const header = document.getElementById('main-header');
+            if (currentScroll > lastScroll && currentScroll > 80) header.classList.add('hide');
+            else header.classList.remove('hide');
+            lastScroll = currentScroll;
+        });
+
         function closeDetails() { document.getElementById('details').style.display = 'none'; }
-        function setTheme(t) { document.body.setAttribute('data-theme', t); toggleDrawer(false); }
+
+        function tab(t, el) {
+            document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+            el.classList.add('active');
+            currentList = (t === 'all') ? rawData : rawData.filter(x => x.type === t);
+            renderGrid(currentList);
+        }
 
         init();
     </script>
