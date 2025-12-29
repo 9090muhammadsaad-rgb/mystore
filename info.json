@@ -1,57 +1,29 @@
 {
-  "trending_ids": ["granny_01", "mc_01"],
+  "trending_ids": ["minecraft-v1"],
   "apps": [
     {
-      "id": "granny_01",
-      "name": "Granny MOD CiberMOD",
-      "type": "game",
-      "category": "Horror",
-      "size": "125MB",
-      "ver": "1.8 (CiberMOD)",
-      "releaseDate": "2025-12-28",
-      "owner": "CiberMOD Team",
-      "icon": "icons/granny.png",
-      "keywords": ["horror", "granny mod", "cibermod", "scary"],
-      "description": "Granny MOD by CiberMOD is here! This version includes a powerful Mod Menu with God Mode, Invisible Mode, Speed Hack, and Unlimited Items. Experience the horror with total control.",
-      "media": [
-        "videos/granny.mp4",
-        "images/granny1.png",
-        "images/granny2.png",
-        "images/granny3.png"
-      ],
-      "platforms": {
-        "android": [
-          {
-            "name": "CiberMOD Direct APK",
-            "url": "https://example.com/granny-cibermod.apk"
-          }
-        ],
-        "windows": null
-      }
-    },
-    {
-      "id": "mc_01",
-      "name": "Minecraft",
+      "id": "minecraft-v1",
+      "name": "Minecraft Mod Menu",
       "type": "game",
       "category": "Simulation",
       "size": "650MB",
-      "ver": "1.20.50",
-      "releaseDate": "2025-12-25",
-      "owner": "Mojang",
-      "icon": "icons/minecraft.png",
-      "keywords": ["craft", "build", "sandbox", "survival"],
-      "description": "Explore infinite worlds and build everything from the simplest of homes to the grandest of castles. Play in creative mode with unlimited resources or mine deep into the world in survival mode.",
+      "ver": "1.26.0.25",
+      "releaseDate": "Dec 2025",
+      "owner": "Mojang & AN1",
+      "icon": "icon/icon.png",
+      "keywords": ["minecraft", "mod menu", "god mode", "build"],
+      "description": "Minecraft is an open-world game where you can build anything. This Special Mod Menu version includes: God Mode, High Damage, Unlocked Premium Skins, and No Fall Damage. Perfect for survival and creative modes.",
       "media": [
-        "icons/minecraft.png"
+        "icon/icon.png"
       ],
       "platforms": {
         "android": [
           {
-            "name": "Official APK",
-            "url": "https://example.com/minecraft.apk"
+            "name": "Direct Download (v1.26.0.25)",
+            "url": "https://files.an1.co/minecraft-mod-menu_1.26.0.25-an1.com.apk"
           }
         ],
-        "windows": "https://example.com/minecraft-pc.exe"
+        "windows": null
       }
     }
   ]
