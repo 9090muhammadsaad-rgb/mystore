@@ -3,278 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Faizan Store | Elite Edition</title>
+    <title>Faizan Store Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --accent: #01875f;
-            --bg: #ffffff;
-            --text: #202124;
-            --card: #ffffff;
-            --border: #e8eaed;
-            --surface: #f1f3f4;
-            --shadow: rgba(0,0,0,0.08);
-        }
-
-        [data-theme="dark"] {
-            --bg: #121212;
-            --text: #e8eaed;
-            --card: #1e1e1e;
-            --border: #333;
-            --surface: #2d2d2d;
-            --shadow: rgba(0,0,0,0.3);
-        }
+        :root { --p-green: #01875f; --p-bg: #ffffff; --p-txt: #202124; --p-card: #ffffff; --p-border: #e8eaed; --p-surface: #f1f3f4; }
+        [data-theme="dark"] { --p-bg: #121212; --p-txt: #e8eaed; --p-card: #1e1e1e; --p-border: #333; --p-surface: #2d2d2d; }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Google Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--p-bg); color: var(--p-txt); overflow-x: hidden; scroll-behavior: smooth; }
+
+        /* HEADER & SEARCH */
+        header { position: sticky; top: 0; background: var(--p-bg); z-index: 1000; padding: 12px 16px; border-bottom: 1px solid var(--p-border); display: flex; align-items: center; gap: 10px; }
+        .search-pill { flex: 1; display: flex; align-items: center; background: var(--p-surface); border-radius: 24px; padding: 0 15px; }
+        .search-box { width: 100%; border: none; background: transparent; padding: 10px; font-size: 15px; outline: none; color: var(--p-txt); }
+        .mic-icon { cursor: pointer; padding: 5px; opacity: 0.7; }
+
+        /* CATEGORY CHIPS */
+        .cat-box { display: flex; gap: 8px; overflow-x: auto; padding: 12px 16px; scrollbar-width: none; }
+        .cat-box::-webkit-scrollbar { display: none; }
+        .chip { padding: 7px 16px; background: var(--p-card); border: 1px solid var(--p-border); border-radius: 20px; font-size: 13px; white-space: nowrap; cursor: pointer; font-weight: 500; }
+        .chip.active { background: var(--p-green); color: white; border: none; }
+
+        /* GRID ANIMATION */
+        .container { padding: 0 16px 100px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 20px; transition: 0.3s; }
+        .app-card { cursor: pointer; position: relative; animation: reveal 0.5s ease-out; }
+        @keyframes reveal { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        body { 
-            background: var(--bg); 
-            color: var(--text); 
-            overflow-x: hidden; 
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+        .app-card img { width: 100%; aspect-ratio: 1/1; border-radius: 22%; object-fit: cover; border: 1px solid var(--p-border); }
+        .badge-new { position: absolute; top: 5px; right: 5px; background: #00c853; color: white; font-size: 8px; padding: 2px 6px; border-radius: 10px; font-weight: bold; }
+        .app-name { font-size: 12px; font-weight: 500; margin-top: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-        /* Modern Custom Scrollbar */
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
-
-        /* HEADER & SEARCH (Glassmorphism) */
-        header { 
-            position: sticky; top: 0; 
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(15px);
-            z-index: 1000; padding: 12px 16px; 
-            display: flex; align-items: center; gap: 12px;
-            border-bottom: 1px solid var(--border);
-        }
-        [data-theme="dark"] header { background: rgba(18, 18, 18, 0.8); }
-
-        .search-pill { 
-            flex: 1; display: flex; align-items: center; 
-            background: var(--surface); border-radius: 28px; 
-            padding: 0 16px; transition: 0.2s;
-            border: 1px solid transparent;
-        }
-        .search-pill:focus-within { border-color: var(--accent); background: var(--card); box-shadow: 0 4px 12px var(--shadow); }
+        /* DETAIL PAGE */
+        #details { position: fixed; inset: 0; background: var(--p-bg); z-index: 5000; display: none; overflow-y: auto; }
+        .d-header { position: sticky; top: 0; background: var(--p-bg); padding: 12px 16px; border-bottom: 1px solid var(--p-border); display: flex; align-items: center; z-index: 10; }
+        .hero { display: flex; padding: 20px; gap: 15px; }
+        .hero img { width: 85px; height: 85px; border-radius: 20%; }
         
-        .search-input { 
-            width: 100%; border: none; background: transparent; 
-            padding: 12px; font-size: 16px; outline: none; color: var(--text); 
-        }
+        /* VERSIONS LIST */
+        .v-list { padding: 0 20px; }
+        .v-item { background: var(--p-surface); border-radius: 12px; padding: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .btn-copy { background: none; border: 1px solid var(--p-green); color: var(--p-green); padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 11px; }
 
-        /* CATEGORY CHIPS (Animated) */
-        .chips-container { 
-            display: flex; gap: 10px; overflow-x: auto; 
-            padding: 15px 16px; scrollbar-width: none;
-        }
-        .chips-container::-webkit-scrollbar { display: none; }
-        .chip { 
-            padding: 8px 20px; background: var(--card); 
-            border: 1px solid var(--border); border-radius: 20px; 
-            font-size: 14px; white-space: nowrap; cursor: pointer; 
-            transition: 0.3s; font-weight: 500;
-        }
-        .chip.active { background: var(--accent); color: white; border-color: var(--accent); box-shadow: 0 4px 10px rgba(1, 135, 95, 0.3); }
+        /* INFO BUTTONS */
+        .info-tab { padding: 20px; border-top: 1px solid var(--p-border); }
+        .info-btn { width: 100%; padding: 12px; text-align: left; background: none; border: none; border-bottom: 1px solid var(--p-border); color: var(--p-txt); cursor: pointer; display: flex; justify-content: space-between; }
 
-        /* MAIN GRID */
-        .app-grid { 
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); 
-            gap: 24px; padding: 16px; max-width: 1200px; margin: 0 auto;
-        }
-        .app-card { 
-            cursor: pointer; text-decoration: none; color: inherit; 
-            transition: transform 0.2s;
-        }
-        .app-card:active { transform: scale(0.92); }
-        .app-icon { 
-            width: 100%; aspect-ratio: 1/1; border-radius: 22%; 
-            object-fit: cover; background: var(--surface);
-            box-shadow: 0 4px 12px var(--shadow);
-        }
-        .app-title { font-size: 13px; font-weight: 500; margin-top: 10px; text-align: left; }
-        .app-info { font-size: 11px; color: var(--grey); margin-top: 2px; opacity: 0.7; }
-
-        /* DETAILS OVERLAY (Smooth Slide) */
-        #details { 
-            position: fixed; inset: 0; background: var(--bg); 
-            z-index: 5000; display: none; overflow-y: auto; 
-            animation: slideUp 0.4s cubic-bezier(0, 0, 0.2, 1); 
-        }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-
-        .d-header { 
-            position: sticky; top: 0; background: var(--bg); 
-            padding: 15px; display: flex; align-items: center; 
-            border-bottom: 1px solid var(--border); z-index: 100;
-        }
-        .close-btn { border: none; background: none; font-size: 28px; color: var(--text); cursor: pointer; }
-
-        /* HERO SECTION */
-        .hero { display: flex; padding: 24px; gap: 20px; align-items: center; }
-        .hero img { width: 96px; height: 96px; border-radius: 22%; object-fit: cover; box-shadow: 0 8px 20px var(--shadow); }
-        .hero-text h1 { font-size: 24px; letter-spacing: -0.5px; }
-        .hero-text p { color: var(--accent); font-weight: 700; font-size: 15px; margin-top: 4px; }
-
-        /* DOWNLOAD ACTION */
-        .action-bar { padding: 0 24px 24px; }
-        .install-btn { 
-            display: block; width: 100%; padding: 14px; 
-            background: var(--accent); color: white; 
-            text-align: center; text-decoration: none; border-radius: 12px;
-            font-weight: 700; font-size: 16px; transition: 0.2s;
-        }
-        .install-btn:hover { filter: brightness(1.1); }
-
-        /* GALLERY SCROLL */
-        .gallery { display: flex; gap: 12px; overflow-x: auto; padding: 0 24px 24px; scrollbar-width: none; }
-        .gallery img { height: 200px; border-radius: 16px; border: 1px solid var(--border); }
-
-        /* RECOMMENDATIONS */
-        .rec-label { padding: 20px 24px 10px; font-weight: 700; font-size: 18px; }
-
-        /* NAVIGATION BAR */
-        nav { 
-            position: fixed; bottom: 0; width: 100%; 
-            background: var(--card); border-top: 1px solid var(--border);
-            display: flex; justify-content: space-around; padding: 12px 0;
-            z-index: 2000;
-        }
-        .nav-btn { border: none; background: none; color: var(--text); opacity: 0.5; font-weight: 700; cursor: pointer; }
-        .nav-btn.active { opacity: 1; color: var(--accent); }
+        /* DRAWER */
+        #drawer { position: fixed; bottom: -100%; left: 0; width: 100%; background: var(--p-card); z-index: 6000; padding: 20px; border-radius: 25px 25px 0 0; transition: 0.4s; box-shadow: 0 -10px 30px rgba(0,0,0,0.2); }
+        #drawer.open { bottom: 0; }
     </style>
 </head>
 <body data-theme="light">
 
     <header>
         <div class="search-pill">
-            <input type="text" id="search" class="search-input" placeholder="Search apps & games">
+            <input type="text" id="search" class="search-box" placeholder="Search apps...">
+            <span class="mic-icon" onclick="startSpeak()">🎙️</span>
         </div>
-        <div style="cursor:pointer; font-size: 24px;" onclick="toggleTheme()">🔘</div>
+        <div onclick="toggleDrawer(true)" style="cursor:pointer; font-size: 20px;">🔘</div>
     </header>
 
-    <div class="chips-container" id="category-box">
-        <div class="chip active" onclick="filterCat('all', this)">All</div>
-    </div>
+    <div class="cat-box" id="cats"></div>
 
-    <main class="app-grid" id="grid"></main>
+    <div class="container">
+        <div class="grid" id="main-grid"></div>
+    </div>
 
     <div id="details">
         <div class="d-header">
-            <button class="close-btn" onclick="hideDetails()">✕</button>
-            <div style="margin-left:20px; font-weight:700;" id="d-nav-title">App</div>
+            <button onclick="closeDetails()" style="background:none; border:none; font-size:24px; color:var(--p-txt);">←</button>
+            <span style="margin-left:15px; font-weight:bold;" id="d-title">App</span>
         </div>
-        <div id="d-content"></div>
-        <div class="rec-label">Recommended for you</div>
-        <div class="app-grid" id="d-rec-grid" style="grid-template-columns: repeat(3, 1fr);"></div>
+        <div id="d-hero-box"></div>
+        <div class="v-list" id="version-box"></div>
+        <div class="info-tab" id="extra-info"></div>
     </div>
 
-    <nav>
-        <button class="nav-btn active" onclick="navTab('all', this)">Store</button>
-        <button class="nav-btn" onclick="navTab('game', this)">Games</button>
-        <button class="nav-btn" onclick="navTab('app', this)">Apps</button>
-        <button class="nav-btn" onclick="navTab('tool', this)">Tools</button>
+    <div id="drawer">
+        <h3 style="margin-bottom:15px;">Settings & Sorting</h3>
+        <button class="info-btn" onclick="setTheme('light')">White Mode ☀️</button>
+        <button class="info-btn" onclick="setTheme('dark')">Dark Mode 🌙</button>
+        <button class="info-btn" onclick="sort('size-h')">Highest Size 📈</button>
+        <button class="info-btn" onclick="sort('size-l')">Lowest Size 📉</button>
+        <button class="info-btn" onclick="sort('new')">Newest First 🆕</button>
+        <button class="info-btn" onclick="sort('old')">Oldest First ⏳</button>
+        <button onclick="toggleDrawer(false)" style="width:100%; padding:15px; margin-top:10px; border-radius:10px; border:none; background:var(--p-surface);">Close</button>
+    </div>
+
+    <nav style="position:fixed; bottom:0; width:100%; background:var(--p-card); display:flex; padding:15px; border-top:1px solid var(--p-border);">
+        <button onclick="tab('all')" style="flex:1; border:none; background:none; color:var(--p-green); font-weight:bold;">Home</button>
+        <button onclick="tab('game')" style="flex:1; border:none; background:none;">Games</button>
+        <button onclick="tab('app')" style="flex:1; border:none; background:none;">Apps</button>
     </nav>
 
     <script>
         let db = [];
-        let currentFilter = 'all';
+        let currentType = 'all';
 
         async function init() {
             const res = await fetch('info.json');
             const data = await res.json();
             db = data.apps;
-            
-            // Build categories
-            const cats = [...new Set(db.map(x => x.category))];
-            cats.forEach(c => {
-                const el = document.createElement('div');
-                el.className = 'chip';
-                el.innerText = c;
-                el.onclick = (e) => filterCat(c, e.target);
-                document.getElementById('category-box').appendChild(el);
-            });
-
+            renderCats();
             renderGrid(db);
         }
 
+        function renderCats() {
+            const cats = [...new Set(db.filter(x => currentType === 'all' || x.type === currentType).map(x => x.category))];
+            const box = document.getElementById('cats');
+            box.innerHTML = `<div class="chip active" onclick="filterCat('all')">All</div>`;
+            cats.forEach(c => box.innerHTML += `<div class="chip" onclick="filterCat('${c}')">${c}</div>`);
+        }
+
         function renderGrid(list) {
-            const grid = document.getElementById('grid');
+            const grid = document.getElementById('main-grid');
             grid.innerHTML = list.map(a => `
-                <div class="app-card" onclick="showDetails('${a.id}')">
-                    <img src="${a.icon}" class="app-icon" loading="lazy">
-                    <div class="app-title">${a.name}</div>
-                    <div class="app-info">${a.size} • ${a.category}</div>
+                <div class="app-card" onclick="openDetails('${a.id}')">
+                    ${a.isNew ? '<span class="badge-new">NEW</span>' : ''}
+                    <img src="${a.icon}">
+                    <div class="app-name">${a.name}</div>
+                    <div style="font-size:10px; color:gray;">${a.size || 'N/A'}</div>
                 </div>
             `).join('');
         }
 
-        function showDetails(id) {
+        function openDetails(id) {
             const a = db.find(x => x.id === id);
-            document.getElementById('d-nav-title').innerText = a.name;
-            const content = document.getElementById('d-content');
-            
-            content.innerHTML = `
+            document.getElementById('d-title').innerText = a.name;
+            document.getElementById('d-hero-box').innerHTML = `
                 <div class="hero">
                     <img src="${a.icon}">
-                    <div class="hero-text">
-                        <h1>${a.name}</h1>
-                        <p>${a.owner || 'Faizan Store Verified'}</p>
+                    <div class="hero-info">
+                        <h2>${a.name}</h2>
+                        <p style="color:var(--p-green); font-weight:bold;">${a.size || 'N/A'}</p>
                     </div>
                 </div>
-                <div class="action-bar">
-                    <a href="${a.platforms.android[0].url}" class="install-btn">Install</a>
-                </div>
-                <div class="gallery">
-                    ${a.media.map(m => `<img src="${m}">`).join('')}
-                </div>
-                <div style="padding:0 24px 24px; font-size:14px; line-height:1.6; color:#5f6368;">
-                    ${a.description}
-                </div>
+            `;
+            
+            // Multiple Versions
+            const vBox = document.getElementById('version-box');
+            vBox.innerHTML = '<h4>Available Versions</h4>';
+            (a.versions || []).forEach(v => {
+                vBox.innerHTML += `
+                    <div class="v-item">
+                        <span>Ver: ${v.ver}</span>
+                        <div style="display:flex; gap:10px;">
+                            <button class="btn-copy" onclick="copyText('${v.url}')">Copy Link</button>
+                            <a href="${v.url}" style="text-decoration:none; color:var(--p-green); font-weight:bold;">Download</a>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Extra Info
+            document.getElementById('extra-info').innerHTML = `
+                <button class="info-btn" onclick="alert('${a.description}')">About This App <span>></span></button>
+                <button class="info-btn">Compatibility: <span>${a.compatibility || 'Android 5.0+'}</span></button>
+                <button class="info-btn">Package: <span>${a.package || 'N/A'}</span></button>
             `;
 
-            // Simple Recs
-            const recs = db.filter(x => x.category === a.category && x.id !== a.id).slice(0, 3);
-            document.getElementById('d-rec-grid').innerHTML = recs.map(r => `
-                <div class="app-card" onclick="showDetails('${r.id}')">
-                    <img src="${r.icon}" class="app-icon">
-                    <div class="app-title" style="font-size:11px">${r.name}</div>
-                </div>
-            `).join('');
-
             document.getElementById('details').style.display = 'block';
-            document.body.style.overflow = 'hidden';
         }
 
-        function hideDetails() {
-            document.getElementById('details').style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-
-        function filterCat(c, el) {
-            document.querySelectorAll('.chip').forEach(x => x.classList.remove('active'));
-            el.classList.add('active');
-            const list = (c === 'all') ? db : db.filter(x => x.category === c);
+        function sort(m) {
+            let list = [...db];
+            if(m === 'size-h') list.sort((a,b) => parseFloat(b.size) - parseFloat(a.size));
+            if(m === 'size-l') list.sort((a,b) => parseFloat(a.size) - parseFloat(b.size));
+            if(m === 'new') list.reverse();
             renderGrid(list);
+            toggleDrawer(false);
         }
 
-        function navTab(t, el) {
-            document.querySelectorAll('.nav-btn').forEach(x => x.classList.remove('active'));
-            el.classList.add('active');
-            const list = (t === 'all') ? db : db.filter(x => x.type === t);
-            renderGrid(list);
-        }
-
-        function toggleTheme() {
-            const b = document.body;
-            b.setAttribute('data-theme', b.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-        }
-
-        document.getElementById('search').addEventListener('input', (e) => {
-            const v = e.target.value.toLowerCase();
-            renderGrid(db.filter(x => x.name.toLowerCase().includes(v)));
-        });
+        function tab(t) { currentType = t; renderCats(); renderGrid(t === 'all' ? db : db.filter(x => x.type === t)); }
+        function closeDetails() { document.getElementById('details').style.display = 'none'; }
+        function toggleDrawer(s) { document.getElementById('drawer').classList.toggle('open', s); }
+        function setTheme(t) { document.body.setAttribute('data-theme', t); toggleDrawer(false); }
+        function copyText(t) { navigator.clipboard.writeText(t); alert('Link Copied!'); }
+        function startSpeak() { alert('Voice search activated... (Simulated)'); }
 
         init();
     </script>
 </body>
-</html>
+    </html>
+    
