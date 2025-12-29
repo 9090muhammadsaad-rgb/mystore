@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Faizan Store | Smart Engine</title>
+    <title>Faizan Store | Final Elite</title>
     <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root { --p-green: #01875f; --p-bg: #ffffff; --p-txt: #202124; --p-border: #e8eaed; --p-surface: #f1f3f4; --p-active: #e6f4ea; }
@@ -12,81 +12,81 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Google Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--p-bg); color: var(--p-txt); transition: 0.3s; overflow-x: hidden; }
 
-        /* HIDING SEARCH ON SCROLL */
+        /* HEADER LOGIC (HIDE ON SCROLL) */
         header { 
             position: fixed; top: 0; width: 100%; background: var(--p-bg); z-index: 1000; 
             padding: 12px 16px; border-bottom: 1px solid var(--p-border); 
-            display: flex; align-items: center; gap: 10px;
-            transition: transform 0.3s ease-in-out;
+            display: flex; align-items: center; gap: 10px; transition: transform 0.3s;
         }
         header.hide { transform: translateY(-100%); }
 
         .search-pill { flex: 1; display: flex; align-items: center; background: var(--p-surface); border-radius: 8px; padding: 0 12px; }
         .search-input { width: 100%; border: none; background: transparent; padding: 12px; font-size: 15px; outline: none; color: var(--p-txt); }
 
-        /* TRENDING HERO SECTION (Offer) */
+        /* FLOATING HELP BUTTON */
+        .help-fab { 
+            position: fixed; bottom: 85px; right: 20px; width: 50px; height: 50px; 
+            background: var(--p-green); color: white; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 3000; cursor: pointer; border: none; font-size: 24px;
+        }
+
+        /* CONTENT AREA */
         .hero-offer { margin-top: 80px; padding: 16px; }
         .offer-card { 
             width: 100%; height: 180px; border-radius: 15px; overflow: hidden; 
-            position: relative; background: #000; color: white; margin-bottom: 20px;
+            position: relative; background: #000; margin-bottom: 20px;
         }
         .offer-card video, .offer-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
-        .offer-content { position: absolute; bottom: 15px; left: 15px; }
-        .offer-content h2 { font-size: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .offer-content { position: absolute; bottom: 15px; left: 15px; color: white; }
 
-        /* GRID LOGIC */
-        .container { padding: 0 16px 100px; }
-        .section-header { display: flex; justify-content: space-between; align-items: center; margin: 20px 0 10px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 18px; }
-        .app-card { cursor: pointer; animation: fadeIn 0.5s ease forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        .container { padding: 0 16px 150px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 18px; margin-top: 15px; }
+        .app-card { cursor: pointer; transition: 0.2s; }
         .app-card img { width: 100%; aspect-ratio: 1/1; border-radius: 20%; object-fit: cover; border: 1px solid var(--p-border); }
         .app-name { font-size: 12px; font-weight: 500; margin-top: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-        /* DETAIL VIEW */
+        /* DETAILS OVERLAY */
         #details { position: fixed; inset: 0; background: var(--p-bg); z-index: 5000; display: none; overflow-y: auto; }
         .d-header { position: sticky; top: 0; background: var(--p-bg); padding: 15px; border-bottom: 1px solid var(--p-border); display: flex; align-items: center; z-index: 10; }
         .hero-main { display: flex; padding: 20px; gap: 20px; align-items: center; }
         .hero-main img { width: 85px; height: 85px; border-radius: 20%; }
         
-        /* MULTIPLE VERSIONS SIZE-BASED */
-        .v-table { margin: 15px; background: var(--p-surface); border-radius: 12px; }
-        .v-row { padding: 12px 15px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--p-border); }
-        .btn-green { background: var(--p-green); color: white; padding: 6px 14px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 12px; }
+        .v-table { margin: 15px; background: var(--p-surface); border-radius: 12px; overflow: hidden; }
+        .v-row { padding: 12px 15px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--p-border); align-items: center; }
+        .btn-green { background: var(--p-green); color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 12px; }
 
-        /* DESCRIPTION BOLD/STYLISH */
         .desc-box { padding: 20px; }
         .desc-title { font-weight: 700; color: var(--p-green); font-size: 16px; margin-bottom: 8px; display: block; }
         .desc-text { font-size: 14px; line-height: 1.6; color: #5f6368; }
 
-        /* BOTTOM NAV */
-        nav { position: fixed; bottom: 0; width: 100%; background: var(--p-bg); border-top: 1px solid var(--p-border); display: flex; justify-content: space-around; padding: 10px 0; z-index: 4000; }
-        .nav-link { border: none; background: none; color: gray; font-size: 12px; font-weight: 500; cursor: pointer; flex: 1; text-align: center; }
-        .nav-link.active { color: var(--p-green); }
-
         /* SETTINGS DRAWER */
         #drawer { position: fixed; bottom: -100%; left: 0; width: 100%; background: var(--p-card); z-index: 6000; padding: 25px; border-radius: 25px 25px 0 0; transition: 0.4s; }
         #drawer.open { bottom: 0; }
+        .drawer-btn { width: 100%; padding: 15px; text-align: left; border: none; background: transparent; border-bottom: 1px solid var(--p-border); color: var(--p-txt); font-size: 16px; }
+
+        /* NAV BAR */
+        nav { position: fixed; bottom: 0; width: 100%; background: var(--p-bg); border-top: 1px solid var(--p-border); display: flex; justify-content: space-around; padding: 10px 0; z-index: 4000; }
+        .nav-link { border: none; background: none; color: gray; font-size: 12px; font-weight: 500; cursor: pointer; flex: 1; }
+        .nav-link.active { color: var(--p-green); }
     </style>
 </head>
 <body>
 
     <header id="main-header">
         <div class="search-pill">
-            <input type="text" id="search" class="search-input" placeholder="Search for anything...">
+            <input type="text" id="search" class="search-input" placeholder="Search apps & games...">
         </div>
         <div onclick="toggleDrawer(true)" style="cursor:pointer; font-size: 20px;">🔘</div>
     </header>
 
+    <button class="help-fab" onclick="window.location.href='https://example.com/help'">❓</button>
+
     <div id="home-content">
         <div class="hero-offer" id="trending-section"></div>
-        
         <div class="container">
-            <div class="section-header"><b>Recommended For You</b></div>
-            <div class="grid" id="rec-grid"></div>
-
-            <div class="section-header"><b>All Content</b></div>
-            <div class="grid" id="all-grid"></div>
+            <h3 id="list-title">Recommended For You</h3>
+            <div class="grid" id="main-grid"></div>
         </div>
     </div>
 
@@ -98,21 +98,21 @@
         <div id="d-hero-area"></div>
         <div class="v-table" id="d-versions"></div>
         <div class="desc-box">
-            <span class="desc-title">About this game</span>
+            <span class="desc-title">About this item</span>
             <div class="desc-text" id="d-desc"></div>
         </div>
         <div class="container">
-            <b>More Like This</b>
-            <div class="grid" id="d-similar" style="margin-top:10px;"></div>
+            <b>Suggested Content</b>
+            <div class="grid" id="d-similar"></div>
         </div>
     </div>
 
     <div id="drawer">
-        <h3 style="margin-bottom:15px">Quick Settings</h3>
-        <button class="nav-link" style="width:100%; padding:15px; text-align:left; border-bottom:1px solid #eee;" onclick="setTheme('light')">☀️ Light Mode</button>
-        <button class="nav-link" style="width:100%; padding:15px; text-align:left; border-bottom:1px solid #eee;" onclick="setTheme('dark')">🌙 Dark Mode</button>
-        <button class="nav-link" style="width:100%; padding:15px; text-align:left; border-bottom:1px solid #eee;" onclick="sort('size-h')">📈 Highest Size</button>
-        <button class="nav-link" style="width:100%; padding:15px; text-align:left; border-bottom:1px solid #eee;" onclick="sort('default')">🔄 Default (Trending First)</button>
+        <h3 style="margin-bottom:15px">Store Settings</h3>
+        <button class="drawer-btn" onclick="setTheme('light')">☀️ Light Mode</button>
+        <button class="drawer-btn" onclick="setTheme('dark')">🌙 Dark Mode</button>
+        <button class="drawer-btn" onclick="sort('size-h')">📈 Highest Size</button>
+        <button class="drawer-btn" onclick="sort('default')">🔄 Default Sorting</button>
         <button onclick="toggleDrawer(false)" style="width:100%; padding:15px; background:var(--p-active); color:var(--p-green); border:none; border-radius:10px; margin-top:15px; font-weight:bold;">Close</button>
     </div>
 
@@ -132,12 +132,10 @@
             const data = await res.json();
             db = data.apps;
             trendingIds = data.trending_ids || [];
-            
             renderHome();
         }
 
         function renderHome() {
-            // Render Offers (Trending)
             const trendBox = document.getElementById('trending-section');
             const trendApps = db.filter(x => trendingIds.includes(x.id));
             trendBox.innerHTML = trendApps.map(a => `
@@ -145,19 +143,13 @@
                     ${a.offer_video ? `<video src="${a.offer_video}" autoplay muted loop></video>` : `<img src="${a.icon}">`}
                     <div class="offer-content">
                         <h2>${a.name}</h2>
-                        <p style="font-size:12px;">Exclusive Offer: Updated Version Available</p>
+                        <p>Special Edition Available Now</p>
                     </div>
                 </div>
             `).join('');
 
-            // Render Recommended
-            const recGrid = document.getElementById('rec-grid');
-            const recApps = [...db].sort(() => 0.5 - Math.random()).slice(0, 3);
-            recGrid.innerHTML = recApps.map(a => cardHtml(a)).join('');
-
-            // Render All
-            const allGrid = document.getElementById('all-grid');
-            allGrid.innerHTML = db.map(a => cardHtml(a)).join('');
+            const grid = document.getElementById('main-grid');
+            grid.innerHTML = db.map(a => cardHtml(a)).join('');
         }
 
         function cardHtml(a) {
@@ -183,7 +175,6 @@
                 </div>
             `;
             
-            // Versions Size Based
             const vTable = document.getElementById('d-versions');
             vTable.innerHTML = (a.versions || []).map(v => `
                 <div class="v-row">
@@ -192,9 +183,8 @@
                 </div>
             `).join('');
 
-            document.getElementById('d-desc').innerText = a.description || "N/A";
+            document.getElementById('d-desc').innerText = a.description || "No description available.";
             
-            // Similar Items
             const similar = db.filter(x => x.category === a.category && x.id !== a.id).slice(0, 3);
             document.getElementById('d-similar').innerHTML = similar.map(s => cardHtml(s)).join('');
 
@@ -202,15 +192,11 @@
             document.body.style.overflow = 'hidden';
         }
 
-        // SCROLL LOGIC
         window.addEventListener('scroll', () => {
             const currentScroll = window.pageYOffset;
             const header = document.getElementById('main-header');
-            if (currentScroll > lastScroll && currentScroll > 100) {
-                header.classList.add('hide');
-            } else {
-                header.classList.remove('hide');
-            }
+            if (currentScroll > lastScroll && currentScroll > 80) header.classList.add('hide');
+            else header.classList.remove('hide');
             lastScroll = currentScroll;
         });
 
@@ -221,7 +207,7 @@
             document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
             el.classList.add('active');
             const list = (t === 'all') ? db : db.filter(x => x.type === t);
-            document.getElementById('all-grid').innerHTML = list.map(a => cardHtml(a)).join('');
+            document.getElementById('main-grid').innerHTML = list.map(a => cardHtml(a)).join('');
         }
 
         init();
