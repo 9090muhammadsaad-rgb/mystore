@@ -3,283 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elite App Store</title>
+    <title>Faizan Store | Smart Engine</title>
     <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        :root { --p-green: #01875f; --p-bg: #ffffff; --p-txt: #202124; --p-card: #ffffff; --p-border: #e8eaed; --p-surface: #f1f3f4; --p-active-bg: #e6f4ea; }
-        [data-theme="dark"] { --p-bg: #121212; --p-txt: #e8eaed; --p-card: #1e1e1e; --p-border: #333; --p-surface: #2d2d2d; --p-active-bg: #1a332a; }
+        :root { --p-green: #01875f; --p-bg: #ffffff; --p-txt: #202124; --p-border: #e8eaed; --p-surface: #f1f3f4; --p-active: #e6f4ea; }
+        [data-theme="dark"] { --p-bg: #121212; --p-txt: #e8eaed; --p-border: #333; --p-surface: #2d2d2d; --p-active: #1a332a; }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Google Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--p-bg); color: var(--p-txt); transition: 0.3s; overflow-x: hidden; }
 
-        /* SEARCH WITH ANIMATION */
-        header { position: sticky; top: 0; background: var(--p-bg); z-index: 1000; padding: 12px 16px; border-bottom: 1px solid var(--p-border); display: flex; align-items: center; gap: 10px; }
-        .search-container { flex: 1; position: relative; display: flex; align-items: center; background: var(--p-surface); border-radius: 8px; padding: 0 12px; }
+        /* HIDING SEARCH ON SCROLL */
+        header { 
+            position: fixed; top: 0; width: 100%; background: var(--p-bg); z-index: 1000; 
+            padding: 12px 16px; border-bottom: 1px solid var(--p-border); 
+            display: flex; align-items: center; gap: 10px;
+            transition: transform 0.3s ease-in-out;
+        }
+        header.hide { transform: translateY(-100%); }
+
+        .search-pill { flex: 1; display: flex; align-items: center; background: var(--p-surface); border-radius: 8px; padding: 0 12px; }
         .search-input { width: 100%; border: none; background: transparent; padding: 12px; font-size: 15px; outline: none; color: var(--p-txt); }
-        .search-loader { position: absolute; right: 10px; width: 18px; height: 18px; border: 2px solid var(--p-green); border-top-color: transparent; border-radius: 50%; display: none; animation: spin 0.8s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* CATEGORY SCROLLER */
-        .cat-bar { display: flex; gap: 10px; overflow-x: auto; padding: 12px 16px; scrollbar-width: none; }
-        .cat-bar::-webkit-scrollbar { display: none; }
-        .chip { padding: 6px 16px; border: 1px solid var(--p-border); border-radius: 8px; font-size: 14px; white-space: nowrap; cursor: pointer; transition: 0.2s; }
-        .chip.active { background: var(--p-active-bg); color: var(--p-green); border-color: var(--p-green); font-weight: 500; }
+        /* TRENDING HERO SECTION (Offer) */
+        .hero-offer { margin-top: 80px; padding: 16px; }
+        .offer-card { 
+            width: 100%; height: 180px; border-radius: 15px; overflow: hidden; 
+            position: relative; background: #000; color: white; margin-bottom: 20px;
+        }
+        .offer-card video, .offer-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
+        .offer-content { position: absolute; bottom: 15px; left: 15px; }
+        .offer-content h2 { font-size: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 
-        /* APP GRID */
+        /* GRID LOGIC */
         .container { padding: 0 16px 100px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 20px; }
-        .app-card { cursor: pointer; position: relative; transition: 0.2s; animation: fadeInUp 0.4s ease forwards; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin: 20px 0 10px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 18px; }
+        .app-card { cursor: pointer; animation: fadeIn 0.5s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
         .app-card img { width: 100%; aspect-ratio: 1/1; border-radius: 20%; object-fit: cover; border: 1px solid var(--p-border); }
-        .new-tag { position: absolute; top: 4px; left: 4px; background: #00c853; color: white; font-size: 8px; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
-        .app-name { font-size: 12px; font-weight: 500; margin-top: 8px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; }
+        .app-name { font-size: 12px; font-weight: 500; margin-top: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-        /* DETAIL PAGE (ULTRA) */
+        /* DETAIL VIEW */
         #details { position: fixed; inset: 0; background: var(--p-bg); z-index: 5000; display: none; overflow-y: auto; }
-        .d-header { position: sticky; top: 0; background: var(--p-bg); padding: 15px; border-bottom: 1px solid var(--p-border); display: flex; align-items: center; z-index: 100; }
-        .hero { display: flex; padding: 20px; gap: 20px; align-items: center; }
-        .hero img { width: 90px; height: 90px; border-radius: 22%; }
-        .hero-info h2 { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
-        .hero-info p { color: var(--p-green); font-weight: 500; font-size: 14px; }
+        .d-header { position: sticky; top: 0; background: var(--p-bg); padding: 15px; border-bottom: 1px solid var(--p-border); display: flex; align-items: center; z-index: 10; }
+        .hero-main { display: flex; padding: 20px; gap: 20px; align-items: center; }
+        .hero-main img { width: 85px; height: 85px; border-radius: 20%; }
+        
+        /* MULTIPLE VERSIONS SIZE-BASED */
+        .v-table { margin: 15px; background: var(--p-surface); border-radius: 12px; }
+        .v-row { padding: 12px 15px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--p-border); }
+        .btn-green { background: var(--p-green); color: white; padding: 6px 14px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 12px; }
 
-        /* MULTIPLE VERSIONS TABLE */
-        .v-table { margin: 20px; background: var(--p-surface); border-radius: 12px; overflow: hidden; }
-        .v-row { padding: 15px; border-bottom: 1px solid var(--p-border); display: flex; justify-content: space-between; align-items: center; }
-        .v-row:last-child { border: none; }
-        .btn-dl { background: var(--p-green); color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; font-size: 13px; text-decoration: none; cursor: pointer; }
-        .btn-copy { background: transparent; border: 1px solid var(--p-green); color: var(--p-green); padding: 7px 12px; border-radius: 6px; font-size: 12px; margin-right: 5px; cursor: pointer; }
-
-        /* SCREENSHOTS / VIDEO */
-        .gallery { display: flex; gap: 12px; overflow-x: auto; padding: 10px 20px; scrollbar-width: none; }
-        .gallery video, .gallery img { height: 200px; border-radius: 12px; border: 1px solid var(--p-border); background: #000; }
-
-        /* DESCRIPTION & READ MORE */
-        .desc-box { padding: 20px; font-size: 14px; color: #5f6368; line-height: 1.6; position: relative; }
-        .desc-content.collapsed { height: 60px; overflow: hidden; }
-        .read-more { color: var(--p-green); font-weight: bold; cursor: pointer; display: block; margin-top: 5px; }
-
-        /* INFO LIST */
-        .info-list { padding: 0 20px 30px; }
-        .info-item { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid var(--p-border); font-size: 14px; }
-        .info-label { font-weight: 500; color: var(--p-txt); }
-        .info-val { color: #5f6368; }
-
-        /* DRAWER */
-        #drawer { position: fixed; bottom: -100%; left: 0; width: 100%; background: var(--p-card); z-index: 6000; padding: 25px; border-radius: 28px 28px 0 0; transition: 0.4s; box-shadow: 0 -10px 30px rgba(0,0,0,0.3); }
-        #drawer.open { bottom: 0; }
-        .drawer-btn { width: 100%; padding: 16px; text-align: left; border: none; background: transparent; border-bottom: 1px solid var(--p-border); color: var(--p-txt); font-size: 16px; cursor: pointer; }
+        /* DESCRIPTION BOLD/STYLISH */
+        .desc-box { padding: 20px; }
+        .desc-title { font-weight: 700; color: var(--p-green); font-size: 16px; margin-bottom: 8px; display: block; }
+        .desc-text { font-size: 14px; line-height: 1.6; color: #5f6368; }
 
         /* BOTTOM NAV */
         nav { position: fixed; bottom: 0; width: 100%; background: var(--p-bg); border-top: 1px solid var(--p-border); display: flex; justify-content: space-around; padding: 10px 0; z-index: 4000; }
-        .nav-btn { display: flex; flex-direction: column; align-items: center; border: none; background: none; color: #5f6368; gap: 4px; cursor: pointer; flex: 1; }
-        .nav-btn.active { color: var(--p-green); }
-        .nav-icon { font-size: 20px; }
-        .nav-label { font-size: 12px; font-weight: 500; }
+        .nav-link { border: none; background: none; color: gray; font-size: 12px; font-weight: 500; cursor: pointer; flex: 1; text-align: center; }
+        .nav-link.active { color: var(--p-green); }
+
+        /* SETTINGS DRAWER */
+        #drawer { position: fixed; bottom: -100%; left: 0; width: 100%; background: var(--p-card); z-index: 6000; padding: 25px; border-radius: 25px 25px 0 0; transition: 0.4s; }
+        #drawer.open { bottom: 0; }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="search-container">
-            <input type="text" id="main-search" class="search-input" placeholder="Search for apps & games">
-            <div class="search-loader" id="loader"></div>
+    <header id="main-header">
+        <div class="search-pill">
+            <input type="text" id="search" class="search-input" placeholder="Search for anything...">
         </div>
-        <div onclick="toggleDrawer(true)" style="cursor:pointer; font-size: 24px;">🔘</div>
+        <div onclick="toggleDrawer(true)" style="cursor:pointer; font-size: 20px;">🔘</div>
     </header>
 
-    <div class="cat-bar" id="cat-scroll"></div>
+    <div id="home-content">
+        <div class="hero-offer" id="trending-section"></div>
+        
+        <div class="container">
+            <div class="section-header"><b>Recommended For You</b></div>
+            <div class="grid" id="rec-grid"></div>
 
-    <div class="container">
-        <h3 id="section-title" style="margin: 15px 0;">Top Results</h3>
-        <div class="grid" id="main-grid"></div>
+            <div class="section-header"><b>All Content</b></div>
+            <div class="grid" id="all-grid"></div>
+        </div>
     </div>
 
     <div id="details">
         <div class="d-header">
-            <button onclick="closeDetails()" style="background:none; border:none; font-size:28px; color:var(--p-txt);">←</button>
-            <span id="d-nav-title" style="margin-left:20px; font-weight:700">App Details</span>
+            <button onclick="closeDetails()" style="background:none; border:none; font-size:24px; color:var(--p-txt);">←</button>
+            <span id="d-nav-title" style="margin-left:20px; font-weight:700"></span>
         </div>
-        <div id="d-hero"></div>
-        <div class="gallery" id="d-gallery"></div>
-        
-        <div class="desc-box">
-            <div id="d-desc" class="desc-content collapsed"></div>
-            <span id="read-more-btn" class="read-more" onclick="toggleDesc()">Read More</span>
-        </div>
-
+        <div id="d-hero-area"></div>
         <div class="v-table" id="d-versions"></div>
-        
-        <div class="info-list" id="d-info"></div>
-
-        <div style="padding: 20px; background: var(--p-surface);">
-            <h4 style="margin-bottom:15px;">Suggested for you</h4>
-            <div class="grid" id="d-recs" style="grid-template-columns: repeat(3, 1fr);"></div>
+        <div class="desc-box">
+            <span class="desc-title">About this game</span>
+            <div class="desc-text" id="d-desc"></div>
+        </div>
+        <div class="container">
+            <b>More Like This</b>
+            <div class="grid" id="d-similar" style="margin-top:10px;"></div>
         </div>
     </div>
 
     <div id="drawer">
-        <h3 style="margin-bottom:15px">Store Settings</h3>
-        <button class="drawer-btn" onclick="setTheme('light')">☀️ White Theme</button>
-        <button class="drawer-btn" onclick="setTheme('dark')">🌙 Dark Theme</button>
-        <button class="drawer-btn" onclick="sort('size-h')">📈 Size: High to Low</button>
-        <button class="drawer-btn" onclick="sort('size-l')">📉 Size: Low to High</button>
-        <button class="drawer-btn" onclick="sort('new')">🆕 Newest First</button>
-        <button onclick="toggleDrawer(false)" style="width:100%; padding:15px; margin-top:20px; border-radius:12px; border:none; background:var(--p-active-bg); color:var(--p-green); font-weight:bold;">Close</button>
+        <h3 style="margin-bottom:15px">Quick Settings</h3>
+        <button class="nav-link" style="width:100%; padding:15px; text-align:left; border-bottom:1px solid #eee;" onclick="setTheme('light')">☀️ Light Mode</button>
+        <button class="nav-link" style="width:100%; padding:15px; text-align:left; border-bottom:1px solid #eee;" onclick="setTheme('dark')">🌙 Dark Mode</button>
+        <button class="nav-link" style="width:100%; padding:15px; text-align:left; border-bottom:1px solid #eee;" onclick="sort('size-h')">📈 Highest Size</button>
+        <button class="nav-link" style="width:100%; padding:15px; text-align:left; border-bottom:1px solid #eee;" onclick="sort('default')">🔄 Default (Trending First)</button>
+        <button onclick="toggleDrawer(false)" style="width:100%; padding:15px; background:var(--p-active); color:var(--p-green); border:none; border-radius:10px; margin-top:15px; font-weight:bold;">Close</button>
     </div>
 
     <nav>
-        <button class="nav-btn active" id="btn-all" onclick="tab('all')">
-            <span class="nav-icon">🏠</span>
-            <span class="nav-label">All</span>
-        </button>
-        <button class="nav-btn" id="btn-game" onclick="tab('game')">
-            <span class="nav-icon">🎮</span>
-            <span class="nav-label">Games</span>
-        </button>
-        <button class="nav-btn" id="btn-app" onclick="tab('app')">
-            <span class="nav-icon">📱</span>
-            <span class="nav-label">Apps</span>
-        </button>
+        <button class="nav-link active" onclick="tab('all', this)">Home</button>
+        <button class="nav-link" onclick="tab('game', this)">Games</button>
+        <button class="nav-link" onclick="tab('app', this)">Apps</button>
     </nav>
 
     <script>
-        let fullData = [];
-        let displayData = [];
-        let currentTab = 'all';
+        let db = [];
+        let trendingIds = [];
+        let lastScroll = 0;
 
         async function init() {
             const res = await fetch('info.json');
             const data = await res.json();
-            fullData = data.apps;
-            displayData = fullData;
-            renderCats();
-            renderGrid(displayData);
+            db = data.apps;
+            trendingIds = data.trending_ids || [];
+            
+            renderHome();
         }
 
-        function renderCats() {
-            const box = document.getElementById('cat-scroll');
-            const cats = [...new Set(fullData.filter(x => currentTab === 'all' || x.type === currentTab).map(x => x.category))];
-            box.innerHTML = `<div class="chip active" onclick="filterCat('all', this)">All Categories</div>`;
-            cats.forEach(c => box.innerHTML += `<div class="chip" onclick="filterCat('${c}', this)">${c}</div>`);
-        }
-
-        function renderGrid(list) {
-            const grid = document.getElementById('main-grid');
-            grid.innerHTML = list.map(a => `
-                <div class="app-card" onclick="openDetails('${a.id}')">
-                    ${a.isNew ? '<div class="new-tag">NEW</div>' : ''}
-                    <img src="${a.icon}" loading="lazy">
-                    <div class="app-name">${a.name}</div>
-                    <div style="font-size:10px; color:gray;">${a.size || 'N/A'} • ${a.category}</div>
+        function renderHome() {
+            // Render Offers (Trending)
+            const trendBox = document.getElementById('trending-section');
+            const trendApps = db.filter(x => trendingIds.includes(x.id));
+            trendBox.innerHTML = trendApps.map(a => `
+                <div class="offer-card" onclick="openDetails('${a.id}')">
+                    ${a.offer_video ? `<video src="${a.offer_video}" autoplay muted loop></video>` : `<img src="${a.icon}">`}
+                    <div class="offer-content">
+                        <h2>${a.name}</h2>
+                        <p style="font-size:12px;">Exclusive Offer: Updated Version Available</p>
+                    </div>
                 </div>
             `).join('');
+
+            // Render Recommended
+            const recGrid = document.getElementById('rec-grid');
+            const recApps = [...db].sort(() => 0.5 - Math.random()).slice(0, 3);
+            recGrid.innerHTML = recApps.map(a => cardHtml(a)).join('');
+
+            // Render All
+            const allGrid = document.getElementById('all-grid');
+            allGrid.innerHTML = db.map(a => cardHtml(a)).join('');
+        }
+
+        function cardHtml(a) {
+            return `
+                <div class="app-card" onclick="openDetails('${a.id}')">
+                    <img src="${a.icon}" loading="lazy">
+                    <div class="app-name">${a.name}</div>
+                    <div style="font-size:10px; color:gray;">${a.size || 'N/A'} • ${a.category || 'N/A'}</div>
+                </div>
+            `;
         }
 
         function openDetails(id) {
-            const a = fullData.find(x => x.id === id);
+            const a = db.find(x => x.id === id);
             document.getElementById('d-nav-title').innerText = a.name;
-            document.getElementById('d-hero').innerHTML = `
-                <div class="hero">
+            document.getElementById('d-hero-area').innerHTML = `
+                <div class="hero-main">
                     <img src="${a.icon}">
                     <div class="hero-info">
                         <h2>${a.name}</h2>
-                        <p>${a.owner || 'Verified Dev'}</p>
+                        <p>${a.category} | ${a.releaseDate || 'N/A'}</p>
                     </div>
                 </div>
             `;
-
-            // Gallery
-            const gal = document.getElementById('d-gallery');
-            gal.innerHTML = (a.media || []).map(m => m.endsWith('.mp4') ? `<video src="${m}" controls></video>` : `<img src="${m}">`).join('');
-
-            // Description
-            document.getElementById('d-desc').innerText = a.description || 'No description available.';
-            document.getElementById('d-desc').classList.add('collapsed');
-
-            // Versions
-            const vBox = document.getElementById('d-versions');
-            vBox.innerHTML = '<h4 style="padding:15px 15px 0">Download Versions</h4>';
-            (a.versions || []).forEach(v => {
-                vBox.innerHTML += `
-                    <div class="v-row">
-                        <div>
-                            <div style="font-weight:bold; font-size:14px;">Ver: ${v.ver}</div>
-                            <div style="font-size:11px; color:gray;">Size: ${v.size || a.size}</div>
-                        </div>
-                        <div>
-                            <button class="btn-copy" onclick="copy('${v.url}')">Copy</button>
-                            <a href="${v.url}" class="btn-dl">Download</a>
-                        </div>
-                    </div>
-                `;
-            });
-
-            // Info Table
-            document.getElementById('d-info').innerHTML = `
-                <div class="info-item"><span class="info-label">Package</span><span class="info-val">${a.package || 'N/A'}</span></div>
-                <div class="info-item"><span class="info-label">Compatibility</span><span class="info-val">${a.compatibility || 'N/A'}</span></div>
-                <div class="info-item"><span class="info-label">Updated</span><span class="info-val">${a.updated || 'N/A'}</span></div>
-            `;
-
-            // Recs
-            const recs = fullData.filter(x => x.category === a.category && x.id !== a.id).slice(0, 3);
-            document.getElementById('d-recs').innerHTML = recs.map(r => `
-                <div class="app-card" onclick="openDetails('${r.id}')">
-                    <img src="${r.icon}">
-                    <div class="app-name" style="font-size:10px">${r.name}</div>
+            
+            // Versions Size Based
+            const vTable = document.getElementById('d-versions');
+            vTable.innerHTML = (a.versions || []).map(v => `
+                <div class="v-row">
+                    <span><b>Ver: ${v.ver}</b> (${v.size || a.size || 'N/A'})</span>
+                    <a href="${v.url}" class="btn-green">Download</a>
                 </div>
             `).join('');
+
+            document.getElementById('d-desc').innerText = a.description || "N/A";
+            
+            // Similar Items
+            const similar = db.filter(x => x.category === a.category && x.id !== a.id).slice(0, 3);
+            document.getElementById('d-similar').innerHTML = similar.map(s => cardHtml(s)).join('');
 
             document.getElementById('details').style.display = 'block';
             document.body.style.overflow = 'hidden';
         }
 
-        // --- CORE FUNCTIONS ---
-        function tab(t) {
-            currentTab = t;
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('btn-' + t).classList.add('active');
-            renderCats();
-            displayData = (t === 'all') ? fullData : fullData.filter(x => x.type === t);
-            renderGrid(displayData);
-        }
-
-        function filterCat(c, el) {
-            document.querySelectorAll('.chip').forEach(ch => ch.classList.remove('active'));
-            el.classList.add('active');
-            let list = (currentTab === 'all') ? fullData : fullData.filter(x => x.type === currentTab);
-            renderGrid(c === 'all' ? list : list.filter(x => x.category === c));
-        }
-
-        function sort(m) {
-            if(m === 'size-h') displayData.sort((a,b) => parseFloat(b.size) - parseFloat(a.size));
-            if(m === 'size-l') displayData.sort((a,b) => parseFloat(a.size) - parseFloat(b.size));
-            if(m === 'new') displayData.reverse();
-            renderGrid(displayData); toggleDrawer(false);
-        }
-
-        document.getElementById('main-search').addEventListener('input', (e) => {
-            const loader = document.getElementById('loader');
-            loader.style.display = 'block';
-            const val = e.target.value.toLowerCase();
-            setTimeout(() => {
-                const results = fullData.filter(x => x.name.toLowerCase().includes(val));
-                renderGrid(results);
-                loader.style.display = 'none';
-            }, 300);
+        // SCROLL LOGIC
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            const header = document.getElementById('main-header');
+            if (currentScroll > lastScroll && currentScroll > 100) {
+                header.classList.add('hide');
+            } else {
+                header.classList.remove('hide');
+            }
+            lastScroll = currentScroll;
         });
 
-        function toggleDesc() {
-            const d = document.getElementById('d-desc');
-            const btn = document.getElementById('read-more-btn');
-            d.classList.toggle('collapsed');
-            btn.innerText = d.classList.contains('collapsed') ? 'Read More' : 'Read Less';
-        }
-
-        function toggleDrawer(s) { document.getElementById('drawer').classList.toggle('open', s); }
         function closeDetails() { document.getElementById('details').style.display = 'none'; document.body.style.overflow = 'auto'; }
+        function toggleDrawer(s) { document.getElementById('drawer').classList.toggle('open', s); }
         function setTheme(t) { document.body.setAttribute('data-theme', t); toggleDrawer(false); }
-        function copy(u) { navigator.clipboard.writeText(u); alert('Link Copied!'); }
+        function tab(t, el) {
+            document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+            el.classList.add('active');
+            const list = (t === 'all') ? db : db.filter(x => x.type === t);
+            document.getElementById('all-grid').innerHTML = list.map(a => cardHtml(a)).join('');
+        }
 
         init();
     </script>
