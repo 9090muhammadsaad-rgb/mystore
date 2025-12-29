@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Faizan Store | Pro Sorting</title>
+    <title>Faizan Store | Elite Layout</title>
     <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root { --p-green: #01875f; --p-bg: #ffffff; --p-txt: #202124; --p-border: #e8eaed; --p-surface: #f1f3f4; --p-active: #e6f4ea; --p-drawer: #ffffff; }
@@ -12,44 +12,47 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Google Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--p-bg); color: var(--p-txt); transition: 0.3s; overflow-x: hidden; }
 
-        /* HEADER */
+        /* HEADER & SEARCH */
         header { position: fixed; top: 0; width: 100%; background: var(--p-bg); z-index: 1000; padding: 12px 16px; border-bottom: 1px solid var(--p-border); display: flex; align-items: center; gap: 10px; transition: 0.3s; }
         header.hide { transform: translateY(-100%); }
         .search-pill { flex: 1; display: flex; align-items: center; background: var(--p-surface); border-radius: 8px; padding: 0 12px; }
         .search-input { width: 100%; border: none; background: transparent; padding: 12px; font-size: 15px; outline: none; color: var(--p-txt); }
 
-        /* SETTINGS DRAWER (Premium Look) */
-        #drawer { 
-            position: fixed; top: 0; right: -100%; width: 300px; height: 100%; 
-            background: var(--p-drawer); color: var(--p-txt); z-index: 6000; padding: 25px; 
-            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: -10px 0 30px rgba(0,0,0,0.2); 
-            overflow-y: auto;
-        }
+        /* DRAWER & OVERLAY */
+        #drawer { position: fixed; top: 0; right: -100%; width: 300px; height: 100%; background: var(--p-drawer); z-index: 6000; padding: 25px; transition: 0.4s; box-shadow: -10px 0 30px rgba(0,0,0,0.2); overflow-y: auto; }
         #drawer.open { right: 0; }
         .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 5500; display: none; backdrop-filter: blur(2px); }
         .overlay.active { display: block; }
+        .drawer-btn { width: 100%; padding: 14px 10px; text-align: left; border: none; background: transparent; border-bottom: 1px solid var(--p-border); color: var(--p-txt); font-size: 15px; cursor: pointer; }
 
-        .drawer-title { font-size: 20px; font-weight: 700; color: var(--p-green); margin-bottom: 20px; border-bottom: 2px solid var(--p-green); padding-bottom: 10px; }
-        .drawer-btn { 
-            width: 100%; padding: 14px 10px; text-align: left; border: none; background: transparent; 
-            border-bottom: 1px solid var(--p-border); color: var(--p-txt); font-size: 15px; 
-            cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 10px;
-        }
-        .drawer-btn:active { background: var(--p-active); }
-
-        /* APP GRID */
+        /* GRID */
         .container { padding: 80px 16px 120px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 18px; }
         .app-card { cursor: pointer; text-align: left; }
         .app-card img { width: 100%; aspect-ratio: 1/1; border-radius: 22%; object-fit: cover; border: 1px solid var(--p-border); }
         .app-name { font-size: 12px; font-weight: 500; margin-top: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .app-meta { font-size: 10px; color: gray; margin-top: 2px; }
 
-        /* DETAIL VIEW */
+        /* DETAIL VIEW (THE NEW LAYOUT) */
         #details { position: fixed; inset: 0; background: var(--p-bg); z-index: 5000; display: none; overflow-y: auto; }
-        .d-header { position: sticky; top: 0; background: var(--p-bg); padding: 15px; border-bottom: 1px solid var(--p-border); display: flex; align-items: center; }
+        .d-header { position: sticky; top: 0; background: var(--p-bg); padding: 15px; border-bottom: 1px solid var(--p-border); z-index: 10; display: flex; align-items: center; }
+        
+        .hero-section { padding: 20px; display: flex; align-items: center; gap: 20px; }
+        .hero-section img { width: 90px; height: 90px; border-radius: 22%; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .hero-section h2 { font-size: 24px; font-weight: 700; }
 
-        /* NAV BAR */
+        .desc-section { padding: 0 20px 20px; font-size: 14px; color: #5f6368; line-height: 1.6; }
+        
+        .gallery { display: flex; gap: 12px; overflow-x: auto; padding: 0 20px 20px; scrollbar-width: none; }
+        .gallery img, .gallery video { height: 180px; border-radius: 12px; border: 1px solid var(--p-border); }
+
+        .dl-section { padding: 0 20px 20px; }
+        .dl-card { background: var(--p-surface); padding: 15px; border-radius: 12px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .dl-info { display: flex; flex-direction: column; gap: 4px; }
+        .dl-btn { background: var(--p-green); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 700; font-size: 14px; text-decoration: none; text-align: center; min-width: 120px; }
+
+        .rec-section { padding: 20px; background: var(--p-surface); }
+
+        /* NAV */
         nav { position: fixed; bottom: 0; width: 100%; background: var(--p-bg); border-top: 1px solid var(--p-border); display: flex; justify-content: space-around; padding: 10px 0; z-index: 4000; }
         .nav-link { border: none; background: none; color: gray; font-size: 12px; font-weight: 500; flex: 1; }
         .nav-link.active { color: var(--p-green); font-weight: 700; }
@@ -59,7 +62,7 @@
 
     <header id="main-header">
         <div class="search-pill">
-            <input type="text" id="search" class="search-input" placeholder="Search apps & games...">
+            <input type="text" id="search" class="search-input" placeholder="Search apps...">
         </div>
         <div onclick="toggleDrawer(true)" style="cursor:pointer; font-size: 24px;">🔘</div>
     </header>
@@ -67,26 +70,18 @@
     <div class="overlay" id="overlay" onclick="toggleDrawer(false)"></div>
 
     <div id="drawer">
-        <div class="drawer-title">Settings & Sorting</div>
-        
+        <div style="font-size: 20px; font-weight: 700; color: var(--p-green); margin-bottom: 20px;">Settings</div>
         <button class="drawer-btn" onclick="window.location.href='https://example.com/help'">❓ Help & Support</button>
-        
-        <div style="margin: 15px 0 10px; font-size: 12px; color: var(--p-green); font-weight: 700;">SORT BY SIZE</div>
-        <button class="drawer-btn" onclick="sortData('size-h')">📈 Highest To Lowest (Size)</button>
-        <button class="drawer-btn" onclick="sortData('size-l')">📉 Lowest To Highest (Size)</button>
-
-        <div style="margin: 15px 0 10px; font-size: 12px; color: var(--p-green); font-weight: 700;">SORT BY DATE</div>
-        <button class="drawer-btn" onclick="sortData('date-n')">🆕 Newest To Oldest (Date)</button>
-        <button class="drawer-btn" onclick="sortData('date-o')">📅 Oldest To Newest (Date)</button>
-
-        <div style="margin: 15px 0 10px; font-size: 12px; color: var(--p-green); font-weight: 700;">THEME</div>
+        <div style="margin: 15px 0 5px; font-size: 12px; font-weight: 700; color: gray;">SORTING</div>
+        <button class="drawer-btn" onclick="sortData('size-h')">📈 Highest To Lowest</button>
+        <button class="drawer-btn" onclick="sortData('size-l')">📉 Lowest To Highest</button>
+        <button class="drawer-btn" onclick="sortData('date-n')">🆕 Newest To Oldest</button>
+        <button class="drawer-btn" onclick="sortData('date-o')">📅 Oldest To Newest</button>
+        <div style="margin: 15px 0 5px; font-size: 12px; font-weight: 700; color: gray;">THEME</div>
         <button class="drawer-btn" onclick="setTheme('dark')">🌙 Dark Mode</button>
-        <button class="drawer-btn" onclick="setTheme('light')">☀️ White Mode (Default)</button>
-
-        <div style="margin: 15px 0 10px; font-size: 12px; color: var(--p-green); font-weight: 700;">RESET</div>
-        <button class="drawer-btn" onclick="sortData('default')" style="color: var(--p-green); font-weight: bold;">🔄 Default (All Sorting)</button>
-        
-        <button onclick="toggleDrawer(false)" style="width:100%; padding:15px; background:var(--p-active); color:var(--p-green); border:none; border-radius:10px; margin-top:30px; font-weight:bold; cursor:pointer;">CLOSE</button>
+        <button class="drawer-btn" onclick="setTheme('light')">☀️ White Mode</button>
+        <button class="drawer-btn" onclick="sortData('default')" style="color: var(--p-green); margin-top: 10px;">🔄 Default (All Sorting)</button>
+        <button onclick="toggleDrawer(false)" style="width:100%; padding:15px; background:var(--p-active); color:var(--p-green); border:none; border-radius:10px; margin-top:20px; font-weight:bold;">CLOSE</button>
     </div>
 
     <div class="container">
@@ -95,10 +90,19 @@
 
     <div id="details">
         <div class="d-header">
-            <button onclick="closeDetails()" style="background:none; border:none; font-size:24px; color:var(--p-txt);">←</button>
-            <span id="d-nav-title" style="margin-left:20px; font-weight:700"></span>
+            <button onclick="closeDetails()" style="background:none; border:none; font-size:24px; color:var(--p-txt); cursor:pointer;">←</button>
+            <span id="d-nav-title" style="margin-left:20px; font-weight:700">App Detail</span>
         </div>
-        <div id="detail-content"></div>
+        
+        <div id="d-hero"></div>
+        <div class="desc-section" id="d-desc"></div>
+        <div class="gallery" id="d-gallery"></div>
+        <div class="dl-section" id="d-versions"></div>
+        
+        <div class="rec-section">
+            <h4 style="margin-bottom:15px;">RECOMMENDED</h4>
+            <div class="grid" id="d-recs" style="grid-template-columns: repeat(3, 1fr);"></div>
+        </div>
     </div>
 
     <nav>
@@ -108,91 +112,100 @@
     </nav>
 
     <script>
-        let rawData = [];
+        let db = [];
         let currentList = [];
         let lastScroll = 0;
+        let touchStartX = 0;
 
         async function init() {
             const res = await fetch('info.json');
             const data = await res.json();
-            rawData = data.apps;
-            currentList = [...rawData];
+            db = data.apps;
+            currentList = [...db];
             renderGrid(currentList);
         }
 
         function renderGrid(list) {
-            const grid = document.getElementById('main-grid');
-            grid.innerHTML = list.map(a => `
+            document.getElementById('main-grid').innerHTML = list.map(a => `
                 <div class="app-card" onclick="openDetails('${a.id}')">
                     <img src="${a.icon}" loading="lazy">
                     <div class="app-name">${a.name}</div>
-                    <div class="app-meta">${a.size} • ${a.releaseDate}</div>
+                    <div style="font-size:10px; color:gray;">${a.size} • ${a.releaseDate}</div>
                 </div>
             `).join('');
         }
 
-        function sortData(type) {
-            let sorted = [...currentList];
-            if (type === 'size-h') sorted.sort((a, b) => parseSize(b.size) - parseSize(a.size));
-            if (type === 'size-l') sorted.sort((a, b) => parseSize(a.size) - parseSize(b.size));
-            if (type === 'date-n') sorted.sort((a, b) => new Date(b.releaseDate) - new Date(a.releaseDate));
-            if (type === 'date-o') sorted.sort((a, b) => new Date(a.releaseDate) - new Date(b.releaseDate));
-            if (type === 'default') sorted = [...rawData];
-            
-            renderGrid(sorted);
-            toggleDrawer(false);
-        }
-
-        function parseSize(s) {
-            let n = parseFloat(s);
-            if (s.includes('GB')) n *= 1024;
-            return n;
-        }
-
         function openDetails(id) {
-            const a = rawData.find(x => x.id === id);
+            const a = db.find(x => x.id === id);
             document.getElementById('d-nav-title').innerText = a.name;
-            document.getElementById('detail-content').innerHTML = `
-                <div style="padding:20px; display:flex; gap:15px; align-items:center;">
-                    <img src="${a.icon}" style="width:90px; height:90px; border-radius:22%;">
-                    <div><h2>${a.name}</h2><p style="color:var(--p-green)">${a.category}</p></div>
-                </div>
-                <div style="padding:20px; background:var(--p-surface); margin:15px; border-radius:12px;">
-                    <b>Versions:</b><br>
-                    ${(a.versions || []).map(v => `<div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--p-border);">
-                        <span>Ver: ${v.ver} (${v.size})</span>
-                        <a href="${v.url}" style="color:var(--p-green); font-weight:bold; text-decoration:none;">Download</a>
-                    </div>`).join('')}
-                </div>
-                <div style="padding:20px;"><b>Description:</b><p style="color:gray; font-size:14px; margin-top:5px;">${a.description}</p></div>
-            `;
+            
+            // Icon and Name
+            document.getElementById('d-hero').innerHTML = `
+                <div class="hero-section">
+                    <img src="${a.icon}">
+                    <h2>${a.name}</h2>
+                </div>`;
+            
+            // Description
+            document.getElementById('d-desc').innerHTML = `(( ${a.description} ))`;
+            
+            // Gallery (Images/Videos)
+            const gal = document.getElementById('d-gallery');
+            if (a.media && a.media.length > 0) {
+                gal.innerHTML = a.media.map(m => m.endsWith('.mp4') ? `<video src="${m}" controls></video>` : `<img src="${m}">`).join('');
+                gal.style.display = 'flex';
+            } else {
+                gal.style.display = 'none';
+            }
+
+            // Multiple Versions
+            document.getElementById('d-versions').innerHTML = (a.versions || []).map(v => `
+                <div class="dl-card">
+                    <div class="dl-info">
+                        <span style="font-weight:700;">Ver: ${v.ver}</span>
+                        <span style="font-size:12px; color:gray;">Size: ${v.size}</span>
+                    </div>
+                    <a href="${v.url}" class="dl-btn">Download</a>
+                </div>`).join('');
+
+            // Recommended (Same Category)
+            const recs = db.filter(x => x.category === a.category && x.id !== a.id).slice(0, 3);
+            document.getElementById('d-recs').innerHTML = recs.map(r => `
+                <div class="app-card" onclick="openDetails('${r.id}')">
+                    <img src="${r.icon}">
+                    <div class="app-name" style="font-size:10px;">${r.name}</div>
+                </div>`).join('');
+
             document.getElementById('details').style.display = 'block';
+            document.body.style.overflow = 'hidden';
         }
 
-        function toggleDrawer(s) {
-            document.getElementById('drawer').classList.toggle('open', s);
-            document.getElementById('overlay').classList.toggle('active', s);
-        }
-
-        function setTheme(t) { 
-            document.body.setAttribute('data-theme', t); 
-            toggleDrawer(false); 
-        }
-
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-            const header = document.getElementById('main-header');
-            if (currentScroll > lastScroll && currentScroll > 80) header.classList.add('hide');
-            else header.classList.remove('hide');
-            lastScroll = currentScroll;
+        // SWIPE & UTILS
+        window.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX);
+        window.addEventListener('touchend', e => {
+            let touchEndX = e.changedTouches[0].screenX;
+            if (touchStartX - touchEndX > 100) toggleDrawer(true);
+            if (touchEndX - touchStartX > 100) toggleDrawer(false);
         });
 
-        function closeDetails() { document.getElementById('details').style.display = 'none'; }
+        function sortData(type) {
+            let sorted = [...currentList];
+            if (type === 'size-h') sorted.sort((a,b) => parseSize(b.size) - parseSize(a.size));
+            if (type === 'size-l') sorted.sort((a,b) => parseSize(a.size) - parseSize(b.size));
+            if (type === 'date-n') sorted.sort((a,b) => new Date(b.releaseDate) - new Date(a.releaseDate));
+            if (type === 'date-o') sorted.sort((a,b) => new Date(a.releaseDate) - new Date(b.releaseDate));
+            if (type === 'default') sorted = [...db];
+            renderGrid(sorted); toggleDrawer(false);
+        }
 
+        function parseSize(s) { let n = parseFloat(s); if(s.includes('GB')) n *= 1024; return n; }
+        function toggleDrawer(s) { document.getElementById('drawer').classList.toggle('open', s); document.getElementById('overlay').classList.toggle('active', s); }
+        function setTheme(t) { document.body.setAttribute('data-theme', t); toggleDrawer(false); }
+        function closeDetails() { document.getElementById('details').style.display = 'none'; document.body.style.overflow = 'auto'; }
         function tab(t, el) {
             document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
             el.classList.add('active');
-            currentList = (t === 'all') ? rawData : rawData.filter(x => x.type === t);
+            currentList = (t === 'all') ? db : db.filter(x => x.type === t);
             renderGrid(currentList);
         }
 
