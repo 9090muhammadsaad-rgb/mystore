@@ -1,32 +1,21 @@
 {
-  "trending_ids": ["g1", "g2"],
+  "trending_ids": ["g1"],
   "apps": [
     {
       "id": "g1",
-      "name": "Minecraft Mod Menu",
+      "name": "Poppy Playtime Chapter 3",
       "type": "game",
-      "category": "Simulation",
-      "size": "650MB",
-      "releaseDate": "29-Dec-2025",
-      "offer_video": "video/mc_promo.mp4",
-      "icon": "icon/icon.png",
-      "description": "Infinite worlds and unlimited resources with god mode menu enabled.",
+      "category": "Horror",
+      "size": "1.2GB",
+      "releaseDate": "2025",
+      "icon": "icon/poppy3.png",
+      "description": "Explore the terrifying Playcare facility in Chapter 3 with new monsters, puzzles, and horror gameplay.",
       "versions": [
-        { "ver": "1.26.0.25", "size": "650MB", "url": "https://example.com/mc_latest.apk" },
-        { "ver": "1.20.0.01", "size": "580MB", "url": "https://example.com/mc_old.apk" }
-      ]
-    },
-    {
-      "id": "g2",
-      "name": "PUBG Mobile",
-      "type": "game",
-      "category": "Action",
-      "size": "1.8GB",
-      "releaseDate": "15-Dec-2025",
-      "icon": "icon/icon.png",
-      "description": "Experience the ultimate battle royale on your mobile device.",
-      "versions": [
-        { "ver": "3.0.0", "size": "1.8GB", "url": "https://example.com/pubg.apk" }
+        {
+          "ver": "1.0.25",
+          "size": "1.2GB",
+          "url": "https://files.an1.co/poppy-playtime-chapter-3_1.0.25-an1.com.apk"
+        }
       ]
     }
   ]
