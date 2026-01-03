@@ -4,19 +4,56 @@
     {
       "id": "g1",
       "name": "Poppy Playtime Chapter 3",
+      "package": "com.mobentertainment.poppyplaytime3",
       "type": "game",
       "category": "Horror",
-      "size": "1.2GB",
-      "releaseDate": "2025",
-      "icon": "icon/poppy1.jpeg",
-      "description": "Explore the terrifying Playcare facility in Chapter 3 with new monsters, puzzles, and horror gameplay.",
       "versions": [
         {
           "ver": "1.0.25",
-          "size": "1.2GB",
           "url": "https://files.an1.co/poppy-playtime-chapter-3_1.0.25-an1.com.apk"
         }
       ]
+    },
+
+    {
+      "id": "g2",
+      "name": "Hill Climb Racing MOD",
+      "package": "com.fingersoft.hillclimb.mod"
+    },
+    {
+      "id": "g3",
+      "name": "Granny (Ciber Mod)",
+      "package": "com.dvloper.granny.cybermod"
+    },
+    {
+      "id": "g4",
+      "name": "Granny 2 (MOD)",
+      "package": "com.dvloper.granny2.mod"
+    },
+    {
+      "id": "g5",
+      "name": "Granny 4 (Original) Fan Made",
+      "package": "com.fanmade.granny4"
+    },
+    {
+      "id": "g6",
+      "name": "Granny 5 Original (Fan Made)",
+      "package": "com.fanmade.granny5"
+    },
+    {
+      "id": "g7",
+      "name": "Pou MOD Unlimited Coin",
+      "package": "me.pou.app.mod"
+    },
+    {
+      "id": "g8",
+      "name": "Minecraft (Original) Mojang",
+      "package": "com.mojang.minecraftpe"
+    },
+    {
+      "id": "g9",
+      "name": "GTA 5 (Online)",
+      "package": "com.rockstargames.gtav"
     }
   ]
 }
