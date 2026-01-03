@@ -1,234 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elite App Store | Pro Layout</title>
-    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        :root { --p-green: #01875f; --p-bg: #ffffff; --p-txt: #202124; --p-border: #e8eaed; --p-surface: #f1f3f4; --p-active: #e6f4ea; --p-drawer: #ffffff; }
-        [data-theme="dark"] { --p-bg: #121212; --p-txt: #e8eaed; --p-border: #333; --p-surface: #2d2d2d; --p-active: #1a332a; --p-drawer: #1e1e1e; }
+<meta charset="UTF-8">
+<title>Faizan Store</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{margin:0;font-family:sans-serif;background:#fff;color:#000}
+header{display:flex;align-items:center;justify-content:space-between;padding:10px 15px;background:#f5f5f5;position:sticky;top:0;z-index:100}
+header input[type=search]{flex:1;padding:8px;margin-right:10px;border-radius:6px;border:1px solid #ccc}
+header button{padding:8px 12px;border:none;border-radius:6px;background:#00aaff;color:#fff;font-weight:bold;cursor:pointer}
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Google Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--p-bg); color: var(--p-txt); transition: 0.3s; overflow-x: hidden; }
+/* GRID CARD */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;padding:12px}
+.card{background:#f0f0f0;border-radius:12px;padding:10px;position:relative;cursor:pointer;display:flex;flex-direction:column;align-items:center;text-align:center}
+.card img{width:100%;height:100px;object-fit:cover;border-radius:8px}
+.card .title{font-size:14px;margin:6px 0;font-weight:bold}
+.card .cat{font-size:12px;color:#666}
+.card .owner{font-size:11px;color:#0077cc;cursor:pointer}
+.trending{position:absolute;top:6px;left:6px;background:#ff9800;color:#000;font-size:11px;padding:2px 6px;border-radius:6px;font-weight:bold}
 
-        /* HEADER */
-        header { position: fixed; top: 0; width: 100%; background: var(--p-bg); z-index: 1000; padding: 12px 16px; border-bottom: 1px solid var(--p-border); display: flex; align-items: center; gap: 10px; transition: 0.3s; }
-        header.hide { transform: translateY(-100%); }
-        .search-pill { flex: 1; display: flex; align-items: center; background: var(--p-surface); border-radius: 8px; padding: 0 12px; }
-        .search-input { width: 100%; border: none; background: transparent; padding: 12px; font-size: 15px; outline: none; color: var(--p-txt); }
-
-        /* DRAWER & OVERLAY */
-        #drawer { position: fixed; top: 0; right: -100%; width: 300px; height: 100%; background: var(--p-drawer); z-index: 6000; padding: 25px; transition: 0.4s; box-shadow: -10px 0 30px rgba(0,0,0,0.2); overflow-y: auto; }
-        #drawer.open { right: 0; }
-        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 5500; display: none; backdrop-filter: blur(2px); }
-        .overlay.active { display: block; }
-        .drawer-btn { width: 100%; padding: 14px 10px; text-align: left; border: none; background: transparent; border-bottom: 1px solid var(--p-border); color: var(--p-txt); font-size: 15px; cursor: pointer; }
-
-        /* MAIN GRID */
-        .container { padding: 80px 16px 120px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 18px; }
-        .app-card { cursor: pointer; text-align: left; }
-        .app-card img { width: 100%; aspect-ratio: 1/1; border-radius: 22%; object-fit: cover; border: 1px solid var(--p-border); }
-        .app-name { font-size: 12px; font-weight: 500; margin-top: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-        /* DETAIL VIEW */
-        #details { position: fixed; inset: 0; background: var(--p-bg); z-index: 5000; display: none; overflow-y: auto; padding-bottom: 100px; }
-        .d-header { position: sticky; top: 0; background: var(--p-bg); padding: 15px; border-bottom: 1px solid var(--p-border); z-index: 10; display: flex; align-items: center; }
-        
-        .hero-section { padding: 20px; display: flex; align-items: center; gap: 20px; }
-        .hero-section img { width: 95px; height: 95px; border-radius: 22%; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .hero-section h2 { font-size: 26px; font-weight: 700; }
-
-        .desc-section { padding: 0 20px 20px; font-size: 14px; color: #5f6368; line-height: 1.6; }
-        
-        .gallery { display: flex; gap: 12px; overflow-x: auto; padding: 0 20px 20px; scrollbar-width: none; }
-        .gallery::-webkit-scrollbar { display: none; }
-        .gallery img, .gallery video { height: 200px; border-radius: 12px; border: 1px solid var(--p-border); }
-
-        /* VERSION SECTION & BIG BUTTONS */
-        .dl-section { padding: 0 20px 30px; }
-        .dl-card { background: var(--p-surface); padding: 20px; border-radius: 16px; margin-bottom: 15px; border: 1px solid var(--p-border); }
-        .dl-info { margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .dl-btn { 
-            display: block; width: 100%; background: var(--p-green); color: white; 
-            border: none; padding: 16px; border-radius: 10px; font-weight: 700; 
-            font-size: 16px; text-decoration: none; text-align: center; 
-            box-shadow: 0 4px 6px rgba(1, 135, 95, 0.2); transition: 0.2s;
-        }
-        .dl-btn:active { transform: scale(0.98); opacity: 0.9; }
-
-        .rec-section { padding: 20px; background: var(--p-surface); border-top: 1px solid var(--p-border); }
-
-        /* NAVIGATION BAR */
-        nav { position: fixed; bottom: 0; width: 100%; background: var(--p-bg); border-top: 1px solid var(--p-border); display: flex; justify-content: space-around; padding: 12px 0; z-index: 4000; }
-        .nav-link { border: none; background: none; color: gray; font-size: 12px; font-weight: 500; flex: 1; cursor: pointer; transition: 0.2s; }
-        .nav-link.active { color: var(--p-green); font-weight: 700; }
-    </style>
+/* DETAILS */
+#details{display:none;padding:12px}
+#details .back{padding:6px 12px;background:#00aaff;color:#fff;border:none;border-radius:6px;margin-bottom:10px;cursor:pointer}
+#details img.icon{width:80px;height:80px;border-radius:12px;object-fit:cover}
+#details .btn{padding:6px 10px;border:none;border-radius:6px;background:#eee;color:#000;margin:2px;cursor:pointer}
+#details .screens{display:flex;overflow-x:auto;gap:8px;margin:10px 0}
+#details .screens img, #details .screens video{height:120px;border-radius:8px;object-fit:cover}
+#recommended{margin-top:20px}
+#recommended .rec-card{background:#eee;padding:8px;border-radius:8px;display:flex;align-items:center;gap:8px;margin:5px 0;color:#000}
+#recommended .rec-card img{width:40px;height:40px;border-radius:6px;object-fit:cover}
+</style>
 </head>
-<body data-theme="light">
+<body>
 
-    <header id="main-header">
-        <div class="search-pill">
-            <input type="text" id="search" class="search-input" placeholder="Search apps & games...">
-        </div>
-        <div onclick="toggleDrawer(true)" style="cursor:pointer; font-size: 24px;">🔘</div>
-    </header>
+<header>
+  <input type="search" id="search" placeholder="Search Games or Apps" oninput="filterList()">
+  <button onclick="toggleSettings()">⚙️</button>
+</header>
 
-    <div class="overlay" id="overlay" onclick="toggleDrawer(false)"></div>
+<div style="display:flex;justify-content:center;gap:10px;padding:10px;">
+  <button onclick="setType('all')">🏠 All</button>
+  <button onclick="setType('game')">🎮 Game</button>
+  <button onclick="setType('app')">❓ App</button>
+</div>
 
-    <div id="drawer">
-        <div style="font-size: 20px; font-weight: 700; color: var(--p-green); margin-bottom: 20px;">Settings</div>
-        <button class="drawer-btn" onclick="window.location.href='https://example.com/help'">❓ Help & Support</button>
-        <div style="margin: 15px 0 5px; font-size: 12px; font-weight: 700; color: gray;">SORTING</div>
-        <button class="drawer-btn" onclick="sortData('size-h')">📈 Highest To Lowest</button>
-        <button class="drawer-btn" onclick="sortData('size-l')">📉 Lowest To Highest</button>
-        <button class="drawer-btn" onclick="sortData('date-n')">🆕 Newest To Oldest</button>
-        <button class="drawer-btn" onclick="sortData('date-o')">📅 Oldest To Newest</button>
-        <div style="margin: 15px 0 5px; font-size: 12px; font-weight: 700; color: gray;">THEME</div>
-        <button class="drawer-btn" onclick="setTheme('dark')">🌙 Dark Mode</button>
-        <button class="drawer-btn" onclick="setTheme('light')">☀️ White Mode</button>
-        <button class="drawer-btn" onclick="sortData('default')" style="color: var(--p-green); margin-top: 10px; font-weight: bold;">🔄 Default (All Sorting)</button>
-        <button onclick="toggleDrawer(false)" style="width:100%; padding:15px; background:var(--p-active); color:var(--p-green); border:none; border-radius:10px; margin-top:20px; font-weight:bold; cursor:pointer;">CLOSE</button>
+<h3 style="padding-left:12px;">🔥 Trending</h3>
+<div id="trending" class="grid"></div>
+
+<h3 style="padding-left:12px;">🎁 Featured / Random Category</h3>
+<div id="randomCategory" class="grid"></div>
+
+<div id="list" class="grid"></div>
+
+<div id="details">
+  <button class="back" onclick="backToList()">← Back</button>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <img class="icon" id="detailIcon">
+    <div>
+      <h2 id="detailName"></h2>
+      <button class="btn" id="ownerBtn"></button>
     </div>
+  </div>
+  <h3>About This App</h3>
+  <p><b>Game Name:</b> <span id="detailGName"></span></p>
+  <p><b>Package:</b> <span id="detailPackage"></span></p>
+  <p><b>Release:</b> <span id="detailRelease"></span></p>
+  <p><b>Last Update:</b> <span id="detailUpdate"></span></p>
+  <p><b>Version:</b> <span id="detailVersion"></span></p>
+  <p><b>Type:</b> <span id="detailType"></span></p>
+  <p><b>Category:</b> <button class="btn" id="detailCategory"></button></p>
+  <p id="detailDesc"></p>
 
-    <div class="container">
-        <div class="grid" id="main-grid"></div>
-    </div>
+  <h3>Screenshots & Video</h3>
+  <div id="detailMedia" class="screens"></div>
 
-    <div id="details">
-        <div class="d-header">
-            <button onclick="closeDetails()" style="background:none; border:none; font-size:24px; color:var(--p-txt); cursor:pointer;">←</button>
-            <span id="d-nav-title" style="margin-left:20px; font-weight:700">App Details</span>
-        </div>
-        
-        <div id="d-hero"></div>
-        <div class="desc-section" id="d-desc"></div>
-        <div class="gallery" id="d-gallery"></div>
-        <div class="dl-section" id="d-versions"></div>
-        
-        <div class="rec-section">
-            <h4 style="margin-bottom:15px; font-weight: 700;">RECOMMENDED</h4>
-            <div class="grid" id="d-recs" style="grid-template-columns: repeat(3, 1fr);"></div>
-        </div>
-    </div>
+  <h3>Recommended</h3>
+  <div id="recommended"></div>
+</div>
 
-    <nav>
-        <button class="nav-link active" onclick="tab('all', this)">Home</button>
-        <button class="nav-link" onclick="tab('game', this)">Games</button>
-        <button class="nav-link" onclick="tab('app', this)">Apps</button>
-    </nav>
+<script>
+let DATA={}; let currentType='all';
 
-    <script>
-        let db = [];
-        let currentList = [];
-        let lastScroll = 0;
-        let touchStartX = 0;
+fetch('info.json').then(r=>r.json()).then(j=>{DATA=j; populateTrending(); populateRandomCategory(); filterList();});
 
-        async function init() {
-            const res = await fetch('info.json');
-            const data = await res.json();
-            db = data.apps;
-            currentList = [...db];
-            renderGrid(currentList);
-        }
+function toggleSettings(){alert("Settings modal can be added here")}
 
-        function renderGrid(list) {
-            const grid = document.getElementById('main-grid');
-            grid.innerHTML = list.map(a => `
-                <div class="app-card" onclick="openDetails('${a.id}')">
-                    <img src="${a.icon}" loading="lazy">
-                    <div class="app-name">${a.name}</div>
-                    <div style="font-size:10px; color:gray;">${a.size} • ${a.releaseDate}</div>
-                </div>
-            `).join('');
-        }
+function setType(t){currentType=t; filterList();}
 
-        function openDetails(id) {
-            const a = db.find(x => x.id === id);
-            document.getElementById('d-nav-title').innerText = a.name;
-            
-            document.getElementById('d-hero').innerHTML = `
-                <div class="hero-section">
-                    <img src="${a.icon}">
-                    <h2>${a.name}</h2>
-                </div>`;
-            
-            document.getElementById('d-desc').innerHTML = `(( ${a.description} ))`;
-            
-            const gal = document.getElementById('d-gallery');
-            if (a.media && a.media.length > 0) {
-                gal.innerHTML = a.media.map(m => m.endsWith('.mp4') ? `<video src="${m}" controls></video>` : `<img src="${m}">`).join('');
-                gal.style.display = 'flex';
-            } else {
-                gal.style.display = 'none';
-            }
+function populateTrending(){
+  const div=document.getElementById('trending'); div.innerHTML='';
+  DATA.apps.forEach(g=>{if(DATA.trending_ids.includes(g.id)) div.appendChild(createCard(g));});
+}
 
-            document.getElementById('d-versions').innerHTML = (a.versions || []).map(v => `
-                <div class="dl-card">
-                    <div class="dl-info">
-                        <span style="font-size:16px; font-weight:700;">Version ${v.ver}</span>
-                        <span style="font-size:14px; color:gray;">Size: ${v.size}</span>
-                    </div>
-                    <a href="${v.url}" class="dl-btn">Download Apk</a>
-                </div>`).join('');
+function populateRandomCategory(){
+  const div=document.getElementById('randomCategory'); div.innerHTML='';
+  const cats=[...new Set(DATA.apps.map(a=>a.category).filter(c=>c))];
+  const randomCat=cats[Math.floor(Math.random()*cats.length)];
+  DATA.apps.filter(a=>a.category===randomCat).forEach(g=>div.appendChild(createCard(g)));
+}
 
-            const recs = db.filter(x => x.category === a.category && x.id !== a.id).slice(0, 3);
-            document.getElementById('d-recs').innerHTML = recs.map(r => `
-                <div class="app-card" onclick="openDetails('${r.id}')">
-                    <img src="${r.icon}">
-                    <div class="app-name" style="font-size:10px;">${r.name}</div>
-                </div>`).join('');
+function filterList(){
+  const list=document.getElementById('list'); list.innerHTML='';
+  let apps=DATA.apps.filter(a=>currentType==='all'||a.type===currentType);
+  const search=document.getElementById('search').value.toLowerCase();
+  if(search) apps=apps.filter(a=>a.name.toLowerCase().includes(search));
+  apps.forEach(g=>list.appendChild(createCard(g)));
+}
 
-            document.getElementById('details').style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
+function createCard(g){
+  const div=document.createElement('div'); div.className='card'; div.onclick=()=>showDetails(g);
+  let iconSrc=(g.icon==='%%FS'||g.icon==='FS')?'https://via.placeholder.com/100x100?text=Faizan+Store':g.icon||'https://via.placeholder.com/100x100?text=N/A';
+  div.innerHTML=`${DATA.trending_ids.includes(g.id)?'<div class="trending">TRENDING</div>':''}
+    <img src="${iconSrc}">
+    <div class="title">${g.name||'N/A'}</div>
+    <div class="cat">${g.category||'N/A'}</div>
+    <div class="owner">${g.owner||'N/A'}</div>`;
+  return div;
+}
 
-        // SWIPE LOGIC
-        window.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX);
-        window.addEventListener('touchend', e => {
-            let touchEndX = e.changedTouches[0].screenX;
-            if (touchStartX - touchEndX > 100) toggleDrawer(true);
-            if (touchEndX - touchStartX > 100) toggleDrawer(false);
-        });
+function showDetails(g){
+  document.getElementById('details').style.display='block';
+  document.getElementById('list').style.display='none';
+  document.getElementById('trending').style.display='none';
+  document.getElementById('randomCategory').style.display='none';
+  document.getElementById('detailIcon').src=(g.icon==='%%FS'||g.icon==='FS')?'https://via.placeholder.com/80x80?text=Faizan+Store':g.icon||'https://via.placeholder.com/80x80?text=N/A';
+  document.getElementById('detailName').innerText=g.name||'N/A';
+  const ownerBtn=document.getElementById('ownerBtn'); ownerBtn.innerText=g.owner||'N/A'; ownerBtn.onclick=()=>filterByOwner(g.owner);
+  document.getElementById('detailGName').innerText=g.name||'N/A';
+  document.getElementById('detailPackage').innerText=g.package||'N/A';
+  document.getElementById('detailRelease').innerText=g.releaseDate||'N/A';
+  document.getElementById('detailUpdate').innerText=g.lastUpdate||'N/A';
+  document.getElementById('detailVersion').innerText=g.versions?.length||1;
+  document.getElementById('detailType').innerText=g.type||'N/A';
+  const catBtn=document.getElementById('detailCategory'); catBtn.innerText=g.category||'N/A'; catBtn.onclick=()=>filterByCategory(g.category);
+  const descEl=document.getElementById('detailDesc');
+  descEl.innerText=g.description||'N/A';
+  const mediaDiv=document.getElementById('detailMedia'); mediaDiv.innerHTML='';
+  if(g.assets?.screenshots) g.assets.screenshots.forEach(s=>{const img=document.createElement('img'); img.src=s; mediaDiv.appendChild(img);});
+  if(g.assets?.video){const video=document.createElement('video'); video.src=g.assets.video; video.controls=true; mediaDiv.appendChild(video);}
+  const recDiv=document.getElementById('recommended'); recDiv.innerHTML='';
+  DATA.apps.filter(a=>a.id!==g.id&&a.type===g.type).forEach(r=>{const rec=document.createElement('div'); rec.className='rec-card'; rec.innerHTML=`<img src="${(r.icon==='%%FS'||r.icon==='FS')?'https://via.placeholder.com/40x40?text=FS':r.icon||'https://via.placeholder.com/40x40?text=N/A'}"><div><b>${r.name||'N/A'}</b><br><small>${r.category||'N/A'}</small></div>`; recDiv.appendChild(rec);});
+}
 
-        function sortData(type) {
-            let sorted = [...currentList];
-            if (type === 'size-h') sorted.sort((a,b) => parseSize(b.size) - parseSize(a.size));
-            if (type === 'size-l') sorted.sort((a,b) => parseSize(a.size) - parseSize(b.size));
-            if (type === 'date-n') sorted.sort((a,b) => new Date(b.releaseDate) - new Date(a.releaseDate));
-            if (type === 'date-o') sorted.sort((a,b) => new Date(a.releaseDate) - new Date(b.releaseDate));
-            if (type === 'default') sorted = [...db];
-            renderGrid(sorted); toggleDrawer(false);
-        }
+function backToList(){document.getElementById('details').style.display='none'; document.getElementById('list').style.display='grid'; document.getElementById('trending').style.display='grid'; document.getElementById('randomCategory').style.display='grid';}
 
-        function parseSize(s) { let n = parseFloat(s); if(s.includes('GB')) n *= 1024; return n; }
-        function toggleDrawer(s) { document.getElementById('drawer').classList.toggle('open', s); document.getElementById('overlay').classList.toggle('active', s); }
-        function setTheme(t) { document.body.setAttribute('data-theme', t); toggleDrawer(false); }
-        function closeDetails() { document.getElementById('details').style.display = 'none'; document.body.style.overflow = 'auto'; }
-        
-        function tab(t, el) {
-            document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
-            el.classList.add('active');
-            currentList = (t === 'all') ? db : db.filter(x => x.type === t);
-            renderGrid(currentList);
-        }
+function filterByOwner(owner){currentType='all'; const list=document.getElementById('list'); list.innerHTML=''; DATA.apps.filter(a=>a.owner===owner).forEach(a=>list.appendChild(createCard(a));}
 
-        document.getElementById('search').addEventListener('input', e => {
-            const val = e.target.value.toLowerCase();
-            const results = db.filter(x => x.name.toLowerCase().includes(val));
-            renderGrid(results);
-        });
-
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-            const header = document.getElementById('main-header');
-            if (currentScroll > lastScroll && currentScroll > 80) header.classList.add('hide');
-            else header.classList.remove('hide');
-            lastScroll = currentScroll;
-        });
-
-        init();
-    </script>
+function filterByCategory(cat){currentType='all'; const list=document.getElementById('list'); list.innerHTML=''; DATA.apps.filter(a=>a.category===cat).forEach(a=>list.appendChild(createCard(a));}
+</script>
 </body>
 </html>
