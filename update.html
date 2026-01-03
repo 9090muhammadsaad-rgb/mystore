@@ -4,169 +4,109 @@
 <meta charset="UTF-8">
 <title>Game JSON Updater</title>
 <style>
-body {
-  font-family: Arial, sans-serif;
-  background: #0f172a;
-  color: #e5e7eb;
-  padding: 20px;
+body { font-family: Arial; background:#111; color:#eee; padding:20px }
+h2 { color:#0f9 }
+input, button, textarea {
+  width:100%; margin:5px 0; padding:8px;
+  background:#222; color:#fff; border:1px solid #444;
 }
-h1 { color: #38bdf8; }
-
-.container {
-  display: flex;
-  gap: 20px;
-}
-
-.list, .editor {
-  background: #020617;
-  padding: 15px;
-  border-radius: 10px;
-  width: 50%;
-  max-height: 85vh;
-  overflow: auto;
-}
-
-.game {
-  padding: 10px;
-  border-bottom: 1px solid #1e293b;
-  cursor: pointer;
-}
-.game:hover {
-  background: #020617;
-}
-
-input, textarea, button {
-  width: 100%;
-  margin: 6px 0;
-  padding: 8px;
-  border-radius: 6px;
-  border: none;
-}
-
-button {
-  background: #38bdf8;
-  color: #020617;
-  font-weight: bold;
-  cursor: pointer;
-}
-button:hover { opacity: 0.9; }
-
-.version {
-  border: 1px dashed #334155;
-  padding: 8px;
-  margin: 5px 0;
-}
+button { cursor:pointer; background:#0f9; color:#000; font-weight:bold }
+.card { border:1px solid #333; padding:10px; margin:10px 0 }
+.version { border-left:3px solid #0f9; padding-left:10px; margin:5px 0 }
 </style>
 </head>
-
 <body>
 
-<h1>🎮 Game JSON Update Panel</h1>
+<h2>📂 Load info.json</h2>
+<input type="file" id="fileInput">
 
-<div class="container">
+<div id="games"></div>
 
-  <!-- OLD GAMES LIST -->
-  <div class="list">
-    <h3>📜 Oldest → Newest Games</h3>
-    <div id="gameList"></div>
-    <button onclick="newGame()">➕ Add New Game</button>
-  </div>
+<h2>➕ Add New Game</h2>
+<input id="gname" placeholder="Enter Game Name">
+<input id="gpackage" placeholder="Enter Package Name">
+<input id="gversions" type="number" placeholder="How many Versions?">
+<button onclick="addGame()">Add New Game</button>
 
-  <!-- EDITOR -->
-  <div class="editor">
-    <h3>✏️ Edit / Add Game</h3>
-
-    <input id="gid" placeholder="Game ID (g10 etc)">
-    <input id="gname" placeholder="Enter Game Name">
-    <input id="gpackage" placeholder="Enter Package Name">
-
-    <h4>Versions</h4>
-    <div id="versions"></div>
-
-    <button onclick="addVersion()">➕ Add Version</button>
-    <button onclick="saveGame()">💾 Save / Update Game</button>
-
-    <h4>📦 Updated JSON</h4>
-    <textarea id="output" rows="10"></textarea>
-  </div>
-
-</div>
+<button onclick="downloadJSON()">⬇ Download Updated info.json</button>
 
 <script>
-let data = {
-  trending_ids: ["g1"],
-  apps: []
-};
+let data = { apps: [] };
 
-function renderList() {
-  const list = document.getElementById("gameList");
-  list.innerHTML = "";
+document.getElementById("fileInput").addEventListener("change", e => {
+  const reader = new FileReader();
+  reader.onload = () => {
+    data = JSON.parse(reader.result);
+    render();
+  };
+  reader.readAsText(e.target.files[0]);
+});
+
+function render() {
+  const wrap = document.getElementById("games");
+  wrap.innerHTML = "<h2>📜 Existing Games (Oldest First)</h2>";
   data.apps.forEach((g, i) => {
-    const d = document.createElement("div");
-    d.className = "game";
-    d.innerText = (i+1) + ". " + g.name;
-    d.onclick = () => editGame(g);
-    list.appendChild(d);
-  });
-}
+    const div = document.createElement("div");
+    div.className = "card";
+    div.innerHTML = `
+      <input value="${g.name}" onchange="g.name=this.value">
+      <input value="${g.package || ''}" onchange="g.package=this.value">
+      <div id="v${i}"></div>
+      <button onclick="addVersion(${i})">Add Version</button>
+    `;
+    wrap.appendChild(div);
 
-function newGame() {
-  document.getElementById("gid").value = "";
-  document.getElementById("gname").value = "";
-  document.getElementById("gpackage").value = "";
-  document.getElementById("versions").innerHTML = "";
-}
+    const vwrap = div.querySelector(`#v${i}`);
+    g.versions = g.versions || [];
+    g.versions.forEach(v => {
+      const vdiv = document.createElement("div");
+      vdiv.className = "version";
+      vdiv.innerHTML = `
+        <input value="${v.ver || ''}" placeholder="Version">
+        <input value="${v.url || ''}" placeholder="Download Link">
+      `;
+      vwrap.appendChild(vdiv);
 
-function editGame(g) {
-  document.getElementById("gid").value = g.id;
-  document.getElementById("gname").value = g.name;
-  document.getElementById("gpackage").value = g.package || "";
-  document.getElementById("versions").innerHTML = "";
-
-  (g.versions || []).forEach(v => {
-    addVersion(v.ver, v.url);
-  });
-}
-
-function addVersion(ver="", url="") {
-  const box = document.createElement("div");
-  box.className = "version";
-  box.innerHTML = `
-    <input placeholder="Version" value="${ver}">
-    <input placeholder="Download Link" value="${url}">
-  `;
-  document.getElementById("versions").appendChild(box);
-}
-
-function saveGame() {
-  const id = gid.value;
-  const name = gname.value;
-  const pkg = gpackage.value;
-
-  let versions = [];
-  document.querySelectorAll(".version").forEach(v => {
-    versions.push({
-      ver: v.children[0].value,
-      url: v.children[1].value
+      const inputs = vdiv.querySelectorAll("input");
+      inputs[0].onchange = e => v.ver = e.target.value;
+      inputs[1].onchange = e => v.url = e.target.value;
     });
   });
-
-  let game = data.apps.find(g => g.id === id);
-  if (!game) {
-    game = { id };
-    data.apps.push(game);
-  }
-
-  game.name = name;
-  game.package = pkg;
-  game.versions = versions;
-
-  renderList();
-  output.value = JSON.stringify(data, null, 2);
 }
 
-renderList();
+function addVersion(i) {
+  data.apps[i].versions.push({ ver:"", url:"" });
+  render();
+}
+
+function addGame() {
+  const name = gname.value;
+  const pkg = gpackage.value;
+  const count = +gversions.value || 0;
+
+  const game = {
+    id: "g" + (data.apps.length + 1),
+    name,
+    package: pkg,
+    versions: []
+  };
+
+  for (let i = 0; i < count; i++) {
+    game.versions.push({ ver:"", url:"" });
+  }
+
+  data.apps.push(game);
+  render();
+}
+
+function downloadJSON() {
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "info.json";
+  a.click();
+}
 </script>
 
 </body>
-  </html>
+</html>
