@@ -2,151 +2,471 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Faizan Store</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Faizan Store - Premium Edition</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
 <style>
-body{margin:0;font-family:sans-serif;background:#fff;color:#000}
-header{display:flex;align-items:center;justify-content:space-between;padding:10px 15px;background:#f5f5f5;position:sticky;top:0;z-index:100}
-header input[type=search]{flex:1;padding:8px;margin-right:10px;border-radius:6px;border:1px solid #ccc}
-header button{padding:8px 12px;border:none;border-radius:6px;background:#00aaff;color:#fff;font-weight:bold;cursor:pointer}
+:root {
+    --primary: #007aff;
+    --bg: #ffffff;
+    --surface: #f2f2f7;
+    --text: #000000;
+    --text-sec: #8e8e93;
+    --card-bg: #ffffff;
+    --accent: #ff9500;
+}
 
-/* GRID CARD */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;padding:12px}
-.card{background:#f0f0f0;border-radius:12px;padding:10px;position:relative;cursor:pointer;display:flex;flex-direction:column;align-items:center;text-align:center}
-.card img{width:100%;height:100px;object-fit:cover;border-radius:8px}
-.card .title{font-size:14px;margin:6px 0;font-weight:bold}
-.card .cat{font-size:12px;color:#666}
-.card .owner{font-size:11px;color:#0077cc;cursor:pointer}
-.trending{position:absolute;top:6px;left:6px;background:#ff9800;color:#000;font-size:11px;padding:2px 6px;border-radius:6px;font-weight:bold}
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--surface);
+    color: var(--text);
+    -webkit-tap-highlight-color: transparent;
+}
 
-/* DETAILS */
-#details{display:none;padding:12px}
-#details .back{padding:6px 12px;background:#00aaff;color:#fff;border:none;border-radius:6px;margin-bottom:10px;cursor:pointer}
-#details img.icon{width:80px;height:80px;border-radius:12px;object-fit:cover}
-#details .btn{padding:6px 10px;border:none;border-radius:6px;background:#eee;color:#000;margin:2px;cursor:pointer}
-#details .screens{display:flex;overflow-x:auto;gap:8px;margin:10px 0}
-#details .screens img, #details .screens video{height:120px;border-radius:8px;object-fit:cover}
-#recommended{margin-top:20px}
-#recommended .rec-card{background:#eee;padding:8px;border-radius:8px;display:flex;align-items:center;gap:8px;margin:5px 0;color:#000}
-#recommended .rec-card img{width:40px;height:40px;border-radius:6px;object-fit:cover}
+/* Header */
+header {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: 15px;
+    border-bottom: 1px solid #d1d1d6;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+header input[type=search] {
+    flex: 1;
+    padding: 12px 15px;
+    border-radius: 12px;
+    border: none;
+    background: #e3e3e8;
+    font-size: 16px;
+    outline: none;
+}
+
+header .btn-icon {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* Categories Bar */
+.nav-pills {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 15px 10px;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.nav-pills button {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 20px;
+    background: var(--card-bg);
+    color: var(--primary);
+    font-weight: 600;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.nav-pills button.active {
+    background: var(--primary);
+    color: white;
+}
+
+/* Sections */
+section {
+    max-width: 1000px;
+    margin: 0 auto 30px auto;
+}
+
+.section-title {
+    padding-left: 15px;
+    margin-bottom: 10px;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+/* Grid Layout */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 15px;
+    padding: 0 15px;
+}
+
+@media (min-width: 600px) {
+    .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+}
+
+/* Card Style */
+.card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 12px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: transform 0.2s;
+    position: relative;
+    overflow: hidden;
+}
+
+.card:active { transform: scale(0.95); }
+
+.card img {
+    width: 80px;
+    height: 80px;
+    border-radius: 18px;
+    object-fit: cover;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.card .title {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 5px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card .size-tag {
+    font-size: 11px;
+    color: var(--text-sec);
+    background: #f0f0f5;
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.card .badge {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: var(--accent);
+    color: white;
+    font-size: 9px;
+    font-weight: 800;
+    padding: 4px 8px;
+    border-bottom-right-radius: 10px;
+}
+
+/* Details View */
+#details {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: var(--bg);
+    z-index: 2000;
+    overflow-y: auto;
+    padding-bottom: 40px;
+}
+
+.details-header {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.details-header img {
+    width: 100px;
+    height: 100px;
+    border-radius: 22px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.back-bar {
+    padding: 10px 15px;
+    position: sticky;
+    top: 0;
+    background: rgba(255,255,255,0.9);
+    backdrop-filter: blur(10px);
+    z-index: 10;
+}
+
+.screens {
+    display: flex;
+    overflow-x: auto;
+    gap: 12px;
+    padding: 15px;
+    scroll-snap-type: x mandatory;
+}
+
+.screens img, .screens video {
+    height: 200px;
+    border-radius: 12px;
+    scroll-snap-align: start;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.info-table {
+    margin: 15px;
+    background: var(--surface);
+    border-radius: 15px;
+    padding: 5px 15px;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #e5e5ea;
+}
+
+.info-row:last-child { border: none; }
+.info-label { color: var(--text-sec); }
+.info-value { font-weight: 600; }
+
+.btn-main {
+    background: var(--primary);
+    color: white;
+    padding: 12px 25px;
+    border-radius: 25px;
+    border: none;
+    font-weight: 700;
+    width: calc(100% - 30px);
+    margin: 10px 15px;
+    cursor: pointer;
+}
+
+/* Hide scrollbars */
+::-webkit-scrollbar { display: none; }
 </style>
 </head>
 <body>
 
 <header>
-  <input type="search" id="search" placeholder="Search Games or Apps" oninput="filterList()">
-  <button onclick="toggleSettings()">⚙️</button>
+    <div class="search-container">
+        <input type="search" id="search" placeholder="Search Apps & Games..." oninput="filterList()">
+        <button class="btn-icon" onclick="toggleSettings()">👤</button>
+    </div>
 </header>
 
-<div style="display:flex;justify-content:center;gap:10px;padding:10px;">
-  <button onclick="setType('all')">🏠 All</button>
-  <button onclick="setType('game')">🎮 Game</button>
-  <button onclick="setType('app')">❓ App</button>
+<div class="nav-pills">
+    <button id="pill-all" class="active" onclick="setType('all')">All</button>
+    <button id="pill-game" onclick="setType('game')">Games</button>
+    <button id="pill-app" onclick="setType('app')">Apps</button>
 </div>
 
-<h3 style="padding-left:12px;">🔥 Trending</h3>
-<div id="trending" class="grid"></div>
+<main id="main-content">
+    <section>
+        <h3 class="section-title">🔥 Trending Now</h3>
+        <div id="trending" class="grid"></div>
+    </section>
 
-<h3 style="padding-left:12px;">🎁 Featured / Random Category</h3>
-<div id="randomCategory" class="grid"></div>
+    <section>
+        <h3 class="section-title" id="cat-title">Featured</h3>
+        <div id="randomCategory" class="grid"></div>
+    </section>
 
-<div id="list" class="grid"></div>
+    <section>
+        <h3 class="section-title">All Discoveries</h3>
+        <div id="list" class="grid"></div>
+    </section>
+</main>
 
 <div id="details">
-  <button class="back" onclick="backToList()">← Back</button>
-  <div style="display:flex;align-items:center;gap:10px;">
-    <img class="icon" id="detailIcon">
-    <div>
-      <h2 id="detailName"></h2>
-      <button class="btn" id="ownerBtn"></button>
+    <div class="back-bar">
+        <button onclick="backToList()" style="border:none; background:none; color:var(--primary); font-size:18px; font-weight:600; cursor:pointer;">Done</button>
     </div>
-  </div>
-  <h3>About This App</h3>
-  <p><b>Game Name:</b> <span id="detailGName"></span></p>
-  <p><b>Package:</b> <span id="detailPackage"></span></p>
-  <p><b>Release:</b> <span id="detailRelease"></span></p>
-  <p><b>Last Update:</b> <span id="detailUpdate"></span></p>
-  <p><b>Version:</b> <span id="detailVersion"></span></p>
-  <p><b>Type:</b> <span id="detailType"></span></p>
-  <p><b>Category:</b> <button class="btn" id="detailCategory"></button></p>
-  <p id="detailDesc"></p>
+    
+    <div class="details-header">
+        <img id="detailIcon" src="">
+        <div>
+            <h1 id="detailName" style="margin:0; font-size:24px;"></h1>
+            <p id="detailOwner" style="color:var(--primary); margin:5px 0; font-weight:600;"></p>
+            <span id="detailSizeTag" class="size-tag"></span>
+        </div>
+    </div>
 
-  <h3>Screenshots & Video</h3>
-  <div id="detailMedia" class="screens"></div>
+    <button class="btn-main">GET / DOWNLOAD</button>
 
-  <h3>Recommended</h3>
-  <div id="recommended"></div>
+    <div class="screens" id="detailMedia"></div>
+
+    <div style="padding:15px;">
+        <h3 style="margin-bottom:8px;">Description</h3>
+        <p id="detailDesc" style="color:#333; line-height:1.5; font-size:15px;"></p>
+    </div>
+
+    <div class="info-table">
+        <div class="info-row"><span class="info-label">Category</span><span class="info-value" id="detailCategory"></span></div>
+        <div class="info-row"><span class="info-label">Package</span><span class="info-value" id="detailPackage"></span></div>
+        <div class="info-row"><span class="info-label">Released</span><span class="info-value" id="detailRelease"></span></div>
+        <div class="info-row"><span class="info-label">Last Updated</span><span class="info-value" id="detailUpdate"></span></div>
+        <div class="info-row"><span class="info-label">Version</span><span class="info-value" id="detailVersion"></span></div>
+    </div>
+
+    <h3 class="section-title">You Might Also Like</h3>
+    <div id="recommended" class="grid"></div>
 </div>
 
 <script>
-let DATA={}; let currentType='all';
+let DATA = { apps: [], trending_ids: [] };
+let currentType = 'all';
 
-fetch('info.json').then(r=>r.json()).then(j=>{DATA=j; populateTrending(); populateRandomCategory(); filterList();});
+// Fetching data
+fetch('info.json')
+    .then(r => r.json())
+    .then(j => {
+        DATA = j;
+        initApp();
+    })
+    .catch(e => {
+        console.error("Local fetch failed, using mock data for demo", e);
+        // Fallback or demo notification could go here
+    });
 
-function toggleSettings(){alert("Settings modal can be added here")}
-
-function setType(t){currentType=t; filterList();}
-
-function populateTrending(){
-  const div=document.getElementById('trending'); div.innerHTML='';
-  DATA.apps.forEach(g=>{if(DATA.trending_ids.includes(g.id)) div.appendChild(createCard(g));});
+function initApp() {
+    populateTrending();
+    populateRandomCategory();
+    filterList();
 }
 
-function populateRandomCategory(){
-  const div=document.getElementById('randomCategory'); div.innerHTML='';
-  const cats=[...new Set(DATA.apps.map(a=>a.category).filter(c=>c))];
-  const randomCat=cats[Math.floor(Math.random()*cats.length)];
-  DATA.apps.filter(a=>a.category===randomCat).forEach(g=>div.appendChild(createCard(g)));
+// Data Parsing: Format Size (Special handling for your %%MB logic)
+function formatSize(sizeStr) {
+    if(!sizeStr) return "N/A";
+    // Agar data mein %%MB wagera hai to usey clean karke dikhayein
+    return sizeStr.replace('%%', '');
 }
 
-function filterList(){
-  const list=document.getElementById('list'); list.innerHTML='';
-  let apps=DATA.apps.filter(a=>currentType==='all'||a.type===currentType);
-  const search=document.getElementById('search').value.toLowerCase();
-  if(search) apps=apps.filter(a=>a.name.toLowerCase().includes(search));
-  apps.forEach(g=>list.appendChild(createCard(g)));
+// Convert sizes to bytes for sorting (MB/GB/TB logic)
+function sizeToBytes(sizeStr) {
+    if (!sizeStr) return 0;
+    const clean = sizeStr.toUpperCase();
+    const val = parseFloat(clean.replace(/[^\d.]/g, ''));
+    if (clean.includes('TB')) return val * 1024 * 1024 * 1024 * 1024;
+    if (clean.includes('GB')) return val * 1024 * 1024 * 1024;
+    if (clean.includes('MB')) return val * 1024 * 1024;
+    return val;
 }
 
-function createCard(g){
-  const div=document.createElement('div'); div.className='card'; div.onclick=()=>showDetails(g);
-  let iconSrc=(g.icon==='%%FS'||g.icon==='FS')?'https://via.placeholder.com/100x100?text=Faizan+Store':g.icon||'https://via.placeholder.com/100x100?text=N/A';
-  div.innerHTML=`${DATA.trending_ids.includes(g.id)?'<div class="trending">TRENDING</div>':''}
-    <img src="${iconSrc}">
-    <div class="title">${g.name||'N/A'}</div>
-    <div class="cat">${g.category||'N/A'}</div>
-    <div class="owner">${g.owner||'N/A'}</div>`;
-  return div;
+function setType(t) {
+    currentType = t;
+    document.querySelectorAll('.nav-pills button').forEach(b => b.classList.remove('active'));
+    document.getElementById('pill-' + t).classList.add('active');
+    filterList();
 }
 
-function showDetails(g){
-  document.getElementById('details').style.display='block';
-  document.getElementById('list').style.display='none';
-  document.getElementById('trending').style.display='none';
-  document.getElementById('randomCategory').style.display='none';
-  document.getElementById('detailIcon').src=(g.icon==='%%FS'||g.icon==='FS')?'https://via.placeholder.com/80x80?text=Faizan+Store':g.icon||'https://via.placeholder.com/80x80?text=N/A';
-  document.getElementById('detailName').innerText=g.name||'N/A';
-  const ownerBtn=document.getElementById('ownerBtn'); ownerBtn.innerText=g.owner||'N/A'; ownerBtn.onclick=()=>filterByOwner(g.owner);
-  document.getElementById('detailGName').innerText=g.name||'N/A';
-  document.getElementById('detailPackage').innerText=g.package||'N/A';
-  document.getElementById('detailRelease').innerText=g.releaseDate||'N/A';
-  document.getElementById('detailUpdate').innerText=g.lastUpdate||'N/A';
-  document.getElementById('detailVersion').innerText=g.versions?.length||1;
-  document.getElementById('detailType').innerText=g.type||'N/A';
-  const catBtn=document.getElementById('detailCategory'); catBtn.innerText=g.category||'N/A'; catBtn.onclick=()=>filterByCategory(g.category);
-  const descEl=document.getElementById('detailDesc');
-  descEl.innerText=g.description||'N/A';
-  const mediaDiv=document.getElementById('detailMedia'); mediaDiv.innerHTML='';
-  if(g.assets?.screenshots) g.assets.screenshots.forEach(s=>{const img=document.createElement('img'); img.src=s; mediaDiv.appendChild(img);});
-  if(g.assets?.video){const video=document.createElement('video'); video.src=g.assets.video; video.controls=true; mediaDiv.appendChild(video);}
-  const recDiv=document.getElementById('recommended'); recDiv.innerHTML='';
-  DATA.apps.filter(a=>a.id!==g.id&&a.type===g.type).forEach(r=>{const rec=document.createElement('div'); rec.className='rec-card'; rec.innerHTML=`<img src="${(r.icon==='%%FS'||r.icon==='FS')?'https://via.placeholder.com/40x40?text=FS':r.icon||'https://via.placeholder.com/40x40?text=N/A'}"><div><b>${r.name||'N/A'}</b><br><small>${r.category||'N/A'}</small></div>`; recDiv.appendChild(rec);});
+function createCard(g) {
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.onclick = () => showDetails(g);
+    
+    const isTrending = DATA.trending_ids.includes(g.id);
+    const icon = (g.icon === '%%FS' || g.icon === 'FS') 
+                 ? 'https://ui-avatars.com/api/?name=FS&background=007aff&color=fff' 
+                 : g.icon || 'https://via.placeholder.com/100';
+    
+    const sizeDisp = formatSize(g.size);
+
+    div.innerHTML = `
+        ${isTrending ? '<div class="badge">TRENDING</div>' : ''}
+        <img src="${icon}" loading="lazy">
+        <div class="title">${g.name || 'Untitled'}</div>
+        <div class="size-tag">${sizeDisp}</div>
+    `;
+    return div;
 }
 
-function backToList(){document.getElementById('details').style.display='none'; document.getElementById('list').style.display='grid'; document.getElementById('trending').style.display='grid'; document.getElementById('randomCategory').style.display='grid';}
+function populateTrending() {
+    const div = document.getElementById('trending');
+    div.innerHTML = '';
+    const trending = DATA.apps.filter(g => DATA.trending_ids.includes(g.id));
+    trending.forEach(g => div.appendChild(createCard(g)));
+}
 
-function filterByOwner(owner){currentType='all'; const list=document.getElementById('list'); list.innerHTML=''; DATA.apps.filter(a=>a.owner===owner).forEach(a=>list.appendChild(createCard(a));}
+function populateRandomCategory() {
+    const div = document.getElementById('randomCategory');
+    const title = document.getElementById('cat-title');
+    const cats = [...new Set(DATA.apps.map(a => a.category).filter(c => c))];
+    if (cats.length > 0) {
+        const randomCat = cats[Math.floor(Math.random() * cats.length)];
+        title.innerText = "Popular in " + randomCat;
+        DATA.apps.filter(a => a.category === randomCat).slice(0, 6).forEach(g => div.appendChild(createCard(g)));
+    }
+}
 
-function filterByCategory(cat){currentType='all'; const list=document.getElementById('list'); list.innerHTML=''; DATA.apps.filter(a=>a.category===cat).forEach(a=>list.appendChild(createCard(a));}
+function filterList() {
+    const list = document.getElementById('list');
+    list.innerHTML = '';
+    let apps = DATA.apps.filter(a => currentType === 'all' || a.type === currentType);
+    
+    // Sort by size (Largest first - keeping your MB/GB/TB logic in mind)
+    apps.sort((a, b) => sizeToBytes(b.size) - sizeToBytes(a.size));
+    
+    const search = document.getElementById('search').value.toLowerCase();
+    if (search) {
+        apps = apps.filter(a => 
+            a.name.toLowerCase().includes(search) || 
+            (a.category && a.category.toLowerCase().includes(search))
+        );
+    }
+    
+    apps.forEach(g => list.appendChild(createCard(g)));
+}
+
+function showDetails(g) {
+    const d = document.getElementById('details');
+    d.style.display = 'block';
+    document.body.style.overflow = 'hidden'; // Prevent scroll
+
+    const icon = (g.icon === '%%FS' || g.icon === 'FS') 
+                 ? 'https://ui-avatars.com/api/?name=FS&background=007aff&color=fff' 
+                 : g.icon;
+
+    document.getElementById('detailIcon').src = icon;
+    document.getElementById('detailName').innerText = g.name;
+    document.getElementById('detailOwner').innerText = g.owner || "Official Developer";
+    document.getElementById('detailSizeTag').innerText = formatSize(g.size);
+    document.getElementById('detailDesc').innerText = g.description || "No description provided for this application.";
+    document.getElementById('detailCategory').innerText = g.category || "General";
+    document.getElementById('detailPackage').innerText = g.package || "N/A";
+    document.getElementById('detailRelease').innerText = g.releaseDate || "N/A";
+    document.getElementById('detailUpdate').innerText = g.lastUpdate || "N/A";
+    document.getElementById('detailVersion').innerText = g.versions ? g.versions.length : "1.0";
+
+    const media = document.getElementById('detailMedia');
+    media.innerHTML = '';
+    if (g.assets && g.assets.screenshots) {
+        g.assets.screenshots.forEach(src => {
+            const img = document.createElement('img');
+            img.src = src;
+            media.appendChild(img);
+        });
+    }
+
+    // Recommendations based on category
+    const recs = document.getElementById('recommended');
+    recs.innerHTML = '';
+    DATA.apps.filter(a => a.id !== g.id && a.category === g.category).slice(0, 4).forEach(r => {
+        recs.appendChild(createCard(r));
+    });
+}
+
+function backToList() {
+    document.getElementById('details').style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+function toggleSettings() {
+    alert("Profile & Settings - Comming Soon");
+}
 </script>
 </body>
 </html>
+
