@@ -1,63 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>Game JSON Updater</title>
+<title>info.json Updater</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-body { font-family: Arial; background:#111; color:#eee; padding:20px }
-h2 { color:#0f9 }
-input, button, textarea {
-  width:100%; margin:5px 0; padding:8px;
-  background:#222; color:#fff; border:1px solid #444;
+body { background:#0f0f0f; color:#eee; font-family:sans-serif; padding:15px }
+h2 { color:#00ff99 }
+input, button {
+  width:100%; padding:10px; margin:5px 0;
+  background:#1e1e1e; color:#fff; border:1px solid #333;
 }
-button { cursor:pointer; background:#0f9; color:#000; font-weight:bold }
+button { background:#00ff99; color:#000; font-weight:bold }
 .card { border:1px solid #333; padding:10px; margin:10px 0 }
-.version { border-left:3px solid #0f9; padding-left:10px; margin:5px 0 }
+.version { border-left:3px solid #00ff99; padding-left:8px; margin:5px 0 }
 </style>
 </head>
 <body>
 
-<h2>📂 Load info.json</h2>
-<input type="file" id="fileInput">
+<h2>🌐 Load info.json from GitHub</h2>
+<input id="githubUrl" placeholder="Paste RAW GitHub JSON URL">
+<button onclick="loadFromGitHub()">Load JSON</button>
 
 <div id="games"></div>
 
 <h2>➕ Add New Game</h2>
 <input id="gname" placeholder="Enter Game Name">
 <input id="gpackage" placeholder="Enter Package Name">
-<input id="gversions" type="number" placeholder="How many Versions?">
-<button onclick="addGame()">Add New Game</button>
+<input id="gdate" type="date" placeholder="Release Date">
+<input id="gversions" type="number" placeholder="How many Versions">
+<button onclick="addGame()">Add Game</button>
 
-<button onclick="downloadJSON()">⬇ Download Updated info.json</button>
+<button onclick="downloadJSON()">⬇ Download info.json</button>
 
 <script>
 let data = { apps: [] };
 
-document.getElementById("fileInput").addEventListener("change", e => {
-  const reader = new FileReader();
-  reader.onload = () => {
-    data = JSON.parse(reader.result);
-    render();
-  };
-  reader.readAsText(e.target.files[0]);
-});
+function loadFromGitHub() {
+  const url = githubUrl.value;
+  fetch(url)
+    .then(r => r.json())
+    .then(json => {
+      data = json;
+      if (!data.apps) data.apps = [];
+      render();
+    })
+    .catch(() => alert("Invalid GitHub RAW URL"));
+}
 
 function render() {
   const wrap = document.getElementById("games");
-  wrap.innerHTML = "<h2>📜 Existing Games (Oldest First)</h2>";
+  wrap.innerHTML = "<h2>📦 Existing Games (Old + New)</h2>";
+
   data.apps.forEach((g, i) => {
     const div = document.createElement("div");
     div.className = "card";
+
     div.innerHTML = `
-      <input value="${g.name}" onchange="g.name=this.value">
-      <input value="${g.package || ''}" onchange="g.package=this.value">
+      <input value="${g.name || ''}" placeholder="Game Name">
+      <input value="${g.package || ''}" placeholder="Package">
+      <input type="date" value="${g.releaseDate || ''}">
       <div id="v${i}"></div>
       <button onclick="addVersion(${i})">Add Version</button>
     `;
     wrap.appendChild(div);
 
-    const vwrap = div.querySelector(`#v${i}`);
+    const inputs = div.querySelectorAll("input");
+    inputs[0].onchange = e => g.name = e.target.value;
+    inputs[1].onchange = e => g.package = e.target.value;
+    inputs[2].onchange = e => g.releaseDate = e.target.value;
+
     g.versions = g.versions || [];
+    const vwrap = div.querySelector(`#v${i}`);
     g.versions.forEach(v => {
       const vdiv = document.createElement("div");
       vdiv.className = "version";
@@ -67,9 +81,9 @@ function render() {
       `;
       vwrap.appendChild(vdiv);
 
-      const inputs = vdiv.querySelectorAll("input");
-      inputs[0].onchange = e => v.ver = e.target.value;
-      inputs[1].onchange = e => v.url = e.target.value;
+      const vin = vdiv.querySelectorAll("input");
+      vin[0].onchange = e => v.ver = e.target.value;
+      vin[1].onchange = e => v.url = e.target.value;
     });
   });
 }
@@ -80,22 +94,19 @@ function addVersion(i) {
 }
 
 function addGame() {
-  const name = gname.value;
-  const pkg = gpackage.value;
-  const count = +gversions.value || 0;
-
   const game = {
     id: "g" + (data.apps.length + 1),
-    name,
-    package: pkg,
+    name: gname.value,
+    package: gpackage.value,
+    releaseDate: gdate.value,
     versions: []
   };
 
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i < (+gversions.value || 0); i++) {
     game.versions.push({ ver:"", url:"" });
   }
 
-  data.apps.push(game);
+  data.apps.push(game); // ✅ MERGE (old data safe)
   render();
 }
 
